@@ -13,12 +13,14 @@ export default function Projects() {
             Projects
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            Showcase your projects with a hero image (16 x 9)
+            "This space is a blank canvas for future innovation. Get ready for it to be filled with
+            exciting features that will spark your imagination! Stay tuned for updates!"
           </p>
         </div>
         <div className="container py-12">
           <div className="-m-4 flex flex-wrap">
-            {projectsData.map((d) => (
+            {/* Todo : 프로젝트 리스트 데이터 연결 */}
+            {/* {projectsData.map((d) => (
               <Card
                 key={d.title}
                 title={d.title}
@@ -26,7 +28,8 @@ export default function Projects() {
                 imgSrc={d.imgSrc}
                 href={d.href}
               />
-            ))}
+            ))} */}
+            아직 첫 페이지를 쓰지 않았습니다. 하지만 곧 흥미진진한 이야기가 시작될 거예요.
           </div>
         </div>
       </div>
