@@ -13,11 +13,18 @@ export default function Projects() {
             Projects
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            이 공간은 미래 혁신을 위한 빈 캔버스입니다. 상상력을 자극할 흥미로운 기능들로 가득 찰
-            준비를 하세요! 업데이트를 계속 지켜봐 주세요!
+            여기에는 다양한 프로젝트가 공유 될 예정입니다.
           </p>
         </div>
         <div className="container py-12">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              아직 게시된 프로젝트가 없습니다.
+            </h2>
+            <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
+              하지만 곧 흥미진진한 이야기가 시작될 거예요. 기대해 주세요!
+            </p>
+          </div>
           <div className="-m-4 flex flex-wrap">
             {/* Todo : 프로젝트 리스트 데이터 연결 */}
             {/* {projectsData.map((d) => (
@@ -29,7 +36,6 @@ export default function Projects() {
                 href={d.href}
               />
             ))} */}
-            아직 첫 페이지를 쓰지 않았습니다. 하지만 곧 흥미진진한 이야기가 시작될 거예요.
           </div>
         </div>
       </div>

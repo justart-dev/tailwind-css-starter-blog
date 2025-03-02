@@ -6,7 +6,7 @@ const headerNavLinks = [
   { href: '/about', title: 'About' },
   {
     href: 'https://cloud.umami.is/share/qEJbOSAe4JLOYalA/justart-dev.vercel.app',
-    title: 'Dashboard',
+    title: 'Insights',
   },
 ]
 
