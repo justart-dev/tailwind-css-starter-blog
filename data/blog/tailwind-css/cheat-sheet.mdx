@@ -1,0 +1,117 @@
+---
+title: 'Tailwind CSS Cheat Sheet'
+date: '2025-03-03'
+tags: ['Tailwind CSS']
+draft: false
+summary: '실전에서 바로 써먹을 수 있는 기초 문법 및 Tailwind CSS Cheat Sheet'
+---
+
+# Tailwind CSS 문법 정리
+
+> [!NOTE]  
+> 공식 문서: [https://tailwindcss.com/docs/installation/using-vite](https://tailwindcss.com/docs/installation/using-vite)
+
+## 1. 기본 개념
+
+- **유틸리티 클래스**: HTML에 직접 적용 가능한 클래스 (예: `text-center`, `bg-blue-500`)
+- **반응형 디자인**: 화면 크기별 스타일 접두사 (예: `sm:`, `md:`, `lg:`)
+- **커스터마이징**: `tailwind.config.js`로 색상, 간격 등 사용자 정의 가능
+
+## 2. 주요 문법 예시
+
+### 텍스트 스타일링
+
+- **글꼴 크기**: `text-{size}`
+  - 예: `text-sm`, `text-lg`, `text-3xl`
+- **글꼴 두께**: `font-{weight}`
+  - 예: `font-bold`, `font-medium`, `font-light`
+- **텍스트 색상**: `text-{color}-{shade}`
+  - 예: `text-blue-500`, `text-gray-900`
+- **정렬**: `text-{alignment}`
+  - 예: `text-center`, `text-left`, `text-right`
+
+> [!TIP]  
+> **Arbitrary Values**: 클래스 값이 없으면 `text-[16px]`처럼 대괄호로 커스텀 가능!  
+> Tailwind v2.2 이상에서 지원되니 버전 확인 필수!
+
+### 배경 스타일
+
+- **배경 색상**: `bg-{color}-{shade}`
+  - 예: `bg-red-300`, `bg-green-700`
+- **배경 이미지**: `bg-{value}`
+  - 예: `bg-cover`, `bg-center`
+
+### 레이아웃
+
+- **디스플레이**: `block`, `inline`, `flex`, `grid`
+- **간격**:
+  - **패딩**: `p-{size}`, `px-{size}`, `py-{size}`
+    - 예: `p-4`, `px-2`, `py-6`
+  - **마진**: `m-{size}`, `mx-{size}`, `my-{size}`
+    - 예: `m-3`, `mx-auto`
+- **너비/높이**: `w-{size}`, `h-{size}`
+  - 예: `w-full`, `h-64`
+
+### Flexbox와 Grid
+
+- **Flex**:
+  - 기본: `flex`, `flex-row`, `flex-col`
+  - 정렬: `justify-{value}` (예: `justify-center`, `justify-between`)
+  - 수직 정렬: `items-{value}` (예: `items-center`, `items-start`)
+- **Grid**:
+  - 기본: `grid`, `grid-cols-{number}` (예: `grid-cols-3`)
+  - 간격: `gap-{size}` (예: `gap-4`)
+
+### 반응형 디자인
+
+- **접두사**: `{breakpoint}:{utility}`
+  - 예: `sm:text-lg`, `md:flex`
+- **브레이크포인트**:
+  - `sm`: 640px
+  - `md`: 768px
+  - `lg`: 1024px
+  - `xl`: 1280px
+
+### 상태 기반 스타일
+
+- **상태 접두사**: `{state}:{utility}`
+  - 예: `hover:bg-blue-700`, `focus:ring-2`
+
+### 테두리와 그림자
+
+- **테두리**: `border`, `border-{size}`, `border-{color}`
+  - 예: `border-2`, `border-gray-400`
+- **그림자**: `shadow-{size}`
+  - 예: `shadow-md`, `shadow-lg`
+
+## 3. 알아두면 좋은 문법
+
+### Rounded
+
+- **Border Radius**: `rounded-{size}`
+  - 예: `rounded`, `rounded-md`, `rounded-lg`, `rounded-full`
+  - 크기:
+    - `none`: 0
+    - `sm`: 2px
+    - 기본: 4px
+    - `md`: 6px
+    - `lg`: 8px
+    - `xl`: 12px
+    - `2xl`: 16px
+    - `3xl`: 24px
+    - `full`: 최대 (원형)
+
+### Opacity
+
+- **투명도**: `{utility}/{opacity}`
+  - 예: `text-black/50` (50% 투명), `bg-red-500/75` (75% 투명)
+  - 값: 0, 10, 20, ..., 100
+
+### Overflow
+
+- **Overflow**: `overflow-{value}`
+  - 예:
+    - `overflow-hidden`: 잘림
+    - `overflow-scroll`: 스크롤
+    - `overflow-auto`: 필요 시 스크롤
+    - `overflow-visible`: 보임
