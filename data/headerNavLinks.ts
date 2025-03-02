@@ -4,7 +4,10 @@ const headerNavLinks = [
   { href: '/tags', title: 'Tags' },
   { href: '/projects', title: 'Projects' },
   { href: '/about', title: 'About' },
-  { href: '/', title: 'Dashboard' },
+  {
+    href: 'https://cloud.umami.is/share/qEJbOSAe4JLOYalA/justart-dev.vercel.app',
+    title: 'Dashboard',
+  },
 ]
 
 export default headerNavLinks

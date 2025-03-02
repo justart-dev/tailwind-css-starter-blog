@@ -13,8 +13,8 @@ export default function Projects() {
             Projects
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            "This space is a blank canvas for future innovation. Get ready for it to be filled with
-            exciting features that will spark your imagination! Stay tuned for updates!"
+            이 공간은 미래 혁신을 위한 빈 캔버스입니다. 상상력을 자극할 흥미로운 기능들로 가득 찰
+            준비를 하세요! 업데이트를 계속 지켜봐 주세요!
           </p>
         </div>
         <div className="container py-12">
