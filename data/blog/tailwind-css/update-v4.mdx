@@ -1,0 +1,85 @@
+---
+title: 'Tailwind CSS 4.0 살펴보기'
+date: '2025-03-03'
+tags: ['Tailwind CSS']
+draft: false
+summary: 'Tailwind CSS 4.0 핵심만 간결하게 다루기'
+---
+
+> [!NOTE]  
+> 업데이트 내역: [https://tailwindcss.com/blog/tailwindcss-v4](https://tailwindcss.com/blog/tailwindcss-v4)
+
+Tailwind CSS 4.0은 2025년 1월 22일에 공식 출시된 최신 버전으로, 성능 최적화와 현대 웹 개발 요구사항을 충족하는 강력한 기능을 제공합니다.
+
+Tailwind CSS 4.0을 초보자와 숙련자 모두에게 유용하도록 핵심만 간결하게 다룰 예정이니 자세한 내용은 꼭 공식문서를 읽으세요!
+
+## 새로운 고성능 엔진
+
+Tailwind 4.0은 Rust 기반의 **Oxide 엔진**을 도입해 성능을 대폭 끌어올렸습니다.
+
+- **빌드 속도**: 전체 빌드는 5배, 증분 빌드는 100배 이상 빨라졌어요.
+- **번들 크기**: 패키지 크기가 35% 이상 줄어 효율성 UP
+
+## 간소화 된 설치 방법 (CSS 중심 설정: JS -> CSS)
+
+이제 `tailwind.config.js` 대신 CSS 파일에서 설정을 관리합니다.
+
+예전에 Tailwind를 적용할려면 config 파일 설정, content에 적용되야 할 파일 경로 추가, 최상위 css 파일에
+아래 내용 처럼 3개 추가하고 등등 설정하기 귀찮았던 거 기억나시죠?
+
+```
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+4.0 버전에서 설정 프로세스를 대폭 간소화하여, 단계 수를 줄이고 많은 보일러플레이트를 제거했습니다.
+
+```
+// Tailwind CSS 설치
+yarn add tailwindcss @tailwindcss/postcss;
+
+// PostCSS 플러그인 추가
+export default {
+plugins: ["@tailwindcss/postcss"],
+};
+
+// Tailwind를 CSS 파일에 가져오기
+@import "tailwindcss";
+```
+
+**자동 컨텐츠 감지**가 가능해져서 개발자가 별도로 content 배열을 설정하지 않아도, Tailwind가 적절한 파일들을 스캔하여 필요한 클래스를 감지한다고 하네요.
+
+물론 `.gitignore`에 포함된 파일과 디렉토리 그리고 `이미지`, `동영상`, `zip` 파일과 같은 바이너리 파일 확장자도 자동으로 스캔 대상에서 제외됩니다.
+
+## 디자인 토큰: CSS 변수로 더 유연하게
+
+Tailwind CSS 4.0은 디자인 토큰(색상, 간격 등)을 CSS 사용자 정의 속성(변수)으로 변환해줘요.
+
+Tailwind CSS 4.0은 디자인 토큰(색상, 간격 등)을 CSS 사용자 정의 속성(변수)으로 변환해줍니다. v3.x에서는 `tailwind.config.js`라는 JS 파일에서 테마를 정의했지만, v4.0은 CSS 파일 안에서 `@theme` 지시어로 설정하고, 런타임에 `var()`로 값을 바로 활용할 수 있어요.
+
+이 변화가 중요한데요.
+
+- 이전 버전 : CSS 변수는 자동 생성되지 않아, 런타임에서 값을 직접 수정하거나 참조하려면 별도의 CSS 작업이 필요해요.
+- 최신 버전 : CSS 변수로 자동 변환됩니다. 이를 통해 JS 없이도 CSS에서 값을 참조하거나 수정할 수 있어요.
+
+Tailwind CSS 4.0에서는 `@theme` 지시어로 정의한 모든 디자인 토큰이 자동으로 CSS 변수로 변환되고, `:root`에 기본값으로 정의됩니다.
+이 변수들은 프로젝트 전반에서 재사용 가능하고, 런타임에 수정도 자유로워요.
+
+### v3.x 과 v4.0 비교
+
+| 항목              | v3.x                        | v4.0                        |
+| ----------------- | --------------------------- | --------------------------- |
+| **CSS 변수 생성** | 자동 생성 안 됨 (수동 추가) | 모든 토큰이 CSS 변수로 변환 |
+| **:root 정의**    | 없음 (직접 작성 필요)       | 기본적으로 :root에 정의     |
+| **런타임 수정**   | 별도 CSS로 변수 관리        | var()로 즉시 수정 가능      |
+| **설정 위치**     | tailwind.config.js          | CSS 파일 (@theme)           |
+
+## 현대 웹 기능 지원
+
+Tailwind 4.0은 최신 CSS 기능을 적극 활용해요:
+
+- 컨테이너 쿼리: `@container`로 부모 크기에 따라 스타일링.
+- P3 색상: 더 생생한 색상을 위한 `oklch()` 지원.
+- 3D 변환: `rotate-x-45` 같은 3D 유틸리티 추가.
+- @starting-style : 요소가 표시되거나 DOM에 삽입될 때의 초기 스타일링.
