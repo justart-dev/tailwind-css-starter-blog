@@ -7,7 +7,8 @@
 /* Core theme configuration */
 @theme {
   /* Font families */
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+  --font-sans:
+    var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
   /* Colors */
@@ -172,4 +173,54 @@ input:-webkit-autofill:focus {
 .linkicon {
   display: inline-block;
   vertical-align: middle;
+}
+
+@layer components {
+  .typing-container {
+    display: inline-block;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+  }
+
+  .typing-text {
+    border-right: 2px solid;
+    max-width: fit-content;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    animation:
+      typing 8s steps(18) infinite,
+      cursor 0.5s step-end infinite alternate;
+  }
+
+  @media (max-width: 768px) {
+    .typing-text {
+      font-size: 1rem;
+    }
+  }
+
+  @keyframes cursor {
+    50% {
+      border-color: transparent;
+    }
+  }
+
+  @keyframes typing {
+    0% {
+      width: 0;
+    }
+    30% {
+      width: 100%;
+    }
+    85% {
+      width: 100%;
+    }
+    95% {
+      width: 0;
+    }
+    100% {
+      width: 0;
+    }
+  }
 }

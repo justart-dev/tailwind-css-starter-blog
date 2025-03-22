@@ -3,7 +3,7 @@ const siteMetadata = {
   title: 'Justart-dev Blog',
   author: 'Justart-dev',
   headerTitle: 'Justart-dev',
-  description: 'Justart의 블로그입니다. 개발 과정에서 얻은 인사이트와 경험을 공유합니다.',
+  description: '개발 과정에서 얻은 인사이트와 경험을 공유합니다.',
   language: 'ko-KR',
   theme: 'system', // system, dark or light
   siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
