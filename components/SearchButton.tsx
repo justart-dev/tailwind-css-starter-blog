@@ -29,6 +29,7 @@ const SearchButton = () => {
       </SearchButtonWrapper>
     )
   }
+  return null // 검색 기능이 비활성화되어 있을 때 null 반환
 }
 
 export default SearchButton
