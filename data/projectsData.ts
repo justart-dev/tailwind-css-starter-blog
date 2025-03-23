@@ -2,25 +2,17 @@ interface Project {
   title: string
   description: string
   href?: string
-  imgSrc?: string
 }
 
 const projectsData: Project[] = [
   {
-    title: 'A Search Engine',
-    description: `What if you could look up any information in the world? Webpages, images, videos
-    and more. Google has many features to help you find exactly what you're looking
-    for.`,
-    imgSrc: '/static/images/google.png',
-    href: 'https://www.google.com',
-  },
-  {
-    title: 'The Time Machine',
-    description: `Imagine being able to travel back in time or to the future. Simple turn the knob
-    to the desired date and press "Go". No more worrying about lost keys or
-    forgotten headphones with this simple yet affordable solution.`,
-    imgSrc: '/static/images/time-machine.jpg',
-    href: '/blog/the-time-machine',
+    title: 'Clip Memo',
+    description: `간단한 웹 기반 메모 도구로 단 한 번의 클릭으로 메모를 간편하게 공유할 수 있는 플랫폼. 
+    
+PWA 기술로 앱처럼 설치하여 사용할 수 있으며, 오프라인에서도 이용할 수 있다.
+
+`,
+    href: 'https://clip-memo.vercel.app',
   },
 ]
 
