@@ -13,7 +13,7 @@ export default function Projects() {
             Projects
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            다양한 프로젝트가 공유 될 예정입니다.
+          지난 페이지는 넘기고, 새 장을 펼칩니다
           </p>
         </div>
         <div className="container py-12">

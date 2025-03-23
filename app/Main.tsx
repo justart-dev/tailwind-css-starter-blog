@@ -29,17 +29,17 @@ export default function Home({ posts }) {
 
             <div className="mt-8 flex gap-6">
               <Link
-                href="/about"
+                href="/blog"
                 className="bg-primary-500 hover:bg-primary-600 inline-flex items-center gap-2 rounded-lg px-8 py-4 text-base font-medium text-white transition-colors"
               >
-                About Me
+                Read Blog
                 <span aria-hidden="true">→</span>
               </Link>
               <Link
-                href="/blog"
+                href="/projects"
                 className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-8 py-4 text-base font-medium text-gray-900 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700"
               >
-                Read Blog
+                Projects
                 <span aria-hidden="true">→</span>
               </Link>
             </div>
