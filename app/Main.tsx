@@ -2,7 +2,7 @@ import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
-import Spline from '@splinetool/react-spline/next';
+import Spline from '@splinetool/react-spline/next'
 
 const MAX_DISPLAY = 5
 
@@ -19,10 +19,8 @@ export default function Home({ posts }) {
             <div className="typing-container flex min-h-[4rem] items-center justify-center text-xl text-gray-600 md:text-2xl dark:text-gray-400">
               <span className="typing-text">hello, nice to meet you. </span>
             </div>
-            <div className="w-full h-[550px]">
-            <Spline
-              scene="https://prod.spline.design/u-rSfD5D6NGWRUxK/scene.splinecode"
-            />
+            <div className="h-[550px] w-full">
+              <Spline scene="https://prod.spline.design/u-rSfD5D6NGWRUxK/scene.splinecode" />
             </div>
 
             <p className="max-w-2xl text-center text-lg leading-7 text-gray-500 dark:text-gray-400">

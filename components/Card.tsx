@@ -1,5 +1,5 @@
 import Link from './Link'
-import React from 'react';
+import React from 'react'
 
 const Card = ({ title, description, href }) => (
   <div className="md max-w-[544px] p-4 md:w-1/2">
@@ -16,7 +16,7 @@ const Card = ({ title, description, href }) => (
             title
           )}
         </h2>
-        <div className="prose mb-3 max-w-none text-gray-500 dark:text-gray-400 whitespace-pre-wrap">
+        <div className="prose mb-3 max-w-none whitespace-pre-wrap text-gray-500 dark:text-gray-400">
           {description.split('\n').map((line, index) => (
             <React.Fragment key={index}>
               {line}

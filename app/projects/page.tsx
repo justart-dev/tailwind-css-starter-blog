@@ -19,13 +19,7 @@ export default function Projects() {
         <div className="container py-12">
           <div className="-m-4 flex flex-wrap">
             {projectsData.map((d) => (
-              <Card
-                key={d.title}
-                title={d.title}
-                description={d.description}
-                href={d.href}
-                className="m-4 transform rounded-lg bg-white p-6 shadow-md transition-transform hover:scale-105"
-              />
+              <Card key={d.title} title={d.title} description={d.description} href={d.href} />
             ))}
           </div>
         </div>
