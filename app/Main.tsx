@@ -2,6 +2,7 @@ import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
+import Spline from '@splinetool/react-spline/next';
 
 const MAX_DISPLAY = 5
 
@@ -18,22 +19,27 @@ export default function Home({ posts }) {
             <div className="typing-container flex min-h-[4rem] items-center justify-center text-xl text-gray-600 md:text-2xl dark:text-gray-400">
               <span className="typing-text">hello, nice to meet you. </span>
             </div>
+            <div className="w-full h-[550px]">
+            <Spline
+              scene="https://prod.spline.design/u-rSfD5D6NGWRUxK/scene.splinecode"
+            />
+            </div>
 
             <p className="max-w-2xl text-center text-lg leading-7 text-gray-500 dark:text-gray-400">
               {siteMetadata.description}
             </p>
 
-            <div className="mt-6 flex gap-4">
+            <div className="mt-8 flex gap-6">
               <Link
                 href="/about"
-                className="bg-primary-500 hover:bg-primary-600 inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-medium text-white transition-colors"
+                className="bg-primary-500 hover:bg-primary-600 inline-flex items-center gap-2 rounded-lg px-8 py-4 text-base font-medium text-white transition-colors"
               >
                 About Me
                 <span aria-hidden="true">→</span>
               </Link>
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-6 py-3 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700"
+                className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-8 py-4 text-base font-medium text-gray-900 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700"
               >
                 Read Blog
                 <span aria-hidden="true">→</span>
@@ -42,7 +48,7 @@ export default function Home({ posts }) {
           </div>
         </div>
 
-        <div className="pt-8">
+        {/* <div className="pt-8">
           <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">Latest Posts</h2>
           <ul className="divide-y divide-gray-200 dark:divide-gray-700">
             {!posts.length && 'No posts found.'}
@@ -106,7 +112,7 @@ export default function Home({ posts }) {
               All Posts &rarr;
             </Link>
           </div>
-        )}
+        )} */}
       </div>
     </>
   )
