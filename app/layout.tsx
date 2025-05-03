@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteMetadata.title,
     description: siteMetadata.description,
-    url: './',
+    url: 'https://justart-dev.vercel.app/',
     siteName: siteMetadata.title,
     images: [siteMetadata.socialBanner],
     locale: 'ko_KR',
@@ -100,7 +100,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         src="https://cloud.umami.is/script.js"
         data-website-id="d33b0949-5629-4042-b086-c48f745e636d"
       />
-      <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
+      <body>
         <ThemeProviders>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
           <SectionContainer>

@@ -1,10 +1,10 @@
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import { formatDate } from 'pliny/utils/formatDate'
+import { genPageMetadata } from 'app/seo'
 import Spline from '@splinetool/react-spline/next'
 
-const MAX_DISPLAY = 5
+export const metadata = genPageMetadata({ title: 'Home',  description: 'justart-dev blog'  })
 
 export default function Home({ posts }) {
   return (
