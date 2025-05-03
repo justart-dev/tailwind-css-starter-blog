@@ -4,7 +4,7 @@ import siteMetadata from '@/data/siteMetadata'
 import { genPageMetadata } from 'app/seo'
 import Spline from '@splinetool/react-spline/next'
 
-export const metadata = genPageMetadata({ title: 'Home',  description: 'justart-dev blog'  })
+export const metadata = genPageMetadata({ title: 'Home', description: 'justart-dev blog' })
 
 export default function Home({ posts }) {
   return (

@@ -13,7 +13,7 @@ export default function Projects() {
             Projects
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-          지난 페이지는 넘기고, 새 장을 펼칩니다
+            나만의 소중한 프로젝트. 경험을 쌓고, 성장하는 곳.
           </p>
         </div>
         <div className="container py-12">
