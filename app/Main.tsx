@@ -24,13 +24,13 @@ export default function Home({ posts }) {
               threshold={0.2}
               rootMargin="-50px"
             />
-            <div style={{ width: '100%', position: 'relative' }}>
+            <div style={{ width: '100%', height: '450px', position: 'relative' }}>
               <Orb hoverIntensity={0.3} rotateOnHover={false} hue={360} forceHoverState={false} />
             </div>
 
             <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
               <svg
-                className="mr-2 h-4 w-4"
+                className="mx-4 h-4 w-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
