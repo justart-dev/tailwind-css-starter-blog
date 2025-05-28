@@ -1,6 +1,6 @@
-import projectsData from '@/data/projectsData'
-import Card from '@/components/Card'
 import { genPageMetadata } from 'app/seo'
+import SpotlightCard from '@/components/SpotlightCard'
+import { projectsData } from 'app/projectsData'
 
 export const metadata = genPageMetadata({ title: 'Projects' })
 
@@ -13,13 +13,20 @@ export default function Projects() {
             Playground
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-          나만의 개발 놀이터. 자유롭게 시도하고, 실패하면서 배우는 공간.
+            나만의 개발 놀이터. 자유롭게 시도하고, 실패하면서 배우는 공간.
           </p>
         </div>
         <div className="container py-12">
           <div className="-m-4 flex flex-wrap">
             {projectsData.map((d) => (
-              <Card key={d.title} title={d.title} description={d.description} href={d.href} />
+              <SpotlightCard
+                className="custom-spotlight-card"
+                spotlightColor="rgba(0, 229, 255, 0.2)"
+                key={d.title}
+                title={d.title}
+                description={d.description}
+                href={d.href}
+              />
             ))}
           </div>
         </div>

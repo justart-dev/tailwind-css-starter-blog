@@ -3,7 +3,7 @@ const siteMetadata = {
   title: 'Justart-dev Blog',
   author: 'Justart-dev',
   headerTitle: 'Justart-dev',
-  description: '기술의 변화 속에서 새로운 가치를 찾아가는 이야기. 개발 과정에서 얻은 인사이트와 경험을 공유합니다.',
+  description: 'Tech’s running wild, and I’m just trying to feel something out of it!',
   language: 'ko-KR',
   theme: 'system', // system, dark or light
   siteUrl: 'https://justart-dev.vercel.app',

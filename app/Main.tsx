@@ -1,8 +1,8 @@
 import Link from '@/components/Link'
-import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { genPageMetadata } from 'app/seo'
-import Spline from '@splinetool/react-spline/next'
+import Orb from '@/components/Orb'
+import SplitText from '@/components/SplitText'
 
 export const metadata = genPageMetadata({ title: 'Home', description: 'justart-dev blog' })
 
@@ -15,102 +15,60 @@ export default function Home({ posts }) {
             <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
               Justart-dev
             </h1>
-
-            <div className="typing-container flex min-h-[4rem] items-center justify-center text-xl text-gray-600 md:text-2xl dark:text-gray-400">
-              <span className="typing-text">hello, nice to meet you. </span>
+            <SplitText
+              text="Hello, nice to meet you."
+              className="my-2 text-center text-2xl font-semibold"
+              delay={150}
+              animationFrom={{ opacity: 0, transform: 'translate3d(0,50px,0)' }}
+              animationTo={{ opacity: 1, transform: 'translate3d(0,0,0)' }}
+              threshold={0.2}
+              rootMargin="-50px"
+            />
+            <div style={{ width: '100%', position: 'relative' }}>
+              <Orb hoverIntensity={0.3} rotateOnHover={false} hue={360} forceHoverState={false} />
             </div>
-            <div className="h-[550px] w-full">
-              <Spline scene="https://prod.spline.design/u-rSfD5D6NGWRUxK/scene.splinecode" />
+
+            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+              <svg
+                className="mr-2 h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+              <span>Sharing insights and experiences from my development journey.</span>
             </div>
 
-            <p className="max-w-2xl text-center text-lg leading-7 text-gray-500 dark:text-gray-400">
-              {siteMetadata.description}
-            </p>
-
-            <div className="mt-8 flex gap-6">
+            <div className="mt-8 flex flex-wrap justify-center gap-4 sm:gap-6">
               <Link
                 href="/blog"
-                className="bg-primary-500 hover:bg-primary-600 inline-flex items-center gap-2 rounded-lg px-8 py-4 text-base font-medium text-white transition-colors"
+                className="group relative flex w-56 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/20"
               >
-                Read Blog
-                <span aria-hidden="true">→</span>
+                <span className="relative z-10 flex items-center justify-center gap-2 whitespace-nowrap">
+                  Read Blog
+                </span>
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-700 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
               </Link>
+
               <Link
-                href="/projects"
-                className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-8 py-4 text-base font-medium text-gray-900 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700"
+                href="/playground"
+                className="group relative flex w-56 items-center justify-center overflow-hidden rounded-lg border-2 border-indigo-500 bg-transparent px-8 py-4 text-base font-medium text-indigo-600 transition-all duration-300 hover:scale-105 hover:bg-indigo-50/50 hover:shadow-lg dark:border-indigo-400 dark:text-indigo-300 dark:hover:bg-gray-800/50"
               >
-                Projects
-                <span aria-hidden="true">→</span>
+                <span className="relative z-10 flex items-center justify-center gap-2 whitespace-nowrap">
+                  Browse Playground
+                </span>
+                <span className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-50 to-blue-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-gray-800/50 dark:to-gray-900/50"></span>
               </Link>
             </div>
           </div>
         </div>
-
-        {/* <div className="pt-8">
-          <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">Latest Posts</h2>
-          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-            {!posts.length && 'No posts found.'}
-            {posts.slice(0, MAX_DISPLAY).map((post) => {
-              const { slug, date, title, summary, tags } = post
-              return (
-                <li key={slug} className="py-12">
-                  <article>
-                    <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                      <dl>
-                        <dt className="sr-only">Published on</dt>
-                        <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                          <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
-                        </dd>
-                      </dl>
-                      <div className="space-y-5 xl:col-span-3">
-                        <div className="space-y-6">
-                          <div>
-                            <h2 className="text-2xl leading-8 font-bold tracking-tight">
-                              <Link
-                                href={`/blog/${slug}`}
-                                className="text-gray-900 dark:text-gray-100"
-                              >
-                                {title}
-                              </Link>
-                            </h2>
-                            <div className="flex flex-wrap">
-                              {tags.map((tag) => (
-                                <Tag key={tag} text={tag} />
-                              ))}
-                            </div>
-                          </div>
-                          <div className="prose max-w-none text-gray-500 dark:text-gray-400">
-                            {summary}
-                          </div>
-                        </div>
-                        <div className="text-base leading-6 font-medium">
-                          <Link
-                            href={`/blog/${slug}`}
-                            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                            aria-label={`Read more: "${title}"`}
-                          >
-                            Read more &rarr;
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-        {posts.length > MAX_DISPLAY && (
-          <div className="flex justify-end text-base leading-6 font-medium">
-            <Link
-              href="/blog"
-              className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-              aria-label="All posts"
-            >
-              All Posts &rarr;
-            </Link>
-          </div>
-        )} */}
       </div>
     </>
   )
