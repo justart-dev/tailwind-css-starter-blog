@@ -1,10 +1,10 @@
 import siteMetadata from '@/data/siteMetadata'
-import { headerNavLinks } from 'app/headerNavLinks'
 import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
 import Image from 'next/image'
+import { headerNavLinks } from 'app/headerNavLinks'
 
 const Header = () => {
   let headerClass = 'flex items-center w-full justify-between py-6'
