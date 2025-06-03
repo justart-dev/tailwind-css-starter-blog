@@ -3,6 +3,7 @@ import siteMetadata from '@/data/siteMetadata'
 import { genPageMetadata } from 'app/seo'
 import Orb from '@/components/Orb'
 import SplitText from '@/components/SplitText'
+import Spline from '@splinetool/react-spline/next'
 
 export const metadata = genPageMetadata({ title: 'Home', description: 'justart-dev blog' })
 
@@ -24,11 +25,11 @@ export default function Home({ posts }) {
               threshold={0.2}
               rootMargin="-50px"
             />
-            <div style={{ width: '100%', height: '450px', position: 'relative' }}>
-              <Orb hoverIntensity={0.3} rotateOnHover={false} hue={360} forceHoverState={false} />
+            <div className="h-[550px] w-full">
+              <Spline scene="https://prod.spline.design/u-rSfD5D6NGWRUxK/scene.splinecode" />
             </div>
 
-            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+            <div className="mt-8 flex items-center text-sm text-gray-500 dark:text-gray-400">
               <svg
                 className="mx-4 h-4 w-4"
                 fill="none"
@@ -57,7 +58,7 @@ export default function Home({ posts }) {
                 <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-700 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
               </Link>
 
-              <Link
+              {/* <Link
                 href="/playground"
                 className="group relative flex w-56 items-center justify-center overflow-hidden rounded-lg border-2 border-indigo-500 bg-transparent px-8 py-4 text-base font-medium text-indigo-600 transition-all duration-300 hover:scale-105 hover:bg-indigo-50/50 hover:shadow-lg dark:border-indigo-400 dark:text-indigo-300 dark:hover:bg-gray-800/50"
               >
@@ -65,7 +66,7 @@ export default function Home({ posts }) {
                   Browse Playground
                 </span>
                 <span className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-50 to-blue-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-gray-800/50 dark:to-gray-900/50"></span>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
