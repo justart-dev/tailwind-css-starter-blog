@@ -22,7 +22,7 @@ summary: 'Playwright를 이용한 E2E 테스트'
 ```typescript
 import { test, expect } from '@playwright/test'
 
-test('홈 접속 > MyPicks 메뉴 클릭 > /myPicks 페이지 이동 > 페이지 제목이 "추천 링크 모음" 이 된다.', async ({
+test('홈 화면에서 MyPicks 메뉴 클릭 하면, myPicks 페이지 이동하고, 이동 된 페이지의 제목이 "추천 링크 모음" 이 된다.', async ({
   page,
 }) => {
   const startUrl = 'http://localhost:3000'
@@ -38,6 +38,9 @@ test('홈 접속 > MyPicks 메뉴 클릭 > /myPicks 페이지 이동 > 페이지
 })
 ```
 
+> [!TIP]  
+> name에 `aria-label`을 사용해도 된다.
+
 `getByRole`에서 `heading`과 `level`의 조합으로 `h1` 태그를 찾는 것이다.
 
 만약 `h2`를 타겟팅 하려면, `level: 2`로 설정하면 된다.
@@ -45,7 +48,7 @@ test('홈 접속 > MyPicks 메뉴 클릭 > /myPicks 페이지 이동 > 페이지
 ### 2-2. 버튼 테스트
 
 ```typescript
-test('다크 모드 전환 테스트', async ({ page }) => {
+test('다크 모드 테마로 전환 이후에도 계속 테마가 유지되어야 한다.', async ({ page }) => {
   const startUrl = 'http://localhost:3000'
 
   // 1. 홈페이지 접속
@@ -99,3 +102,69 @@ test('다크 모드 전환 테스트', async ({ page }) => {
 `step`을 사용하면 테스트 가독성을 향상 시킬 수 있고, 디버깅을 용이하게 할 수 있다.
 
 또한, `Playwright`의 HTML 보고서(show-report)에서 `step`의 사용은 단계별로 계층 구조가 명확하게 표시되어 한눈에 파악할 수 있다.
+
+### 2-3. 제출 양식 테스트
+
+현제 사이트에서는 form 양식이 없으므로, 네이버 로그인 폼으로 테스트 코드를 작성해 보았다.
+
+```typescript
+test('로그인 필드가 모두 채워졌을 때, 로그인 버튼이 활성화 된다.', async ({ page }) => {
+  const startUrl = 'https://nid.naver.com/nidlogin.login?mode=form&url=https://www.naver.com/'
+  const loginButton = page.locator('[id="log.login"]')
+
+  await page.goto(startUrl)
+
+  await expect(loginButton).toHaveClass(/off/)
+
+  await page.locator('input#id').fill('testId')
+
+  await page.locator('input#pw').fill('testPassword')
+
+  await expect(loginButton).not.toHaveClass(/off/)
+})
+```
+
+`Playwright`는 `locator`를 사용하여 DOM 요소를 찾을 수 있다.
+
+네이버는 특이하게 `disabled` 속성을 사용하지 않고, 클래스로 on/off를 하고 있어서 `toBeEnabled()`를 사용할 수 없었다.
+
+`getByRole`을 사용하여 테스트 코드를 작성하고자 하였으나, 은근 힘이 들어서 다른 방법을 찾아보았다.
+
+그러는 도중 `locator`를 사용하여 테스트 코드를 작성할 수 있었다. 그래서 아래에 대한 내용을 좀 정리 해보았다.
+
+---
+
+## 🎯 Playwright에서 `locator()` 와 `getByRole()` 는 언제 사용 해야 할까?
+
+| 메서드        | 설명                                   | 사용 예                                        |
+| ------------- | -------------------------------------- | ---------------------------------------------- |
+| `locator()`   | 범용 요소 선택기 (CSS/XPath 기반)      | 구조 기반 선택: `.card`, `nth`, `attribute`    |
+| `getByRole()` | 접근성 역할(role)을 기준으로 요소 선택 | 의미 기반 선택: `button`, `heading`, `link` 등 |
+
+Playwright에서 요소를 조작하려면 **Locator 객체**가 필요합니다.
+
+## locator
+
+`locator()`는 원하는 요소를 선택하고, 클릭하거나 입력하거나 확인하는 데 사용되는 기본 메서드입니다.
+
+```typescript
+const loginButton = page.locator('button.login')
+await loginButton.click()
+```
+
+이건 마치 CSS 선택자 기반 DOM 선택처럼 동작합니다.
+
+## getByRole
+
+`getByRole()`은 화면 상에서 의미 있는 역할(Role)을 기준으로 요소를 선택합니다.  
+접근성(A11y)에 기반한 방식으로, **사람이 보는 UI 의미와 코드가 연결되도록** 도와줍니다.
+
+```typescript
+await page.getByRole('button', { name: '로그인' }).click()
+```
+
+이런 방식은 테스트의 **가독성과 안정성, 유지보수성**을 훨씬 높여줍니다.
+
+다만, 가능하다면 `getByRole()` 같은 의미 기반 접근을 먼저 고려하는 것이 좋습니다.
+
+두 가지 모두 상황에 맞게 병행하는 것이 Playwright를 잘 쓰는 방법입니다.

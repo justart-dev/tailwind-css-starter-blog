@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test('홈 접속 > MyPicks 메뉴 클릭 > /myPicks 페이지 이동 > 페이지 제목이 "추천 링크 모음" 이 된다.', async ({
+test('홈 화면에서 MyPicks 메뉴 클릭 하면, myPicks 페이지 이동하고, 이동 된 페이지의 제목이 "추천 링크 모음" 이 된다.', async ({
   page,
 }) => {
   const startUrl = 'http://localhost:3000'
@@ -15,7 +15,7 @@ test('홈 접속 > MyPicks 메뉴 클릭 > /myPicks 페이지 이동 > 페이지
   await expect(page).toHaveTitle(title)
 })
 
-test('다크 모드 전환 테스트', async ({ page }) => {
+test('다크 모드 테마로 전환 이후에도 계속 테마가 유지되어야 한다.', async ({ page }) => {
   const startUrl = 'http://localhost:3000'
 
   // 1. 홈페이지 접속
@@ -63,4 +63,19 @@ test('다크 모드 전환 테스트', async ({ page }) => {
     )
     expect(isDarkMode).toBeTruthy()
   })
+})
+
+test('로그인 필드가 모두 채워졌을 때, 로그인 버튼이 활성화 된다.', async ({ page }) => {
+  const startUrl = 'https://nid.naver.com/nidlogin.login?mode=form&url=https://www.naver.com/'
+  const loginButton = page.locator('[id="log.login"]')
+
+  await page.goto(startUrl)
+
+  await expect(loginButton).toHaveClass(/off/)
+
+  await page.locator('input#id').fill('testId')
+
+  await page.locator('input#pw').fill('testPassword')
+
+  await expect(loginButton).not.toHaveClass(/off/)
 })
