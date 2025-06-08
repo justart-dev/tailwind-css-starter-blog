@@ -1,0 +1,101 @@
+---
+title: 'Playwright 기초'
+date: '2025-06-08'
+tags: ['Testing Tool']
+draft: false
+summary: 'Playwright를 이용한 E2E 테스트'
+---
+
+> [!NOTE]  
+> 설치 : [Playwright Installation](https://playwright.dev/docs/intro)
+
+## 1. 시작
+
+`playwright.config.ts` 파일의 projects에서 테스트 할 브라우저를 설정할 수 있다.
+
+`Playwright VSCode` 라고 마이크로소프트에서 만든 익스텐션이 있다. 설치를 하면 유용하게 디버깅을 할 수 있다. 꼭 설치하자.
+
+## 2. 기초 예제
+
+### 2-1. 네비게이션 테스트
+
+```typescript
+import { test, expect } from '@playwright/test'
+
+test('홈 접속 > MyPicks 메뉴 클릭 > /myPicks 페이지 이동 > 페이지 제목이 "추천 링크 모음" 이 된다.', async ({
+  page,
+}) => {
+  const startUrl = 'http://localhost:3000'
+  const headingText = '추천 링크 모음'
+  const title = /추천 링크 모음/
+
+  await page.goto(startUrl)
+  await page.getByRole('link', { name: 'MyPicks' }).click()
+
+  await expect(page).toHaveURL(`${startUrl}/myPicks`)
+  await expect(page.getByRole('heading', { name: headingText, level: 1 })).toBeVisible()
+  await expect(page).toHaveTitle(title)
+})
+```
+
+`getByRole`에서 `heading`과 `level`의 조합으로 `h1` 태그를 찾는 것이다.
+
+만약 `h2`를 타겟팅 하려면, `level: 2`로 설정하면 된다.
+
+### 2-2. 버튼 테스트
+
+```typescript
+test('다크 모드 전환 테스트', async ({ page }) => {
+  const startUrl = 'http://localhost:3000'
+
+  // 1. 홈페이지 접속
+  await test.step('1. 홈페이지에 접속합니다', async () => {
+    await page.goto(startUrl)
+    await expect(page).toHaveURL(startUrl)
+  })
+
+  // 2. 다크 모드 버튼 찾기
+  await test.step('2. 다크 모드 전환 버튼을 찾습니다', async () => {
+    const themeButton = page.getByRole('button', { name: 'Theme switcher' })
+    await expect(themeButton).toBeVisible()
+
+    // 테마 전환 버튼 클릭
+    await themeButton.click()
+  })
+
+  // 3. 다크 모드 옵션 선택
+  await test.step('3. 다크 모드 옵션을 선택합니다', async () => {
+    // 다크 모드 옵션 버튼 찾기 (aria-label이나 텍스트로 찾기)
+    const darkModeOption = page.getByRole('menuitem', { name: /dark/i })
+    await expect(darkModeOption).toBeVisible()
+
+    // 다크 모드 클릭
+    await darkModeOption.click()
+
+    // 테마 전환 애니메이션 대기
+    await page.waitForTimeout(500)
+  })
+
+  // 4. 다크 모드 적용 확인
+  await test.step('4. 다크 모드가 적용되었는지 확인합니다', async () => {
+    const isDarkMode = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark')
+    )
+    console.log(`현재 테마: ${isDarkMode ? '다크 모드' : '라이트 모드'}`)
+    expect(isDarkMode).toBeTruthy()
+  })
+
+  // 5. 페이지 새로고침 후 테마 유지 확인
+  await test.step('5. 페이지를 새로고침하여 다크 모드가 유지되는지 확인합니다', async () => {
+    await page.reload()
+    const isDarkMode = await page.evaluate(() =>
+      document.documentElement.classList.contains('dark')
+    )
+    expect(isDarkMode).toBeTruthy()
+  })
+})
+```
+
+`step`을 사용하면 테스트 가독성을 향상 시킬 수 있고, 디버깅을 용이하게 할 수 있다.
+
+또한, `Playwright`의 HTML 보고서(show-report)에서 `step`의 사용은 단계별로 계층 구조가 명확하게 표시되어 한눈에 파악할 수 있다.
