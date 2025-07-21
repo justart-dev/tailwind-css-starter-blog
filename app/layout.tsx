@@ -101,8 +101,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         data-website-id="d33b0949-5629-4042-b086-c48f745e636d"
       />
       <Script
+        async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6198824361218150"
         crossOrigin="anonymous"
+        strategy="beforeInteractive"
       />
       <body>
         <ThemeProviders>
