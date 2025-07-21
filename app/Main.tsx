@@ -4,6 +4,7 @@ import { genPageMetadata } from 'app/seo'
 import Orb from '@/components/Orb'
 import SplitText from '@/components/SplitText'
 import Spline from '@splinetool/react-spline/next'
+import { RocketLaunchIcon } from '@heroicons/react/24/outline'
 
 export const metadata = genPageMetadata({ title: 'Home', description: 'justart-dev blog' })
 
@@ -29,33 +30,22 @@ export default function Home({ posts }) {
               <Spline scene="https://prod.spline.design/u-rSfD5D6NGWRUxK/scene.splinecode" />
             </div>
 
-            <div className="mt-8 flex items-center text-sm text-gray-500 dark:text-gray-400">
-              <svg
-                className="mx-4 h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-              <span>Sharing insights and experiences from my development journey.</span>
+            <div className="mt-8 flex items-center justify-center text-base text-gray-600 dark:text-gray-300 gap-2">
+              {/* Heroicons: RocketLaunch */}
+              <RocketLaunchIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+              <span>Small attempts gather to make big changes.</span>
             </div>
 
             <div className="mt-8 flex flex-wrap justify-center gap-4 sm:gap-6">
               <Link
                 href="/blog"
-                className="group relative flex w-56 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/20"
+                className="flex items-center gap-2 px-6 py-2 rounded-full border border-black dark:border-white text-black dark:text-white font-semibold text-base hover:bg-black hover:text-white hover:dark:bg-white hover:dark:text-black transition-all duration-200"
               >
-                <span className="relative z-10 flex items-center justify-center gap-2 whitespace-nowrap">
-                  Read Blog
-                </span>
-                <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-700 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+                Go to Blog
+                {/* Arrow left icon (Heroicons outline) */}
+                <svg className="h-5 w-5 ml-1" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12h10.5m0 0l-4.5-4.5m4.5 4.5l-4.5 4.5" />
+                </svg>
               </Link>
 
               {/* <Link
