@@ -33,7 +33,7 @@ export default function Home({ posts }) {
             <div className="mt-8 flex items-center justify-center text-base text-gray-600 dark:text-gray-300 gap-2">
               {/* Heroicons: RocketLaunch */}
               <RocketLaunchIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
-              <span>Small attempts gather to make big changes.</span>
+              <span>Small attempts add up to big changes.</span>
             </div>
 
             <div className="mt-8 flex flex-wrap justify-center gap-4 sm:gap-6">
