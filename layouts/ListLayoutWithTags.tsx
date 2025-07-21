@@ -88,6 +88,29 @@ export default function ListLayoutWithTags({
             {title}
           </h1>
         </div>
+        {/* Mobile tag collection */}
+        <div className="sm:hidden mb-4 overflow-x-auto pb-2">
+          <div className="flex gap-2 min-w-full">
+            {/* All tag */}
+            <Link
+              href="/blog"
+              className={`whitespace-nowrap px-3 py-1 rounded border border-gray-200 dark:border-gray-700 text-xs font-medium transition-colors duration-150 ${!pathname.includes('/tags/') ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-white text-black dark:bg-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900'}`}
+              aria-label="View all posts"
+            >
+              ALL
+            </Link>
+            {sortedTags.map((t) => (
+              <Link
+                key={t}
+                href={`/tags/${slug(t)}`}
+                className={`whitespace-nowrap px-3 py-1 rounded border border-gray-200 dark:border-gray-700 text-xs font-medium transition-colors duration-150 ${decodeURI(pathname.split('/tags/')[1]) === slug(t) ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-white text-black dark:bg-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900'}`}
+                aria-label={`View posts tagged ${t}`}
+              >
+                {t}
+              </Link>
+            ))}
+          </div>
+        </div>
         <div className="flex sm:space-x-24">
           <div className="hidden h-full max-h-screen max-w-[280px] min-w-[280px] flex-wrap overflow-auto rounded-sm bg-gray-50 pt-5 shadow-md sm:flex dark:bg-gray-900/70 dark:shadow-gray-800/40">
             <div className="px-6 py-4">
