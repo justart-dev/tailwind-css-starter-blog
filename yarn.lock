@@ -2078,6 +2078,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@heroicons/react@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@heroicons/react@npm:2.1.1"
+  peerDependencies:
+    react: ">= 16"
+  checksum: 5ba8add458d23f6bbb823d759181d1d7e70707d966ad14577e05bbeb17e383aef800e0df7a163f4a5ec7987dd5e9816cd5d9edc0d874984db34818600bfd5c9e
+  languageName: node
+  linkType: hard
+
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"
@@ -11598,6 +11607,7 @@ __metadata:
     "@eslint/eslintrc": ^3.2.0
     "@eslint/js": ^9.16.0
     "@headlessui/react": 2.2.0
+    "@heroicons/react": 2.1.1
     "@next/bundle-analyzer": 15.1.4
     "@playwright/test": ^1.52.0
     "@react-spring/web": ^10.0.1

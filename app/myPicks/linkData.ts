@@ -81,6 +81,11 @@ export const categories = [
         url: 'https://screenshots.pro/',
         description: '앱의 소개 스크린샷을 무료로 생성하는 도구',
       },
+      {
+        name: 'App Privacy Policy Generator',
+        url: 'https://app-privacy-policy-generator.firebaseapp.com/',
+        description: '앱의 개인정보 보호 정책을 생성하는 도구',
+      },
     ],
   },
   {

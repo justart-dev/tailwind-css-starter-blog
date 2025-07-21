@@ -11,33 +11,33 @@ export default function AuthorLayout({ children, content }: Props) {
   const { name, avatar, occupation, company, email, github } = content
 
   return (
-    <>
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-          <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
+    <div className="min-h-screen py-8 bg-white dark:bg-black">
+      <div className="max-w-3xl mx-auto px-4">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-black dark:text-white">
             About
           </h1>
         </div>
-        <div className="items-start space-y-2 xl:grid xl:grid-cols-3 xl:space-y-0 xl:gap-x-8">
-          <div className="flex flex-col items-center space-x-2 pt-8">
+        <div className="flex flex-col md:flex-row md:items-start md:gap-12">
+          <div className="flex flex-col items-center md:w-1/3 mb-8 md:mb-0">
             {avatar && (
               <Image
                 src={avatar}
                 alt="avatar"
-                width={192}
-                height={192}
-                className="h-48 w-48 rounded-full"
+                width={144}
+                height={144}
+                className="h-36 w-36 rounded-full border border-gray-200 dark:border-gray-700"
               />
             )}
-            <h3 className="pt-4 pb-2 text-2xl leading-8 font-bold tracking-tight">{name}</h3>
-            <div className="text-gray-500 dark:text-gray-400">{occupation}</div>
-            <div className="text-gray-500 dark:text-gray-400">{company}</div>
+            <h3 className="mt-4 mb-1 text-xl font-semibold text-black dark:text-white">{name}</h3>
+            <div className="text-sm text-gray-700 dark:text-gray-300">{occupation}</div>
+            <div className="text-sm text-gray-700 dark:text-gray-300">{company}</div>
           </div>
-          <div className="prose dark:prose-invert max-w-none pt-8 pb-8 xl:col-span-2">
+          <div className="md:w-2/3 prose dark:prose-invert max-w-none">
             {children}
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
