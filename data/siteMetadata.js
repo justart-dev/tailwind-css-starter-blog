@@ -1,7 +1,7 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
   title: 'Justart-dev Blog',
-  author: 'Justart-dev',
+  author: 'Justart',
   headerTitle: 'Justart-dev',
   description: 'Tech’s running wild, and I’m just trying to feel something out of it!',
   language: 'ko-KR',
