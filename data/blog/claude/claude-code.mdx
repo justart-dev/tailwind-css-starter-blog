@@ -1,0 +1,205 @@
+---
+title: 'Claude Code 활용하기'
+date: '2025-07-27'
+tags: ['claude']
+draft: false
+summary: 'Claude Code 설치부터 MCP 연동 해보기'
+---
+
+## 프롤로그
+
+바이브 코딩이 열풍인 가운데 매주 업데이트가 너무 빨리 진행되고 있어서 비교하느라 진을 뺐다.
+
+처음에는 커서를 이용했지만 조금 무거웠고, 응답 속도는 빨랐지만 금방 리밋이 걸렸다. 과금을 했었지만 이대로는 너무 빨리 소진 될 것 같아 그만 뒀다.
+AI한테만 의지 하다보니 그냥 개발하는 것 만큼 프롬프트로 디버깅하는 시간이 걸린적도 있었다.
+
+현재는 윈드서프를 이용하고 있는데 UI가 간단하고 무료 모델로도 자동 완성이 가능하고 나름 바이브 코딩이 가능하기에 잘 사용하고 있었다. 거의 자동 완성 노예로만 사용하고
+간단한건 chat GPT를 이용하거나 일부 컨텍스트에서만 기존 모델을 이용해서 사용중에 있다.
+
+최근에 커서의 가격 정책 때문에 논란이 많아서 다들 클로드 코드로 넘어가는 분위기다. Opus 모델을 써보고 싶었지만 비싸서 프로 플랜을 구독하였다. 그래도 커서 보다 저렴하다. (5시간 마다 초기화 됨)
+
+MCP를 연동해서 이용해보았다.
+
+예전과는 확실히 다른 경험을 하게 되었다. 기존의 바이브 코딩 할 때와는 다르게 좀 더 프로젝트를 이해하고 컨텍스트에 맞는 응답을 제공했다.
+놀라웠던 점은 supabase MCP를 이용하면 DB관련 작업을 할 때에도 해줘~! 해도 다 된다는거다.
+
+각설하고 클로드코드 처음이니까 좀 잘 써보기 위해 정리를 해보았다.
+
+## Claude Code란?
+
+Claude Code는 Anthropic에서 개발한 혁신적인 AI 기반 개발 도구입니다.
+단순히 코드를 생성하는 것을 넘어서, 프로젝트 전체를 이해하고 컨텍스트에 맞는 개발 지원을 제공합니다.
+
+### 주요 특징
+
+| 기능                   | 설명                                                    |
+| ---------------------- | ------------------------------------------------------- |
+| **프로젝트 전체 이해** | 코드베이스 전체를 분석하여 컨텍스트에 맞는 답변 제공    |
+| **다중 파일 작업**     | 여러 파일을 동시에 읽고 편집할 수 있는 강력한 기능      |
+| **실시간 협업**        | 개발자와 AI가 함께 문제를 해결하는 페어 프로그래밍 경험 |
+| **메모리 기능**        | CLAUDE.md를 통한 프로젝트별 컨텍스트 저장               |
+| **MCP 연동**           | Model Context Protocol을 통한 확장 기능                 |
+
+---
+
+## 1. 설치 및 시작하기
+
+### 1️⃣ 설치 (Node.js v18 이상 필요)
+
+```bash
+npm install -g claude-code
+```
+
+### 2️⃣ 실행
+
+IDE 터미널에서 `claude` 입력하면 자동으로 extension이 설치됩니다.
+
+```bash
+claude
+```
+
+터미널에서 바로 Claude와 대화할 수 있는 인터페이스가 시작됩니다.
+
+---
+
+## 2. 핵심 기능 활용하기
+
+### 프로젝트 초기화
+
+새 프로젝트에서 Claude Code를 처음 사용할 때 **필수** 명령어입니다.
+
+```bash
+/init
+```
+
+**수행 작업:**
+
+- **프로젝트 구조 분석**: 현재 디렉토리의 모든 파일과 폴더 스캔
+- **기술 스택 파악**: package.json, requirements.txt 등 분석
+- **CLAUDE.md 생성**: 프로젝트별 가이드라인과 컨텍스트 문서 자동 생성
+
+### CLAUDE.md
+
+CLAUDE.md는 Claude Code의 **핵심 기능**입니다. Cursor의 `.cursorrules` 파일과 유사한 개념입니다!
+
+> [!TIP]
+> 프로젝트 시작 후 지속적으로 업데이트하는 것이 핵심입니다.
+
+### 대화내역 초기화
+
+Claude가 이상하게 작동할 때 대화 내역을 삭제하고 다시 시작
+
+```bash
+/clear
+```
+
+#### 모드 전환 (Shift + Tab)
+
+- **계획 모드**: 작업 전 계획 설명 후 승인 대기
+- **자동 수락**: 모든 제안 자동 수락
+- **일반 모드**: 각 작업마다 승인 필요 (기본값)
+
+### 권한 스킵
+
+클로드 처음 실행할때 해야함. 잠재적으로 위험한 작업도 확인 없이 바로 실행 (완전 자동화용)
+
+```bash
+claude --dangerously-skip-permissions
+```
+
+---
+
+## 3. MCP (Model Context Protocol) 연동
+
+MCP는 Claude Code의 기능을 확장할 수 있는 프로토콜입니다.
+다양한 서비스와 연동하여 Claude의 능력을 확장할 수 있습니다.
+
+### MCP 설치 및 추천
+
+1. .mcp.json 파일 생성
+
+```
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "env": {}
+    },
+    "mcp-playwright": {
+      "command": "npx",
+      "args": ["-y", "@executeautomation/playwright-mcp-server"],
+      "env": {},
+      "disabled": false
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+  }
+}
+
+```
+
+2. 커맨드 설치
+   (필요에 따라 api key 혹은 access token 추가)
+
+#### playwright MCP
+
+- 웹 자동화, 프론트엔드 개발 작업 분배, 순차적 추론 등의 기능을 수행하며, AI개발의 효율성과 품질 향상에 기여
+
+```bash
+claude mcp add --transport http playwright https://playwright.dev/mcp
+```
+
+#### context7 MCP
+
+- 라이브러리의 최신 정보를 제공
+
+```bash
+claude mcp add --transport http context7 https://mcp.context7.com/mcp
+```
+
+#### Magic MCP
+
+- 프론트엔드 작업의 오류를 줄이기 위해 사용
+
+```bash
+claude mcp add --transport http magic https://mcp.magic.ai/mcp
+```
+
+#### Claude Task Master MCP
+
+- 테스크를 참조하여 점진적 개발에 도움
+
+```bash
+claude mcp add --transport http taskmaster https://taskmaster.dev/mcp
+```
+
+#### Sequential Thinking MCP
+
+- 복잡한 프로젝트에서 단계적으로 논리적인 흐름을 따라 사고하고 작업
+
+```bash
+claude mcp add --transport http sequential-thinking https://sequential-thinking.dev/mcp
+```
+
+### MCP 확인
+
+Manage MCP servers를 통해 MCP가 정상적으로 설치되었는지 확인할 수 있습니다.
+
+```bash
+/mcp
+```
+
+## 4. 기타 유용한 옵션
+
+### 1. 슈퍼 클로드 (https://superclaude.org)
+
+클로드 코드 프레임워크라고 불림
+
+**특징:**
+
+- Claude Code의 확장된 기능 제공
+- 더 많은 MCP 서버 지원
+- 커스텀 워크플로우 생성 가능
