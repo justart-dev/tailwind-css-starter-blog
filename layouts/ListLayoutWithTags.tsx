@@ -89,12 +89,12 @@ export default function ListLayoutWithTags({
           </h1>
         </div>
         {/* Mobile tag collection */}
-        <div className="sm:hidden mb-4 overflow-x-auto pb-2">
-          <div className="flex gap-2 min-w-full">
+        <div className="mb-4 overflow-x-auto pb-2 sm:hidden">
+          <div className="flex min-w-full gap-2">
             {/* All tag */}
             <Link
               href="/blog"
-              className={`whitespace-nowrap px-3 py-1 rounded border border-gray-200 dark:border-gray-700 text-xs font-medium transition-colors duration-150 ${!pathname.includes('/tags/') ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-white text-black dark:bg-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900'}`}
+              className={`rounded border border-gray-200 px-3 py-1 text-xs font-medium whitespace-nowrap transition-colors duration-150 dark:border-gray-700 ${!pathname.includes('/tags/') ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-white text-black hover:bg-gray-100 dark:bg-black dark:text-white dark:hover:bg-gray-900'}`}
               aria-label="View all posts"
             >
               ALL
@@ -103,7 +103,7 @@ export default function ListLayoutWithTags({
               <Link
                 key={t}
                 href={`/tags/${slug(t)}`}
-                className={`whitespace-nowrap px-3 py-1 rounded border border-gray-200 dark:border-gray-700 text-xs font-medium transition-colors duration-150 ${decodeURI(pathname.split('/tags/')[1]) === slug(t) ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-white text-black dark:bg-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900'}`}
+                className={`rounded border border-gray-200 px-3 py-1 text-xs font-medium whitespace-nowrap transition-colors duration-150 dark:border-gray-700 ${decodeURI(pathname.split('/tags/')[1]) === slug(t) ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-white text-black hover:bg-gray-100 dark:bg-black dark:text-white dark:hover:bg-gray-900'}`}
                 aria-label={`View posts tagged ${t}`}
               >
                 {t}
@@ -154,29 +154,29 @@ export default function ListLayoutWithTags({
                 return (
                   <li
                     key={path}
-                    className="mb-5 transform rounded-lg border border-gray-200 p-5 shadow-md transition duration-300 ease-in-out hover:scale-105 hover:bg-gray-100 hover:shadow-lg xl:min-w-[650px] dark:hover:bg-gray-800"
+                    className="mb-4 transform rounded-lg border border-gray-200 p-3 shadow-md transition duration-300 ease-in-out hover:scale-105 hover:bg-gray-100 hover:shadow-lg sm:p-5 xl:min-w-[650px] dark:hover:bg-gray-800"
                   >
                     <article className="flex flex-col space-y-2 xl:space-y-0">
                       <dl>
                         <dt className="sr-only">Published on</dt>
-                        <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
+                        <dd className="text-sm leading-6 font-medium text-gray-500 sm:text-base dark:text-gray-400">
                           <time dateTime={date} suppressHydrationWarning>
                             {formatDate(date, siteMetadata.locale)}
                           </time>
                         </dd>
                       </dl>
-                      <div className="space-y-3">
+                      <div className="space-y-2 sm:space-y-3">
                         <div>
-                          <h2 className="my-2 text-2xl leading-8 font-bold tracking-tight">
+                          <h2 className="my-1 text-xl leading-7 font-bold tracking-tight sm:my-2 sm:text-2xl sm:leading-8">
                             <Link href={`/${path}`} className="text-gray-900 dark:text-gray-100">
                               {title}
                             </Link>
                           </h2>
-                          <div className="my-2 flex flex-wrap">
+                          <div className="my-1 flex flex-wrap sm:my-2">
                             {tags?.map((tag) => <Tag key={tag} text={tag} />)}
                           </div>
                         </div>
-                        <div className="prose max-w-none text-gray-500 dark:text-gray-400">
+                        <div className="prose max-w-none text-sm text-gray-500 sm:text-base dark:text-gray-400">
                           {summary}
                         </div>
                       </div>

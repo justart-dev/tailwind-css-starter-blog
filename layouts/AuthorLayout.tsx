@@ -11,15 +11,15 @@ export default function AuthorLayout({ children, content }: Props) {
   const { name, avatar, occupation, company, email, github } = content
 
   return (
-    <div className="min-h-screen py-8 bg-white dark:bg-black">
-      <div className="max-w-3xl mx-auto px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-black dark:text-white">
+    <div className="py-8">
+      <div className="mx-auto max-w-3xl px-4">
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl font-extrabold tracking-tight text-black md:text-5xl dark:text-white">
             About
           </h1>
         </div>
         <div className="flex flex-col md:flex-row md:items-start md:gap-12">
-          <div className="flex flex-col items-center md:w-1/3 mb-8 md:mb-0">
+          <div className="mb-8 flex flex-col items-center md:mb-0 md:w-1/3">
             {avatar && (
               <Image
                 src={avatar}
@@ -33,9 +33,7 @@ export default function AuthorLayout({ children, content }: Props) {
             <div className="text-sm text-gray-700 dark:text-gray-300">{occupation}</div>
             <div className="text-sm text-gray-700 dark:text-gray-300">{company}</div>
           </div>
-          <div className="md:w-2/3 prose dark:prose-invert max-w-none">
-            {children}
-          </div>
+          <div className="prose dark:prose-invert max-w-none md:w-2/3">{children}</div>
         </div>
       </div>
     </div>
