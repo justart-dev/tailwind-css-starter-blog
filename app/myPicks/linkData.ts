@@ -97,6 +97,11 @@ export const categories = [
         url: 'https://clip-memo.vercel.app',
         description: 'PWA로 만든 간단한 메모 웹 앱',
       },
+      {
+        name: 'Patch Log',
+        url: 'https://patchlog.vercel.app',
+        description: '스팀 게임 패치내역 한글화',
+      },
     ],
   },
 ]
