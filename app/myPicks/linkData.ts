@@ -18,6 +18,11 @@ export const categories = [
         url: 'https://icons.pqoqubbw.dev/',
         description: '애니메이션 아이콘',
       },
+      {
+        name: 'LaunchKit',
+        url: 'https://launchkit.evilmartians.io/',
+        description: '랜딩페이지 화면 레이아웃 ',
+      },
     ],
   },
   {
