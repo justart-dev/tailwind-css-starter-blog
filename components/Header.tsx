@@ -21,13 +21,14 @@ const Header = () => {
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <Link href="/" aria-label={siteMetadata.headerTitle} className="flex items-center">
-            <div className="mr-3">
+            <div className="w-10 h-10 min-w-10 min-h-10 mr-3 flex items-center justify-center overflow-hidden">
               <Image
                 src={siteMetadata.siteLogo}
                 alt="avatar"
                 width={40}
                 height={40}
-                className="rounded-full border-2 border-gray-200 transition-colors duration-300 dark:border-gray-700"
+                className="w-10 h-10 aspect-square object-cover rounded-full border-2 border-gray-200 transition-colors duration-300 dark:border-gray-700"
+                priority
               />
             </div>
             {typeof siteMetadata.headerTitle === 'string' ? (
