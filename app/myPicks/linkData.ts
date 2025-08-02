@@ -23,6 +23,11 @@ export const categories = [
         url: 'https://launchkit.evilmartians.io/',
         description: '랜딩페이지 화면 레이아웃 ',
       },
+      {
+        name: 'Dicebear',
+        url: 'https://www.dicebear.com/',
+        description: '랜덤 아바타 이미지',
+      },
     ],
   },
   {
