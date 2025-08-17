@@ -17,7 +17,7 @@ const siteMetadata = {
   facebook: 'https://facebook.com',
   youtube: 'https://youtube.com',
   linkedin: 'https://www.linkedin.com',
-  threads: 'https://www.threads.net/@d.g_justart',
+  threads: 'https://www.threads.com/@d.g_justart?igshid=NTc4MTIwNjQ2YQ==',
   instagram: 'https://www.instagram.com',
   medium: 'https://medium.com',
   bluesky: 'https://bsky.app/',
