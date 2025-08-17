@@ -30,7 +30,7 @@ export default function Home({ posts }) {
               <Spline scene="https://prod.spline.design/u-rSfD5D6NGWRUxK/scene.splinecode" />
             </div>
 
-            <div className="mt-8 flex items-center justify-center text-base text-gray-600 dark:text-gray-300 gap-2">
+            <div className="mt-8 flex items-center justify-center gap-2 text-base text-gray-600 dark:text-gray-300">
               {/* Heroicons: RocketLaunch */}
               <RocketLaunchIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
               <span>Small attempts add up to big changes.</span>
@@ -39,12 +39,23 @@ export default function Home({ posts }) {
             <div className="mt-8 flex flex-wrap justify-center gap-4 sm:gap-6">
               <Link
                 href="/blog"
-                className="flex items-center gap-2 px-6 py-2 rounded-full border border-black dark:border-white text-black dark:text-white font-semibold text-base hover:bg-black hover:text-white hover:dark:bg-white hover:dark:text-black transition-all duration-200"
+                className="flex items-center gap-2 rounded-full border border-black px-6 py-2 text-base font-semibold text-black transition-all duration-200 hover:bg-black hover:text-white dark:border-white dark:text-white hover:dark:bg-white hover:dark:text-black"
               >
                 Go to Blog
                 {/* Arrow left icon (Heroicons outline) */}
-                <svg className="h-5 w-5 ml-1" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12h10.5m0 0l-4.5-4.5m4.5 4.5l-4.5 4.5" />
+                <svg
+                  className="ml-1 h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.75 12h10.5m0 0l-4.5-4.5m4.5 4.5l-4.5 4.5"
+                  />
                 </svg>
               </Link>
 

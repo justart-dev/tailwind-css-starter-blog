@@ -1,0 +1,342 @@
+---
+title: 'PatchLog 프로젝트 개발기: 배치 시스템 구축'
+date: '2025-08-17'
+tags: ['Project']
+draft: false
+summary: 'Marvel Rivals 패치 로그를 자동으로 수집하고 번역하는 서비스를 만들면서 겪은 시행착오와 해결 과정을 기록합니다.'
+---
+
+## 목차
+
+1. [프로젝트 개요](#프로젝트-개요)
+2. [PostgreSQL & Supabase 데이터베이스 설계](#postgresql--supabase-데이터베이스-설계)
+3. [배치 시스템 구축](#배치-시스템-구축)
+4. [모니터링 시스템 구축](#모니터링-시스템-구축)
+5. [Cron 표현식과 시간대 문제](#cron-표현식과-시간대-문제)
+6. [배운 점과 개선 방향](#배운-점과-개선-방향)
+
+---
+
+## 프로젝트 개요
+
+**PatchLog**는 Marvel Rivals 게임의 패치 노트를 Steam API에서 자동으로 수집하고, AI를 활용해 한국어로 번역하여 제공하는 서비스입니다.
+
+🔗 **서비스 링크**: [PatchLog](https://patchlog.vercel.app/)
+
+---
+
+## PostgreSQL & Supabase 데이터베이스 설계
+
+### 테이블 구조
+
+몇 가지 테이블만 소개 하겠습니다.
+
+#### 1. steam_patch_logs - 패치 로그 본문
+
+```sql
+CREATE TABLE steam_patch_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  app_id TEXT NOT NULL REFERENCES steam_app_metadata(app_id),
+  app_gid TEXT UNIQUE, -- Steam의 고유 게시글 ID
+  title TEXT,
+  content TEXT,
+  translated_ko TEXT, -- AI 번역된 한국어 컨텐츠
+  published_at TIMESTAMPTZ,
+  synced_at TIMESTAMPTZ, -- 데이터 동기화 시점
+  url TEXT,
+  app_name TEXT NOT NULL
+);
+```
+
+**설계 의도:**
+
+- `app_gid`: Steam API에서 제공하는 고유 게시글 ID. 중복 방지를 위한 UNIQUE 제약
+- `translated_ko`: 원본과 번역본을 분리하여 번역 품질 비교 가능
+- `synced_at`: 최근 2일 내 동기화된 패치만 번역하도록 필터링
+- `app_name`: 정규화보다는 조회 성능을 위해 비정규화 선택
+
+#### 2. batch_execution_logs - 배치 실행 로그
+
+```sql
+CREATE TABLE batch_execution_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  batch_name TEXT NOT NULL,
+  status TEXT NOT NULL CHECK (status IN ('started', 'success', 'failed')),
+  started_at TIMESTAMPTZ DEFAULT now(),
+  finished_at TIMESTAMPTZ,
+  error_message TEXT,
+  execution_details JSONB, -- 실행 세부정보 (헤더, 결과 등)
+  created_at TIMESTAMPTZ DEFAULT now(),
+  steam_data_fetched BOOLEAN DEFAULT false,
+  steam_items_count INTEGER DEFAULT 0
+);
+```
+
+**칼럼별 설계 이유:**
+
+- `batch_name`: 여러 배치가 있을 때 구분용 (현재는 'marvel-rivals-batch'만 사용)
+- `status`: ENUM 대신 CHECK 제약 사용 (PostgreSQL ENUM의 변경 복잡성 회피)
+- `execution_details`: JSONB로 유연한 메타데이터 저장 (API 헤더, 실행 결과 등)
+- `steam_data_fetched`, `steam_items_count`: 비즈니스 로직용 별도 칼럼 (JSONB 조회보다 빠름)
+
+### PostgreSQL 특화 기능 활용
+
+#### 1. JSONB(Binary JSON) 활용
+
+```sql
+-- execution_details에서 특정 값 조회
+SELECT * FROM batch_execution_logs
+WHERE execution_details->>'userAgent' = 'vercel-cron/1.0';
+
+-- JSONB 인덱스 생성 (성능 최적화)
+CREATE INDEX idx_batch_logs_user_agent
+ON batch_execution_logs USING GIN ((execution_details->>'userAgent'));
+```
+
+**JSONB의 장점:**
+
+- 저장 시 약간 느리지만 조회, 검색, 인덱싱이 훨씬 빠름
+- 유연한 메타데이터 저장 가능
+- GIN 인덱스를 통한 효율적인 조회 지원
+
+#### 2. 시간대 처리 (TIMESTAMPTZ)
+
+```sql
+-- 한국 시간으로 변환하여 조회
+SELECT
+  started_at AT TIME ZONE 'Asia/Seoul' as started_at_kst
+FROM batch_execution_logs;
+```
+
+**특징:**
+
+- 시간대 정보를 포함한 타임스탬프 저장
+- 필요에 따라 특정 시간대로 변환 가능
+
+#### 3. RLS(Row Level Security) - PostgreSQL 고유 기능
+
+**정책 설계:**
+
+```sql
+-- 패치 로그는 누구나 읽을 수 있음
+ALTER TABLE steam_patch_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Anyone can read patch logs" ON steam_patch_logs
+  FOR SELECT USING (true);
+
+-- 자신의 댓글만 수정/삭제 가능
+CREATE POLICY "Users can manage own comments" ON comments
+  FOR ALL USING (auth.uid() = user_id);
+
+-- 배치 로그는 서비스 롤키만 접근 가능
+CREATE POLICY "Service role only for batch logs" ON batch_execution_logs
+  FOR ALL USING (false); -- 기본적으로 모든 접근 차단
+```
+
+**주의사항:**
+
+```typescript
+// ❌ anon key로는 RLS 때문에 접근 불가
+const { data } = await supabase.from('batch_execution_logs').select('*')
+
+// ✅ Service Role Key로 RLS 우회
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+```
+
+---
+
+## 배치 시스템 구축
+
+### 배치 로깅 시스템
+
+```typescript
+export class BatchLogger {
+  static async logStart(batchName: string, details?: BatchExecutionDetails) {
+    const { data } = await supabase
+      .from('batch_execution_logs')
+      .insert({
+        batch_name: batchName,
+        status: 'started',
+        execution_details: details || {},
+      })
+      .select()
+      .single()
+
+    return data.id
+  }
+
+  static async logSuccess(logId: string, details?: BatchExecutionDetails) {
+    // 기존 details와 병합
+    const { data: existingLog } = await supabase
+      .from('batch_execution_logs')
+      .select('execution_details')
+      .eq('id', logId)
+      .single()
+
+    const mergedDetails = {
+      ...(existingLog?.execution_details || {}),
+      ...(details || {}),
+    }
+
+    await supabase
+      .from('batch_execution_logs')
+      .update({
+        status: 'success',
+        finished_at: new Date().toISOString(),
+        execution_details: mergedDetails,
+        steam_data_fetched: details?.steamDataFetched,
+        steam_items_count: details?.steamItemsCount,
+      })
+      .eq('id', logId)
+  }
+}
+```
+
+**로깅 시스템 설계 포인트:**
+
+- **시작 로그 우선**: 인증 실패해도 시작 로그는 남김
+- **세부정보 병합**: 기존 execution_details와 새 정보 병합
+- **비즈니스 메트릭**: `steam_data_fetched`, `steam_items_count` 별도 추적
+
+---
+
+## 모니터링 시스템 구축
+
+### 문제: 배치 실패 감지 불가
+
+패치 내역이 업데이트되지 않는 문제를 뒤늦게 발견했습니다.
+
+### 해결: 3단계 모니터링 시스템 (진행중)
+
+#### 1. 배치 상태 API
+
+```typescript
+// app/api/batch-status/route.ts
+export async function GET() {
+  const { data: recentBatches } = await supabase
+    .from('batch_execution_logs')
+    .select('*')
+    .gte('started_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+    .order('started_at', { ascending: false })
+
+  const today = new Date().toISOString().split('T')[0]
+  const todayBatches = recentBatches?.filter((batch) => batch.started_at?.startsWith(today))
+
+  return NextResponse.json({
+    healthy: todayBatches && todayBatches.length > 0,
+    todayExecutions: todayBatches?.length || 0,
+    lastSuccess: recentBatches?.find((b) => b.status === 'success'),
+  })
+}
+```
+
+#### 2. GitHub Actions 모니터링
+
+```yaml
+# .github/workflows/batch-monitor.yml
+name: Batch Monitor
+on:
+  schedule:
+    - cron: '0 10 * * *' # 배치 1시간 후 체크
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Batch Status
+        run: |
+          response=$(curl -s https://patchlog.vercel.app/api/batch-status)
+          healthy=$(echo "$response" | jq -r '.healthy')
+
+          if [ "$healthy" = "false" ]; then
+            echo "::warning::Batch execution failed"
+            exit 1
+          fi
+```
+
+#### 3. 자동 이슈 생성
+
+```yaml
+- name: Create Issue on Failure
+  if: failure()
+  uses: actions/github-script@v7
+  with:
+    script: |
+      await github.rest.issues.create({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        title: `🚨 Batch Execution Failed - ${new Date().toISOString().split('T')[0]}`,
+        labels: ['batch-failure', 'bug', 'high-priority']
+      });
+```
+
+---
+
+## Cron 표현식과 시간대 문제
+
+### Cron 표현식 기본
+
+```
+# ┌───────────── 분 (0-59)
+# │ ┌───────────── 시 (0-23)
+# │ │ ┌───────────── 일 (1-31)
+# │ │ │ ┌───────────── 월 (1-12)
+# │ │ │ │ ┌───────────── 요일 (0-7, 0과 7은 일요일)
+# │ │ │ │ │
+# * * * * *
+```
+
+### 시간대
+
+Vercel Cron은 UTC 기준, 한국 서비스는 KST는 UTC+9
+
+---
+
+## 배운 점과 개선 방향
+
+### 1. 백업 시스템의 중요성
+
+**문제**: Vercel 무료 플랜의 한계
+
+- 배치 실행 후 1시간만 로그 보존
+- 디버깅이 어려워짐
+
+**해결**: GitHub Actions 백업 크론
+
+- Vercel Cron 실패 시 자동 실행
+- 다른 플랫폼 사용으로 단일 장애점 제거
+
+### 2. 로깅 전략
+
+**핵심**: 문제 상황에서도 로그는 남겨야 함
+
+```typescript
+// 인증 실패해도 시작 로그는 생성
+const logId = await BatchLogger.logStart(batchName, headers)
+
+// 인증 체크
+if (!isVercelCron) {
+  await BatchLogger.logFailure(logId, 'Authentication failed')
+  return
+}
+```
+
+### 3. 모니터링 시스템의 필요성
+
+- 배치 실패를 빠르게 감지하고 대응
+- 단순한 로깅을 넘어서 실시간 알림과 자동 복구 메커니즘 구축
+- GitHub Actions를 통한 자동화된 이슈 생성
+
+### 4. PostgreSQL/Supabase 활용 포인트
+
+- **JSONB**: 유연한 메타데이터 저장과 효율적인 조회
+- **RLS**: 세밀한 접근 제어 (단, 권한 관리 복잡성 주의)
+- **TIMESTAMPTZ**: 시간대 정보 포함 타임스탬프
+- **CHECK 제약**: 데이터 무결성 보장과 유연성 확보
+
+---
+
+## 마무리
+
+작은 프로젝트지만 실제 서비스 운영의 핵심 요소들을 경험할 수 있었습니다. 안정적인 배치 시스템과 효과적인 모니터링의 중요성을 깨달았고, PostgreSQL의 다양한 특징들을 살펴볼 수 있었습니다.
+
+특히, **백업 시스템 구축**, **세밀한 로깅 전략**, **실시간 모니터링**의 중요성을 체감했습니다. 앞으로는 미비한 부분들을 개선할 예정입니다.

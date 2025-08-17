@@ -1,5 +1,7 @@
 {
-  "testing-tool": 2,
+  "claude": 1,
+  "tdd": 2,
   "tailwind-css": 2,
+  "project": 1,
   "think": 1
 }
