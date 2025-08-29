@@ -98,8 +98,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                   className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300"
                   id="comment"
                 >
-                  {/* Todo : 코멘트 기능 추가 */}
-                  {/* <Comments slug={slug} /> */}
+                  <Comments slug={slug} />
                 </div>
               )}
             </div>
