@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { headerNavLinks } from 'app/headerNavLinks'
 
 const Header = () => {
-  let headerClass = 'flex items-center w-full justify-between py-4 sm:py-6'
+  let headerClass = 'flex items-center w-full justify-between py-2 sm:py-3'
 
   // 헤더 스타일 - 부드러운 디자인을 위한 스타일 조정
   headerClass +=
@@ -20,7 +20,7 @@ const Header = () => {
   return (
     <header className={headerClass}>
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex min-h-[60px] items-center justify-between">
+        <div className="flex min-h-[48px] items-center justify-between sm:min-h-[52px]">
           <Link
             href="/"
             aria-label={siteMetadata.headerTitle}
