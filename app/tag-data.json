@@ -1,8 +1,8 @@
 {
-  "claude": 1,
   "project": 2,
-  "tailwind-css": 2,
+  "react": 1,
+  "claude": 1,
   "tdd": 2,
-  "think": 1,
-  "react": 1
+  "tailwind-css": 2,
+  "think": 1
 }
