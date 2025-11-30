@@ -19,6 +19,11 @@ export const categories = [
         description: '애니메이션 아이콘',
       },
       {
+        name: 'simple icon',
+        url : 'https://simpleicons.org/?q=claude',
+        description: '유명 브랜드를 위한 SVG 아이콘',
+      },
+      {
         name: 'LaunchKit',
         url: 'https://launchkit.evilmartians.io/',
         description: '랜딩페이지 화면 레이아웃 ',
