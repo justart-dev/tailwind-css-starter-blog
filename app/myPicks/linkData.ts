@@ -49,6 +49,11 @@ export const categories = [
         url: 'https://wwit.design/',
         description: '앱 디자인 레퍼런스',
       },
+      {
+        name: '60FPS',
+        url: 'https://60fps.design/',
+        description: '애니메이션 디자인 레퍼런스',
+      }
     ],
   },
   {
@@ -65,6 +70,11 @@ export const categories = [
         url: 'https://ui.aceternity.com/',
         description: '다양한 애니메이션 컴포넌트 컬렉션',
       },
+      {
+        name: 'React email',
+        url : 'https://react.email/',
+        description: 'React를 이용한 이메일 탬플릿 라이브러리 - 주로 resend를 이용하여 이메일 발송',
+      }
     ],
   },
   {
