@@ -26,13 +26,14 @@ export const metadata: Metadata = {
     template: `%s | ${siteMetadata.title}`,
   },
   description: siteMetadata.description,
+  keywords: siteMetadata.keywords,
   openGraph: {
     title: siteMetadata.title,
     description: siteMetadata.description,
-    url: 'https://justart-dev.vercel.app/',
+    url: siteMetadata.siteUrl,
     siteName: siteMetadata.title,
     images: [siteMetadata.socialBanner],
-    locale: 'ko_KR',
+    locale: siteMetadata.locale.replace('-', '_'),
     type: 'website',
   },
   alternates: {

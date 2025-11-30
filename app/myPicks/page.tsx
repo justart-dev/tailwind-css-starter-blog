@@ -9,7 +9,10 @@ import {
 } from '@heroicons/react/24/solid'
 import { JSX } from 'react'
 
-export const metadata = genPageMetadata({ title: '추천 링크 모음' })
+export const metadata = genPageMetadata({
+  title: '추천 링크 모음',
+  description: '다양한 디자인 리소스, 레퍼런스, React 라이브러리, 유용한 도구 모음',
+})
 
 const categoryIcons: Record<string, JSX.Element> = {
   '디자인 리소스': <SparklesIcon className="h-6 w-6 text-black dark:text-white" />,

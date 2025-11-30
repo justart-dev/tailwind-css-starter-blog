@@ -3,7 +3,7 @@ const siteMetadata = {
   title: 'Justart-dev Blog',
   author: 'Justart',
   headerTitle: 'Justart-dev',
-  description: 'Tech’s running wild, and I’m just trying to feel something out of it!',
+  description: 'Justart-dev Blog - Web Development, React, Next.js, and Tech Insights. Tech’s running wild, and I’m just trying to feel something out of it!',
   language: 'ko-KR',
   theme: 'system', // system, dark or light
   siteUrl: 'https://justart-dev.vercel.app',
@@ -23,6 +23,7 @@ const siteMetadata = {
   bluesky: 'https://bsky.app/',
   notion: 'https://www.notion.so/parklego/Justart-dev-95a04974aa47476e9930ba3b214441a8',
   locale: 'ko-KR',
+  keywords: 'React, Next.js, Web Development, Tech Blog, JavaScript, TypeScript, Tailwind CSS',
   // set to true if you want a navbar fixed to the top
   stickyNav: true,
   analytics: {
@@ -45,9 +46,9 @@ const siteMetadata = {
     // posthogAnalytics: {
     //   posthogProjectApiKey: '', // e.g. 123e4567-e89b-12d3-a456-426614174000
     // },
-    // googleAnalytics: {
-    //   googleAnalyticsId: '', // e.g. G-XXXXXXX
-    // },
+    googleAnalytics: {
+      googleAnalyticsId: 'G-XXXXXXX', // e.g. G-XXXXXXX
+    },
   },
   newsletter: {
     // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus, beehive

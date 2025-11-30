@@ -13,13 +13,14 @@ export function genPageMetadata({ title, description, image, ...rest }: PageSEOP
   return {
     title,
     description: description || siteMetadata.description,
+    keywords: siteMetadata.keywords,
     openGraph: {
       title: `${title} | ${siteMetadata.title}`,
       description: description || siteMetadata.description,
-      url: './',
+      url: siteMetadata.siteUrl,
       siteName: siteMetadata.title,
       images: image ? [image] : [siteMetadata.socialBanner],
-      locale: 'ko_KR',
+      locale: siteMetadata.locale.replace('-', '_'),
       type: 'website',
     },
     twitter: {
