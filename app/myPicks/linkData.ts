@@ -82,6 +82,7 @@ export const categories = [
       }
     ],
   },
+  
   {
     title: '유용한 도구들',
     description: '개발에 유용한 도구들',
@@ -111,6 +112,38 @@ export const categories = [
         url: 'https://app-privacy-policy-generator.firebaseapp.com/',
         description: '앱의 개인정보 보호 정책을 생성하는 도구',
       },
+      {
+        name: 'Excalidraw',
+        url: 'https://excalidraw.com/',
+        description: '간단히 타이핑, 그림을 그리는 도구',
+      }
+    ],
+  },
+  {
+    title : '레퍼런스',
+    description: '개발에 도움되는 레퍼런스',
+    links: [
+      {
+        name: 'State of JS',
+        url: 'https://2024.stateofjs.com/ko-KR/',
+        description: 'JavaScript의 사용 현황을 보여주는 레퍼런스',
+      },
+      {
+        name: 'State of React',
+        url: 'https://2024.stateofreact.com/ko-KR/',
+        description: 'React의 사용 현황을 보여주는 레퍼런스',
+      },
+      {
+        name: 'State of React Native',
+        url: 'https://results.stateofreactnative.com/en-US/',
+        description: 'React Native의 사용 현황을 보여주는 레퍼런스',
+      },
+      {
+        name : 'GeekNews',
+        url : 'https://news.hada.io/',
+        description : '개발 뉴스를 보여주는 레퍼런스',
+      }
+   
     ],
   },
   {
