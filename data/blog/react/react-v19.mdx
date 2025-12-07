@@ -1,0 +1,275 @@
+---
+title: 'React v19.2 릴리즈'
+date: '2025-12-07'
+tags: ['React']
+draft: false
+summary: 'React v19 ~ v19.2 공식문서 살펴보기'
+---
+
+## 목차
+
+1. 시작하기
+2. 새로운 기능
+    - use
+    - Activity 컴포넌트
+3. 개선 사항
+    - forwardRef
+4. 마무리
+---
+
+## 시작하기
+
+🔗 **리액트 블로그**: [React v19](https://ko.react.dev/blog/2024/12/05/react-19)
+
+**React 19**가 2024년 12월 5일에 정식 출시되었습니다.
+
+릴리즈 된지 벌써 1년이 지났네요. 그동안 AI agent들을 이것저것 다뤄보느라 정신없이 지내다 보니, 정작 React 19를 제대로 살펴보지 못했습니다.
+
+이번 버전에는 정말 인상적인 업데이트들이 많습니다. 공식문서에 자세한 설명이 있지만, 이 글에서는 **개인적으로 감명 깊었던 기능들**을 중심으로 정리해보려 합니다.
+
+## 새로운 기능
+
+### 새로운 API: use 
+
+React 18 이전에는 컴포넌트 렌더링은 동기적이어야 한다는 제약이 있었다.
+
+그러니까 React는 컴포넌트를 호출하면 즉시 JSX를 반환받아야 했어요. ("잠깐 기다려줘!" 라는 개념이 없다는 뜻)
+
+그래서 우회하는 방법을 사용했던 것이죠. 
+
+```javascript
+function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetchUser(userId).then(data => setUser(data)); // 여기서 비동기 처리
+  }, [userId]);
+
+  if (!user) return <Spinner />;
+  return <div>{user.name}</div>;
+}
+```
+
+**React 18 이전 흐름:**
+
+> 첫 렌더링 → user는 null → Spinner 보여줌 → useEffect 실행 → API 호출 → 응답 오면 → setUser(data) → 리렌더링 트리거 → 두 번째 렌더링 → user 있음 → 실제 UI 보여줌
+
+하지만 React 19에서는 `use` API를 통해 이 패턴이 훨씬 간결해집니다.
+
+```javascript
+function UserProfile({ userPromise }) {
+  const user = use(userPromise); // Promise가 resolve될 때까지 기다림
+  return <div>{user.name}</div>;
+}
+
+// 부모 컴포넌트
+function App() {
+  const userPromise = fetchUser(1); // Promise 
+  
+  return (
+    <Suspense fallback={<Spinner />}>
+      <UserProfile userPromise={userPromise} />
+    </Suspense>
+  );
+}
+```
+
+**React 19 흐름:**
+
+> 렌더링 시작 → use(userPromise) 호출 → Promise가 pending 상태 → Suspense가 감지하고 Spinner 보여줌 → Promise resolve → React가 자동으로 리렌더링 → user 데이터로 실제 UI 보여줌
+
+### 핵심 차이점
+
+| 항목 | React 18 이전 | React 19 |
+|------|--------------|----------|
+| 상태 관리 | `useState` + `useEffect` 필요 | `use` 하나로 해결 |
+| 로딩 처리 | 컴포넌트 내부에서 직접 분기 | `Suspense`가 자동 처리 |
+| 코드량 | 보일러플레이트 많음 | 간결함 |
+| 렌더링 | 2번 (null → 데이터) | 1번 (데이터 준비 후) |
+
+Promise를 컴포넌트 렌더링 흐름 안에서 직접 기다릴 수 있게 된 것이 핵심입니다. 
+
+기존에는 `useEffect`로 사이드 이펙트 처리하거나 외부 라이브러리(React Query, SWR 등)에 의존해야 했는데, 이제 React 자체에서 `Suspense`와 연동되는 방식으로 지원하게 되었습니다.
+
+### 새로운 컴포넌트: Activity
+
+🔗 **리액트 레퍼런스**: [Activity](https://ko.react.dev/reference/react/Activity)
+
+React 19.2에서 새로 도입된 컴포넌트입니다. 실무에서 정말 자주 겪는 **상태 손실 문제**를 우아하게 해결해줍니다.
+
+(다른건 몰라도 이 컴포넌트는 꼭 공식문서에서 이전과 비교해보세요!! 저는 소름 돋았거든요..)
+
+#### 문제 상황: 조건부 렌더링 시 상태 손실
+
+사이드바나 탭을 숨겼다가 다시 보여줄 때, 기존 방식은 컴포넌트를 **마운트 해제**하기 때문에 내부 상태가 사라집니다.
+
+**React 18 이전 (조건부 렌더링):**
+
+```javascript
+function App() {
+  const [isShowingSidebar, setIsShowingSidebar] = useState(true);
+
+  return (
+    <>
+      {isShowingSidebar && <Sidebar />} // 자주 사용하던 패턴 
+      
+      <button onClick={() => setIsShowingSidebar(!isShowingSidebar)}>
+        Toggle sidebar
+      </button>
+    </>
+  );
+}
+```
+
+> **흐름:** isShowingSidebar가 false → Sidebar 마운트 해제 → 내부 상태(펼쳐진 메뉴, 스크롤 위치 등) 모두 손실 → 다시 true가 되면 초기 상태로 다시 시작
+
+> [!TIP]
+> **`&&` vs `? :`의 차이**
+> 
+> ```javascript
+> // && 연산자: 숫자가 0이면 "0"이 화면에 렌더링됨! 😱
+> {count && <Component />}  // count가 0이면 → 화면에 "0" 출력
+> 
+> // 삼항 연산자: 명시적으로 null 반환하여 안전함
+> {count ? <Component /> : null}  // count가 0이면 → 아무것도 렌더링 안됨
+> ```
+> 
+> 숫자를 조건으로 쓸 땐 `count > 0 && <Component />` 또는 `삼항 연산자`를 사용하기!
+
+**React 19 (Activity 사용):**
+
+```javascript
+import { Activity, useState } from 'react';
+
+function App() {
+  const [isShowingSidebar, setIsShowingSidebar] = useState(true);
+
+  return (
+    <>
+      // Wrapper 형태로 감싸기만 하면 됨! 
+      <Activity mode={isShowingSidebar ? 'visible' : 'hidden'}> 
+        <Sidebar />
+      </Activity>
+      
+      <button onClick={() => setIsShowingSidebar(!isShowingSidebar)}>
+        Toggle sidebar
+      </button>
+    </>
+  );
+}
+```
+
+> **흐름:** mode가 'hidden' → `display: none`으로 시각적으로만 숨김 + Effect 클린업 → 상태는 그대로 보존 → 'visible'이 되면 이전 상태 그대로 복원
+
+#### 핵심 차이점
+
+| 항목 | React 18 이전 (조건부 렌더링) | React 19 (Activity) |
+|------|------------------------------|---------------------|
+| 숨길 때 동작 | 컴포넌트 마운트 해제 | `display: none` |
+| 내부 상태 | **손실됨** | **보존됨** |
+| DOM 상태 (input 값 등) | **손실됨** | **보존됨** |
+| Effect | 클린업 후 재실행 | 클린업 후 복원 시 재생성 |
+| 사전 렌더링 | 불가능 | 가능 (hidden 상태로 미리 렌더링) |
+
+#### 보너스: 사전 렌더링 (Pre-rendering)
+
+Activity의 또 다른 강력한 기능은 **아직 보이지 않는 콘텐츠를 미리 렌더링**할 수 있다는 점입니다.
+
+**React 18 이전 (조건부 렌더링):**
+
+```javascript
+function App() {
+  const [activeTab, setActiveTab] = useState('home');
+
+  return (
+    <Suspense fallback={<Loading />}>
+      {activeTab === 'home' && <Home />}
+      {activeTab === 'posts' && <Posts />}  {/* 클릭해야 렌더링 시작 */}
+    </Suspense>
+  );
+}
+```
+
+> **흐름:** Posts 탭 클릭 → 그제서야 Posts 마운트 → 데이터 페칭 시작 → 로딩 스피너 표시 → 완료 후 UI 표시
+
+**React 19 (Activity로 사전 렌더링):**
+
+```javascript
+function App() {
+  const [activeTab, setActiveTab] = useState('home');
+
+  return (
+    <Suspense fallback={<Loading />}>
+      <Activity mode={activeTab === 'home' ? 'visible' : 'hidden'}>
+        <Home />
+      </Activity>
+      <Activity mode={activeTab === 'posts' ? 'visible' : 'hidden'}>
+        <Posts />  {/* 숨겨진 상태에서 미리 렌더링! */}
+      </Activity>
+    </Suspense>
+  );
+}
+```
+
+> **흐름:** 앱 로드 → Home 렌더링 (visible) + Posts도 낮은 우선순위로 백그라운드 렌더링 (hidden) → Posts 탭 클릭 → 이미 준비되어 있으므로 **즉시 표시!**
+
+#### 핵심 포인트
+
+| 항목 | 조건부 렌더링 | Activity 사전 렌더링 |
+|------|--------------|---------------------|
+| 렌더링 시점 | 탭 클릭 후 | 앱 로드 시 (낮은 우선순위) |
+| 탭 전환 시 | 로딩 스피너 표시 | **즉시 표시** |
+| 데이터 페칭 | 탭 클릭 후 시작 | 미리 완료 |
+| 사용자 경험 | 대기 시간 있음 | 부드러운 전환 |
+
+사용자가 **다음에 볼 가능성이 높은 UI**를 미리 준비해두면, 탭 전환이나 네비게이션이 훨씬 빠르고 부드러워집니다!
+
+
+## 개선 사항
+
+### Prop으로의 ref 
+
+React 19부터 함수 컴포넌트의 Prop으로 ref에 접근할 수 있습니다.
+
+**React 18 이전 (forwardRef 필요):**
+
+```javascript
+import { forwardRef } from 'react';
+
+const MyInput = forwardRef(function MyInput({ placeholder }, ref) {
+  return <input placeholder={placeholder} ref={ref} />
+});
+
+// 사용
+<MyInput ref={ref} placeholder="Enter text..." />
+```
+
+**React 19 (forwardRef 불필요):**
+
+```javascript
+function MyInput({ placeholder, ref }) {
+  return <input placeholder={placeholder} ref={ref} />
+}
+
+// 사용 - 동일
+<MyInput ref={ref} placeholder="Enter text..." />
+```
+
+### 핵심 차이점
+
+| 항목 | React 18 이전 | React 19 |
+|------|--------------|----------|
+| ref 전달 방식 | `forwardRef` HOC 필수 | prop으로 직접 전달 |
+| 코드 복잡도 | 래핑 함수 필요 | 일반 prop처럼 사용 |
+| 가독성 | 중첩 구조 | 직관적 |
+
+새로운 함수 컴포넌트에서는 더 이상 `forwardRef`가 필요하지 않습니다. 
+
+## 마무리
+
+이번 React 19 릴리즈에서는 정말 많은 개선이 있었습니다. 특히 **UX와 DX** 모두를 신경 쓴 느낌을 많이 받았어요.
+
+`useMemo`, `useCallback`의 자동화에 이어 `forwardRef`까지 단순화되면서, 보일러플레이트 코드가 눈에 띄게 줄었습니다. 
+
+그리고 `Activity` 컴포넌트는 실무에서 정말 자주 겪던 상태 손실 문제를 우아하게 해결해주어서 인상 깊었어요.
+
