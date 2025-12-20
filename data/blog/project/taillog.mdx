@@ -1,0 +1,320 @@
+---
+title: 'Taillog : 크롬 익스텐션 만들어보기'
+date: '2025-12-19'
+tags: ['Project']
+draft: true
+summary: '개발자 도구 없이 좀 더 빠르게 디버깅하기 위한 크롬 익스텐션 개발'
+---
+
+
+## 목차
+
+1. 시작하기
+2. 기술 스택과 구조
+3. Content Script와 Background Script 통신
+4. Manifest 설정 
+5. 개발하면서 겪은 문제와 해결
+6. 크롬 웹스토어 배포
+
+---
+
+## 시작하기
+
+내가 왜 만들기로 생각했냐면 프론트엔드 개발자라면 알 것이다. 리액트 환경에서 상태값을 추적하려고 **console.log**를 여러개 찍어서 변화를 확인하거나 상태를 확인했었던 것을.
+
+그럴 때 마다 수많은 **console.log** 들을 지나치고 내가 원하는 곳에 가서 로그를 봐야한다. 개발자 도구를 열어 Console 탭 이 두 번 누르는 것조차도 귀찮아 질 때가 있다.
+
+여기에 추가로, API의 Payload를 잘 보냈는지? url은 맞는지? response 값이 잘 오고 있었던 건지 등 Network 탭을 확인 해야 하는 경우도 있다.
+
+마찬가지로 수 많은 페이지들에서 지나쳐 내가 원하는 내용을 찾으려면 매우 귀찮다. 현재 실무에서는 실제로 호출되는 공통 API가 많기에 바로 찾는 것이 힘들다.
+
+그래서 만들었다. 테스트 할 때에 조금이나마 편하기 위해서!
+
+---
+
+## 기술 스택과 구조
+
+```
+taillog/
+├── public/
+│   ├── manifest.json      # 익스텐션 설정
+│   ├── background.js      # 서비스 워커
+│   ├── content.js         # 콘텐츠 스크립트
+│   └── inject.js          # 페이지에 주입되는 스크립트
+├── src/                   # React 컴포넌트 (팝업 UI)
+├── vite.config.js
+└── package.json
+```
+
+- **Vite** - 빌드 도구
+- **React** - 팝업 UI
+- **Manifest V3** - 최신 크롬 익스텐션 표준
+
+---
+
+## Content Script와 Background Script 통신
+
+크롬 익스텐션에서 가장 헷갈렸던 부분이 스크립트 간 통신이었다. 각 스크립트는 서로 다른 컨텍스트에서 실행된다.
+
+### 실행 컨텍스트 이해하기
+
+| 스크립트 | 실행 환경 | 접근 가능 |
+|---|---|---|
+| inject.js | 웹 페이지 컨텍스트 | window, DOM, console |
+| content.js | 격리된 컨텍스트 | DOM, chrome API |
+| background.js | 서비스 워커 | chrome API 전체 |
+
+문제는 `console.log`나 `fetch`를 가로채려면 **웹 페이지 컨텍스트**에서 실행해야 하는데, content script는 격리된 환경에서 실행된다는 점이었다.
+
+### 방법: 스크립트 주입
+
+content.js에서 inject.js를 페이지에 직접 주입했다.
+
+```javascript
+// content.js
+const script = document.createElement('script')
+script.src = chrome.runtime.getURL('inject.js')
+document.documentElement.appendChild(script)
+```
+
+### 3단계 통신 구조
+
+```
+[웹 페이지]                       [격리된 환경]                       [서비스 워커]
+inject.js  ---postMessage--->  content.js  ---sendMessage--->  background.js
+                                    ↑                                ↓
+                              clipboard 이벤트                  storage, 브로드캐스트
+```
+
+**1단계: inject.js → content.js (postMessage)**
+
+```javascript
+// inject.js - console.log 가로채기
+const originalLog = console.log
+console.log = function (...args) {
+  window.postMessage({
+    source: 'taillog-extension',
+    type: 'console',
+    data: { type: 'log', args: safeStringify(args) }
+  }, '*')
+  originalLog.apply(console, args)
+}
+```
+
+**2단계: content.js → background.js (chrome.runtime.sendMessage)**
+
+```javascript
+// content.js
+window.addEventListener('message', (event) => {
+  if (event.data?.source === 'taillog-extension') {
+    chrome.runtime.sendMessage({
+      type: event.data.type,
+      data: event.data.data
+    })
+  }
+})
+```
+
+**3단계: background.js에서 데이터 관리**
+
+```javascript
+// background.js
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === 'console') {
+    consoleLogs.push(message.data)
+    // 연결된 포트들에 브로드캐스트
+    broadcastToConnections({ type: 'console', data: consoleLogs })
+  }
+})
+```
+
+### 팝업과의 양방향 통신 (Port)
+
+팝업 UI와는 `chrome.runtime.connect`를 사용해 지속적인 연결을 유지했다.
+
+```javascript
+// background.js
+chrome.runtime.onConnect.addListener((port) => {
+  connections.add(port)
+
+  port.onMessage.addListener((msg) => {
+    if (msg.type === 'init') {
+      // 초기 데이터 전송
+      port.postMessage({ type: 'console', data: consoleLogs })
+    }
+  })
+
+  port.onDisconnect.addListener(() => {
+    connections.delete(port)
+  })
+})
+```
+
+---
+
+## Manifest 설정 
+
+
+
+
+### 권한 최소화
+
+초기에는 `activeTab`, `clipboardWrite` 권한을 넣었는데, 크롬 웹스토어 심사 과정에서 불필요한 권한은 제거하라는 피드백을 받을 수 있다는 것을 알게 되었다.
+
+결국 필요한 권한만 남겼다.
+
+```json
+{
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"]
+}
+```
+
+클립보드 읽기는 권한 없이 `copy`, `cut` 이벤트 리스너로 해결했다.
+
+```javascript
+// content.js
+document.addEventListener('copy', () => {
+  const selectedText = window.getSelection()?.toString()
+  if (selectedText) {
+    chrome.runtime.sendMessage({
+      type: 'clipboard',
+      data: { text: selectedText, timestamp: Date.now() }
+    })
+  }
+})
+```
+
+### web_accessible_resources 설정
+
+inject.js를 페이지에 주입하려면 해당 파일을 웹에서 접근 가능하도록 설정해야 한다.
+
+```json
+{
+  "web_accessible_resources": [{
+    "resources": ["inject.js"],
+    "matches": ["<all_urls>"]
+  }]
+}
+```
+
+이 설정이 없으면 `chrome.runtime.getURL('inject.js')`로 가져온 URL이 차단된다.
+
+---
+
+## 개발하면서 겪은 문제와 해결
+
+### 1. 순환 참조로 인한 JSON 직렬화 실패
+
+`console.log`로 출력된 객체 중 순환 참조가 있으면 `JSON.stringify`가 실패한다.
+
+```javascript
+// inject.js
+function safeStringify(obj) {
+  const seen = new WeakSet()
+  return JSON.stringify(obj, (key, value) => {
+    if (typeof value === 'object' && value !== null) {
+      if (seen.has(value)) return '[Circular]'
+      seen.add(value)
+    }
+    return value
+  })
+}
+```
+
+### 2. 익스텐션 자체 로그 필터링
+
+inject.js가 console을 오버라이드하면서 익스텐션 자체의 로그나 Vite HMR 로그까지 캡처되는 문제가 있었다.
+
+```javascript
+// inject.js
+const isExtensionLog = args.some(arg =>
+  String(arg).includes('chrome-extension') ||
+  String(arg).includes('[vite]') ||
+  String(arg).includes('HMR')
+)
+if (isExtensionLog) return originalLog.apply(console, args)
+```
+
+### 3. Fetch와 XHR 둘 다 캡처하기
+
+모던 앱은 `fetch`를 쓰지만, 레거시 라이브러리는 여전히 `XMLHttpRequest`를 사용한다. 둘 다 캡처해야 했다.
+
+```javascript
+// inject.js - Fetch 캡처
+const originalFetch = window.fetch
+window.fetch = async function (...args) {
+  const response = await originalFetch.apply(this, args)
+  // 요청/응답 정보 전송
+  return response
+}
+
+// XHR 캡처
+const originalOpen = XMLHttpRequest.prototype.open
+XMLHttpRequest.prototype.open = function (method, url) {
+  this._method = method
+  this._url = url
+  return originalOpen.apply(this, arguments)
+}
+```
+
+### 4. 데이터 제한
+
+로그가 무한히 쌓이면 메모리 문제가 생긴다. 각 카테고리별 최대 개수를 제한했다.
+
+```javascript
+// background.js
+const MAX_ITEMS = 10
+
+if (consoleLogs.length > MAX_ITEMS) {
+  consoleLogs = consoleLogs.slice(-MAX_ITEMS)
+}
+```
+
+---
+
+## 크롬 웹스토어 배포
+
+### 1. 개발자 등록
+
+크롬 웹스토어에 익스텐션을 배포하려면 먼저 [Chrome 개발자 대시보드](https://chrome.google.com/webstore/devconsole)에서 개발자 등록을 해야 한다. 
+
+등록비 **$5** 가 필요하다. 한국은 안되서 미국으로 돌리고 결제했다..
+
+### 2. 개인정보처리방침 작성
+
+익스텐션이 사용자 데이터를 다루면 개인정보처리방침이 필요하다. 다들 GitHub Pages나 Notion 등에 호스팅한다고 한다. 
+
+### 3. 빌드 및 패키징
+
+```bash
+npm run build
+```
+
+`dist` 폴더를 zip으로 압축해서 업로드한다.
+
+### 4. 스토어 등록 정보
+
+- 익스텐션 설명
+- 스크린샷 (최소 1개, 1280x800 또는 640x400)
+- 카테고리 선택
+- 언어 설정
+
+### 5. 심사 대기
+
+제출 후 심사까지 보통 1~3일 정도 걸린다고 한다. 권한이 많거나 민감한 API를 사용하면 더 오래 걸릴 수 있다.
+
+
+#### 2025-12-19
+
+아마 나는 host 권한이 필요해서 심사가 오래걸릴 것 같다.
+
+
+
+---
+
+## 마무리
+
+처음 크롬 익스텐션을 만들어보면서 웹 페이지 컨텍스트와 익스텐션 컨텍스트의 분리, 그리고 이들 간의 통신 방식을 이해하는 게 가장 어려웠다. 하지만 한 번 구조를 이해하고 나니 다양한 기능을 추가하는 건 어렵지 않았다.
+
+개발자 도구를 열지 않고도 빠르게 디버깅 정보를 확인할 수 있게 되어서 만족스럽다.

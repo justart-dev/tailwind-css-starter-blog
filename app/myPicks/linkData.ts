@@ -33,6 +33,7 @@ export const categories = [
         url: 'https://www.dicebear.com/',
         description: '랜덤 아바타 이미지',
       },
+     
     ],
   },
   {
@@ -85,7 +86,7 @@ export const categories = [
   
   {
     title: '유용한 도구들',
-    description: '개발에 유용한 도구들',
+    description: '웹/앱에서 유용한 도구들',
     links: [
       {
         name: 'Code2Image',
@@ -116,6 +117,11 @@ export const categories = [
         name: 'Excalidraw',
         url: 'https://excalidraw.com/',
         description: '간단히 타이핑, 그림을 그리는 도구',
+      },
+      {
+        name: 'Screely',
+        url: 'https://screely.com/',
+        description: '화면 캡처',
       }
     ],
   },

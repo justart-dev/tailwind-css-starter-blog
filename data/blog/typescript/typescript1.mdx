@@ -1,0 +1,196 @@
+---
+title: '옵셔널보다 타입 확장을 선택해야 하는 이유'
+date: '2025-12-20'
+tags: ['typescript']
+draft: false
+summary: '옵셔널 프로퍼티 남용의 문제점과 타입 확장 및 Exhaustiveness Checking을 활용한 안전한 타입 설계'
+---
+
+## 타입 확장의 필요성
+
+실무에서는 초기 설계 이후 요구사항이 추가되는 경우가 빈번하다. 이때 기존 타입에 옵셔널 프로퍼티를 무분별하게 추가하면 타입 안정성이 떨어지고 런타임 에러의 위험이 증가한다.
+
+### 예제: 결제 시스템
+
+커머스 플랫폼에서 결제 수단을 처리하는 상황을 생각해보자.
+
+#### 초기 요구사항
+
+처음에는 카드 결제만 지원했다.
+
+```typescript
+interface Payment {
+  id: string
+  amount: number
+  cardNumber: string
+  cardExpiry: string
+}
+```
+
+#### 요구사항 추가
+
+서비스가 성장하면서 계좌이체와 간편결제도 지원해야 한다.
+
+**안티패턴: 옵셔널 프로퍼티 남용**
+
+```typescript
+interface Payment {
+  id: string
+  amount: number
+  // 카드 결제
+  cardNumber?: string
+  cardExpiry?: string
+  // 계좌이체
+  bankCode?: string
+  accountNumber?: string
+  // 간편결제
+  provider?: 'kakao' | 'naver' | 'toss'
+  token?: string
+}
+```
+
+이 방식의 문제점:
+- 카드 결제인데 `cardNumber`가 없어도 타입 에러가 발생하지 않는다
+- 계좌이체인데 `bankCode`만 있고 `accountNumber`가 없어도 허용된다
+- 결제 수단 간 필드가 잘못 조합되어도 컴파일 타임에 잡지 못한다
+
+**권장 패턴: 타입 확장**
+
+```typescript
+interface BasePayment {
+  id: string
+  amount: number
+}
+
+interface CardPayment extends BasePayment {
+  type: 'card'
+  cardNumber: string
+  cardExpiry: string
+}
+
+interface BankTransfer extends BasePayment {
+  type: 'bank'
+  bankCode: string
+  accountNumber: string
+}
+
+interface EasyPayment extends BasePayment {
+  type: 'easy'
+  provider: 'kakao' | 'naver' | 'toss'
+  token: string
+}
+
+type Payment = CardPayment | BankTransfer | EasyPayment
+```
+
+이제 각 결제 수단에 맞는 필드가 강제되고, `type` 프로퍼티로 타입 가드를 적용할 수 있다.
+
+```typescript
+function processPayment(payment: Payment) {
+  switch (payment.type) {
+    case 'card':
+      // payment.cardNumber, payment.cardExpiry 사용 가능
+      return processCardPayment(payment)
+    case 'bank':
+      // payment.bankCode, payment.accountNumber 사용 가능
+      return processBankTransfer(payment)
+    case 'easy':
+      // payment.provider, payment.token 사용 가능
+      return processEasyPayment(payment)
+  }
+}
+```
+
+---
+
+### Exhaustiveness Checking으로 타입 분기 유지하기
+
+유니온 타입을 사용할 때, 새로운 타입이 추가되면 모든 분기 처리 로직을 수정해야 한다. 하지만 개발자가 이를 놓치기 쉽다. Exhaustiveness Checking을 활용하면 처리되지 않은 케이스를 컴파일 타임에 잡아낼 수 있다.
+
+#### 문제 상황
+
+위의 결제 시스템에서 새로운 결제 수단이 추가되었다고 가정하자.
+
+```typescript
+interface CryptoPayment extends BasePayment {
+  type: 'crypto'
+  walletAddress: string
+  network: 'ethereum' | 'bitcoin'
+}
+
+type Payment = CardPayment | BankTransfer | EasyPayment | CryptoPayment
+```
+
+기존 `processPayment` 함수는 `CryptoPayment`를 처리하지 않지만, 타입스크립트는 아무런 경고를 주지 않는다.
+
+```typescript
+function processPayment(payment: Payment) {
+  switch (payment.type) {
+    case 'card':
+      return processCardPayment(payment)
+    case 'bank':
+      return processBankTransfer(payment)
+    case 'easy':
+      return processEasyPayment(payment)
+    // 'crypto' 케이스 누락 - 하지만 에러 없음!
+  }
+}
+```
+
+#### 해결: never 타입을 활용한 Exhaustiveness Checking
+
+```typescript
+function assertNever(value: never): never {
+  throw new Error(`Unhandled case: ${value}`)
+}
+
+function processPayment(payment: Payment) {
+  switch (payment.type) {
+    case 'card':
+      return processCardPayment(payment)
+    case 'bank':
+      return processBankTransfer(payment)
+    case 'easy':
+      return processEasyPayment(payment)
+    default:
+      return assertNever(payment)
+      // Error: Argument of type 'CryptoPayment' is not assignable to parameter of type 'never'
+  }
+}
+```
+
+모든 케이스가 처리되면 `default`에 도달할 수 없으므로 `payment`는 `never` 타입이 된다. 하지만 처리되지 않은 케이스가 있으면 해당 타입이 남아있어 컴파일 에러가 발생한다.
+
+#### 올바른 처리
+
+```typescript
+function processPayment(payment: Payment) {
+  switch (payment.type) {
+    case 'card':
+      return processCardPayment(payment)
+    case 'bank':
+      return processBankTransfer(payment)
+    case 'easy':
+      return processEasyPayment(payment)
+    case 'crypto':
+      return processCryptoPayment(payment)
+    default:
+      return assertNever(payment) // 이제 에러 없음
+  }
+}
+```
+
+이 패턴을 사용하면 유니온 타입에 새로운 멤버가 추가될 때마다 관련된 모든 switch문에서 컴파일 에러가 발생하므로, 누락된 처리 로직을 쉽게 찾을 수 있다.
+
+---
+
+## 정리
+
+| 옵셔널 프로퍼티 | 타입 확장 |
+|---|---|
+| 필드 조합의 유효성을 보장하지 못함 | 각 케이스에 맞는 필드가 강제됨 |
+| 런타임에 에러 발견 | 컴파일 타임에 에러 발견 |
+| 타입 가드 적용이 어려움 | switch/if로 자연스러운 타입 좁히기 |
+
+**Exhaustiveness Checking**을 함께 사용하면 새로운 타입 추가 시 처리 누락을 컴파일 타임에 방지할 수 있다.
+
