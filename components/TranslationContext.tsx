@@ -38,9 +38,6 @@ export function TranslationProvider({ children }: TranslationProviderProps) {
   // 초기화: API 지원 여부 확인 및 저장된 언어 로드
   useEffect(() => {
     const supported = isTranslatorSupported()
-    console.log('[Translation] API supported:', supported)
-    console.log('[Translation] window.Translator:', typeof window !== 'undefined' ? (window as any).Translator : 'N/A')
-    console.log('[Translation] window.translation:', typeof window !== 'undefined' ? (window as any).translation : 'N/A')
     setIsSupported(supported)
 
     if (supported) {
