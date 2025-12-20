@@ -20,7 +20,7 @@ const categoryIcons: Record<string, JSX.Element> = {
   '디자인 레퍼런스': <BookOpenIcon className="h-6 w-6 text-black dark:text-white" />,
   'React 라이브러리': <RocketLaunchIcon className="h-6 w-6 text-black dark:text-white" />,
   '유용한 도구들': <CodeBracketIcon className="h-6 w-6 text-black dark:text-white" />,
-  '레퍼런스': <ChartBarIcon className="h-6 w-6 text-black dark:text-white" />,
+  레퍼런스: <ChartBarIcon className="h-6 w-6 text-black dark:text-white" />,
   '토이 프로젝트': <StarIcon className="h-6 w-6 text-black dark:text-white" />,
 }
 

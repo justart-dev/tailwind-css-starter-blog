@@ -1,9 +1,9 @@
 {
-  "typescript": 1,
   "project": 3,
   "react": 2,
-  "think": 2,
   "ai-agent": 1,
+  "tailwind-css": 2,
   "tdd": 2,
-  "tailwind-css": 2
+  "think": 2,
+  "typescript": 1
 }

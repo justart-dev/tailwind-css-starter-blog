@@ -3,6 +3,7 @@ import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
+import LanguageSelector from './LanguageSelector'
 import Image from 'next/image'
 import { headerNavLinks } from 'app/headerNavLinks'
 
@@ -58,6 +59,7 @@ const Header = () => {
             </div>
             <div className="flex items-center space-x-2 sm:space-x-3">
               <SearchButton />
+              <LanguageSelector />
               <ThemeSwitch />
               <MobileNav />
             </div>

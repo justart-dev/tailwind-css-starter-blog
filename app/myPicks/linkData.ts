@@ -20,7 +20,7 @@ export const categories = [
       },
       {
         name: 'simple icon',
-        url : 'https://simpleicons.org/?q=claude',
+        url: 'https://simpleicons.org/?q=claude',
         description: '유명 브랜드를 위한 SVG 아이콘',
       },
       {
@@ -33,7 +33,6 @@ export const categories = [
         url: 'https://www.dicebear.com/',
         description: '랜덤 아바타 이미지',
       },
-     
     ],
   },
   {
@@ -59,7 +58,7 @@ export const categories = [
         name: '60FPS',
         url: 'https://60fps.design/',
         description: '애니메이션 디자인 레퍼런스',
-      }
+      },
     ],
   },
   {
@@ -78,12 +77,12 @@ export const categories = [
       },
       {
         name: 'React email',
-        url : 'https://react.email/',
+        url: 'https://react.email/',
         description: 'React를 이용한 이메일 탬플릿 라이브러리 - 주로 resend를 이용하여 이메일 발송',
-      }
+      },
     ],
   },
-  
+
   {
     title: '유용한 도구들',
     description: '웹/앱에서 유용한 도구들',
@@ -122,11 +121,11 @@ export const categories = [
         name: 'Screely',
         url: 'https://screely.com/',
         description: '화면 캡처',
-      }
+      },
     ],
   },
   {
-    title : '레퍼런스',
+    title: '레퍼런스',
     description: '개발에 도움되는 레퍼런스',
     links: [
       {
@@ -145,11 +144,10 @@ export const categories = [
         description: 'React Native의 사용 현황을 보여주는 레퍼런스',
       },
       {
-        name : 'GeekNews',
-        url : 'https://news.hada.io/',
-        description : '개발 뉴스를 보여주는 레퍼런스',
-      }
-   
+        name: 'GeekNews',
+        url: 'https://news.hada.io/',
+        description: '개발 뉴스를 보여주는 레퍼런스',
+      },
     ],
   },
   {
