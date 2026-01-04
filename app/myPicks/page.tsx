@@ -19,9 +19,9 @@ export const metadata = genPageMetadata({
 
 const categoryIcons: Record<string, JSX.Element> = {
   '디자인 에셋': <SparklesIcon className="h-6 w-6 text-black dark:text-white" />,
-  '영감 & 레퍼런스': <LightBulbIcon className="h-6 w-6 text-black dark:text-white" />,
+  '레퍼런스': <LightBulbIcon className="h-6 w-6 text-black dark:text-white" />,
   '프론트엔드 라이브러리': <RocketLaunchIcon className="h-6 w-6 text-black dark:text-white" />,
-  '앱 개발 & 마켓팅': <DevicePhoneMobileIcon className="h-6 w-6 text-black dark:text-white" />,
+  '마케팅': <DevicePhoneMobileIcon className="h-6 w-6 text-black dark:text-white" />,
   '개발 유틸리티': <WrenchScrewdriverIcon className="h-6 w-6 text-black dark:text-white" />,
   '기술 인사이트': <ChartBarIcon className="h-6 w-6 text-black dark:text-white" />,
   '사이드 프로젝트': <StarIcon className="h-6 w-6 text-black dark:text-white" />,
