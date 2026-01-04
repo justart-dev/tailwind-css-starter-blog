@@ -4,24 +4,27 @@ import {
   SparklesIcon,
   BookOpenIcon,
   RocketLaunchIcon,
-  CodeBracketIcon,
+  WrenchScrewdriverIcon,
   StarIcon,
   ChartBarIcon,
+  DevicePhoneMobileIcon,
+  LightBulbIcon,
 } from '@heroicons/react/24/solid'
 import { JSX } from 'react'
 
 export const metadata = genPageMetadata({
   title: '추천 링크 모음',
-  description: '다양한 디자인 리소스, 레퍼런스, React 라이브러리, 유용한 도구 모음',
+  description: '디자인 리소스, 개발 도구, 모바일 앱 출시 등 유용한 링크 모음',
 })
 
 const categoryIcons: Record<string, JSX.Element> = {
-  '디자인 리소스': <SparklesIcon className="h-6 w-6 text-black dark:text-white" />,
-  '디자인 레퍼런스': <BookOpenIcon className="h-6 w-6 text-black dark:text-white" />,
-  'React 라이브러리': <RocketLaunchIcon className="h-6 w-6 text-black dark:text-white" />,
-  '유용한 도구들': <CodeBracketIcon className="h-6 w-6 text-black dark:text-white" />,
-  레퍼런스: <ChartBarIcon className="h-6 w-6 text-black dark:text-white" />,
-  '토이 프로젝트': <StarIcon className="h-6 w-6 text-black dark:text-white" />,
+  '디자인 에셋': <SparklesIcon className="h-6 w-6 text-black dark:text-white" />,
+  '영감 & 레퍼런스': <LightBulbIcon className="h-6 w-6 text-black dark:text-white" />,
+  '프론트엔드 라이브러리': <RocketLaunchIcon className="h-6 w-6 text-black dark:text-white" />,
+  '앱 개발 & 마켓팅': <DevicePhoneMobileIcon className="h-6 w-6 text-black dark:text-white" />,
+  '개발 유틸리티': <WrenchScrewdriverIcon className="h-6 w-6 text-black dark:text-white" />,
+  '기술 인사이트': <ChartBarIcon className="h-6 w-6 text-black dark:text-white" />,
+  '사이드 프로젝트': <StarIcon className="h-6 w-6 text-black dark:text-white" />,
 }
 
 export default function LinkCollection() {
