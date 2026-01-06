@@ -28,6 +28,7 @@ export const categories = [
         url: 'https://www.dicebear.com/',
         description: '다양한 스타일의 사용자 아바타를 생성하는 라이브러리',
       },
+      
     ],
   },
   {
@@ -70,6 +71,11 @@ export const categories = [
     title: '프론트엔드 라이브러리',
     description: 'React와 Next.js 개발 생산성을 한 단계 높여주는 라이브러리',
     links: [
+      {
+        name: '21st',
+        url: 'https://21st.dev/community/components',
+        description: 'React 컴포넌트의 큐레이션 리소스',
+      },
       {
         name: 'ReactBits',
         url: 'https://www.reactbits.dev/',
@@ -120,6 +126,11 @@ export const categories = [
         name: 'Privacy Policy Gen',
         url: 'https://app-privacy-policy-generator.firebaseapp.com/',
         description: '복잡한 앱 개인정보 처리방침을 간편하게 생성',
+      },
+      {
+        name: 'Dub',
+        url: 'https://dub.co/',
+        description: '간편한 URL 줄이기 서비스',
       },
     ],
   },
