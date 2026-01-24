@@ -1,4 +1,7 @@
 {
+  "infra": 1,
+  "architecture": 1,
+  "msa": 1,
   "typescript": 1,
   "project": 3,
   "react": 2,
