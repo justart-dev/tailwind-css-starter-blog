@@ -7,6 +7,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: [
+          'var(--font-space-grotesk)',
+          'var(--font-noto-sans-jp)',
+          'system-ui',
+          '-apple-system',
+          'sans-serif',
+        ],
+      },
       colors: {
         primary: {
           50: '#eff6ff',
