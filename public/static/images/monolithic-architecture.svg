@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600">
+  <!-- Clients -->
+  <g id="clients">
+    <rect x="30" y="80" width="120" height="70" rx="5" fill="#4A90E2" stroke="#2E5C8A" stroke-width="2"/>
+    <text x="90" y="120" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Web Client</text>
+
+    <rect x="30" y="180" width="120" height="70" rx="5" fill="#4A90E2" stroke="#2E5C8A" stroke-width="2"/>
+    <text x="90" y="220" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Mobile App</text>
+  </g>
+
+  <!-- Monolithic Application -->
+  <g id="monolith">
+    <rect x="300" y="50" width="350" height="380" rx="10" fill="#6C6C6C" stroke="#4A4A4A" stroke-width="3"/>
+
+    <!-- Title -->
+    <text x="475" y="90" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Monolithic Application</text>
+
+    <!-- Components inside -->
+    <rect x="340" y="120" width="270" height="60" rx="5" fill="#7ED321" stroke="#5FA319" stroke-width="2"/>
+    <text x="475" y="155" text-anchor="middle" fill="white" font-size="15" font-weight="bold">User Module</text>
+
+    <rect x="340" y="200" width="270" height="60" rx="5" fill="#F5A623" stroke="#D68910" stroke-width="2"/>
+    <text x="475" y="235" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Product Module</text>
+
+    <rect x="340" y="280" width="270" height="60" rx="5" fill="#9013FE" stroke="#6B0FBF" stroke-width="2"/>
+    <text x="475" y="315" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Order Module</text>
+
+    <rect x="340" y="360" width="270" height="60" rx="5" fill="#50E3C2" stroke="#3AB39A" stroke-width="2"/>
+    <text x="475" y="395" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Payment Module</text>
+  </g>
+
+  <!-- Arrows from clients to Monolith -->
+  <path d="M 150 115 L 300 180" stroke="#333" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 150 215 L 300 240" stroke="#333" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- Single Database -->
+  <g id="database">
+    <ellipse cx="800" cy="240" rx="70" ry="50" fill="#555" stroke="#333" stroke-width="3"/>
+    <text x="800" y="248" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Database</text>
+  </g>
+
+  <!-- Arrow from monolith to database -->
+  <path d="M 650 240 L 730 240" stroke="#333" stroke-width="4" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333"/>
+    </marker>
+  </defs>
+</svg>
