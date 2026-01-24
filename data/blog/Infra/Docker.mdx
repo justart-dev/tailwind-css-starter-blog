@@ -1,0 +1,497 @@
+---
+title: 'Docker 톺아보기'
+date: '2026-01-24'
+tags: ['Infra']
+draft: false
+summary: 'Docker의 핵심 개념부터 실전 활용까지 - Image, Container, Volume을 중심으로'
+---
+
+## 목차
+
+1. Docker란?
+2. Image
+3. Container
+4. Volume
+5. 명령어
+6. Docker Compose
+7. 마무리
+
+---
+
+## 1. Docker란?
+
+### "내 컴퓨터에서는 되는데요?"
+
+개발하다 보면 이런 상황을 겪는다:
+
+- 로컬에서는 잘 되는데 서버에 올리면 안 됨
+- 팀원 컴퓨터에서는 실행이 안 됨
+- Node 버전이 달라서 에러 발생
+
+이유는 간단하다. **실행 환경이 다르기 때문**이다.
+
+### Docker가 해결하는 문제
+
+Docker는 **애플리케이션과 실행 환경을 하나로 묶어서 패키징**한다. 어디서 실행하든 동일하게 작동하도록 보장한다.
+
+---
+
+## 2. Image
+
+컨테이너를 만들기 위한 **설계도**라고 생각하면 된다.
+
+### Image 구성 요소
+
+이미지 안에는 딱 4가지가 들어있다:
+
+- **애플리케이션 코드**: 작성한 소스 코드
+- **실행 환경**: Node.js, Python 등
+- **라이브러리**: npm packages, pip packages
+- **기본 실행 명령**: 어떻게 실행할지
+
+### Image의 핵심 특징: 불변성 (Immutable)
+
+한 번 만들어진 이미지는 **절대 바뀌지 않는다**. 수정하려면 새 이미지를 다시 만들어야 한다.
+
+왜 이렇게 설계했을까? **어디서 실행하든 항상 동일한 결과를 보장**하기 위해서다.
+
+### Image 생성 과정
+
+> Dockerfile 작성 → docker build → Image 생성
+
+### Dockerfile 구조
+
+가장 전형적인 `Dockerfile`은 이렇게 생겼다. **위에서 아래로** 순서대로 실행된다.
+
+```dockerfile
+FROM node:20-alpine        # 베이스 이미지 (실행 환경)
+WORKDIR /app               # 작업 디렉토리 설정
+COPY package.json .        # 의존성 파일 복사
+RUN npm install            # 패키지 설치 (빌드 타임)
+COPY . .                   # 소스 코드 복사
+EXPOSE 3000                # 포트 선언 (문서화)
+CMD ["node", "server.js"]  # 실행 명령 (런타임)
+```
+
+> [!NOTE]  
+> **Alpine Linux**는 컨테이너를 위해 만들어진 초경량 리눅스 배포판이다.
+>
+> **장점**: 이미지 크기 작음, 보안에 유리
+>
+> **단점**: 일부 라이브러리 호환성 이슈 가능
+
+### Dockerfile 명령어 상세
+
+#### 1. FROM
+
+**어떤 환경에서 시작할 것인가?**
+
+모든 Dockerfile은 `FROM`으로 시작한다. 기존 이미지를 기반으로 새 이미지를 만든다.
+
+```dockerfile
+FROM node:20-alpine     # Node.js 20 + Alpine Linux
+FROM python:3.11-slim   # Python 3.11 + Slim Debian
+FROM nginx:alpine       # Nginx + Alpine
+```
+
+#### 2. WORKDIR
+
+**어디를 작업 디렉토리로 지정할 것인가?**.
+
+이후 모든 명령은 이 디렉토리에서 실행된다. 디렉토리가 없으면 자동 생성.
+
+#### 3. COPY
+
+**파일과 디렉토리를 이미지에 추가(복사)**
+
+```dockerfile
+# COPY: 로컬 파일을 컨테이너로 복사 (권장)
+COPY package.json .
+COPY src/ ./src/
+
+# ADD: 압축 해제, URL 다운로드 기능 포함
+ADD archive.tar.gz /app/
+```
+
+#### 4. RUN
+
+**이미지를 만들 때 실행할 명령**
+
+빌드 타임에 실행된다. 주로 패키지 설치나 빌드 작업에 사용.
+
+```dockerfile
+RUN npm install
+RUN npm run build
+RUN apt-get update && apt-get install -y curl
+```
+
+#### 5. EXPOSE
+
+**포트 선언 (문서화 용도)**
+
+실제로 포트를 열지는 않는다. "이 포트를 사용할 거야"라고 알려주는 것뿐.
+
+```dockerfile
+EXPOSE 3000    # HTTP 서버
+EXPOSE 5432    # PostgreSQL
+```
+
+실제 포트 바인딩은 `docker run -p` 옵션으로 한다.
+
+### Image 레이어 시스템
+
+Docker는 이미지를 **레이어 단위**로 관리한다. 각 명령어마다 레이어가 생성되고, 변경된 부분만 새로 빌드한다.
+
+```dockerfile
+FROM node:20-alpine        # Layer 1
+WORKDIR /app               # Layer 2
+COPY package.json .        # Layer 3
+RUN npm install            # Layer 4 (캐시됨!)
+COPY . .                   # Layer 5
+CMD ["node", "server.js"]  # Layer 6
+```
+
+**장점:**
+
+- 빌드 속도 빠름 (캐시 활용)
+- 이미지 크기 절약 (레이어 재사용)
+
+**최적화 팁:**
+
+```dockerfile
+# 나쁜 예: 코드 수정할 때마다 npm install 재실행
+COPY . .
+RUN npm install
+
+# 좋은 예: package.json 변경 시에만 npm install
+COPY package.json .
+RUN npm install
+COPY . .  # 코드 수정은 마지막에
+```
+
+---
+
+## 3. Container
+
+컨테이너는 **이미지를 실행한 결과물**이다. 이미지가 설계도라면, 컨테이너는 실제로 돌아가는 프로그램이다.
+
+컨테이너의 운영 철학은 "컨테이너는 고쳐 쓰는 대상이 아니라, **버리고 다시 만드는 대상**이다."
+
+### Container vs Image 비교
+
+```
+Image (설계도)          Container (실행 중)
+node:20-alpine  →      실행 중인 Node 앱 1
+                →      실행 중인 Node 앱 2
+                →      실행 중인 Node 앱 3
+```
+
+하나의 이미지로 **여러 개의 컨테이너**를 만들 수 있다.
+
+### Container의 특징
+
+#### 1. 프로세스 단위 실행
+
+컨테이너는 보통 **하나의 주요 프로세스**를 실행한다.
+
+- 컨테이너 = 프로세스
+- 프로세스 종료 = 컨테이너 종료
+
+#### 2. 독립된 실행 환경
+
+각 컨테이너는 서로 **완전히 분리**되어 있다.
+
+- **파일 시스템** 격리: 컨테이너 A의 파일은 컨테이너 B에서 보이지 않음
+- **네트워크** 격리: 각 컨테이너는 자기만의 IP를 가짐
+- **프로세스** 격리: 서로의 프로세스를 볼 수 없음
+
+#### 3. 휘발성 (Stateless)
+
+**컨테이너 내부에서 생성된 데이터는 임시적**이다. 컨테이너 삭제 시 데이터도 함께 사라진다.
+중요한 데이터는 `Volume`에 저장 해야한다.
+
+---
+
+## 4. Volume
+
+컨테이너의 데이터는 **휘발성**이다. 컨테이너가 삭제되면 데이터도 사라진다. 그럼 데이터베이스는 어떻게 관리할까?
+
+### Volume이란?
+
+**컨테이너 외부에 데이터를 저장**하는 메커니즘이다. 컨테이너가 삭제되어도 데이터는 남아있다.
+
+```
+컨테이너 (휘발성)  ←→  Volume (영구 저장)
+     삭제됨              유지됨
+```
+
+### Volume 사용 예시
+
+```bash
+# Volume 생성
+docker volume create mydata
+
+# Volume을 연결해서 컨테이너 실행
+docker run -v mydata:/app/data myapp
+
+# 컨테이너 삭제
+docker rm -f myapp
+
+# Volume은 여전히 존재 (데이터 유지)
+docker volume ls
+```
+
+#### Volume (권장)
+
+Docker가 관리하는 저장 공간
+
+```bash
+docker run -v myvolume:/app/data myapp
+```
+
+**장점:**
+
+- Docker가 관리해줌
+- 백업/마이그레이션 쉬움
+- 여러 컨테이너에서 공유 가능
+
+### 실전 사용: PostgreSQL
+
+```bash
+# Volume 생성
+docker volume create postgres-data
+
+# PostgreSQL 실행 (데이터를 Volume에 저장)
+docker run -d \
+  --name postgres \
+  -v postgres-data:/var/lib/postgresql/data \
+  -e POSTGRES_PASSWORD=secret \
+  postgres:15
+
+# 컨테이너 삭제해도 데이터는 유지됨
+docker rm -f postgres
+docker volume ls  # postgres-data 여전히 존재
+```
+
+---
+
+## 5. 명령어
+
+### Image 관련
+
+```bash
+# 이미지 빌드
+docker build -t myapp:1.0 .
+
+# 이미지 목록
+docker images
+
+# 이미지 삭제
+docker rmi myapp:1.0
+
+# 이미지 Pull (다운로드)
+docker pull nginx:alpine
+
+# 이미지 Push (업로드)
+docker push myusername/myapp:1.0
+
+# 사용하지 않는 이미지 정리
+docker image prune
+```
+
+### Container 관련
+
+```bash
+# 컨테이너 실행
+docker run -d --name myapp -p 3000:3000 myapp:1.0
+
+# -d: 백그라운드 실행
+# --name: 컨테이너 이름
+# -p 3000:3000: 포트 매핑 (호스트:컨테이너)
+
+# 실행 중인 컨테이너 목록
+docker ps
+
+# 모든 컨테이너 목록 (종료된 것 포함)
+docker ps -a
+
+# 컨테이너 로그 보기
+docker logs myapp
+docker logs -f myapp  # 실시간 로그
+
+# 컨테이너 안으로 들어가기
+docker exec -it myapp bash
+
+# 컨테이너 중지
+docker stop myapp
+
+# 컨테이너 삭제
+docker rm myapp
+
+# 컨테이너 중지 + 삭제
+docker rm -f myapp
+
+# 모든 컨테이너 삭제
+docker rm -f $(docker ps -aq)
+```
+
+### 네트워크 관련
+
+```bash
+# 네트워크 생성
+docker network create mynetwork
+
+# 컨테이너를 네트워크에 연결해서 실행
+docker run -d --name app --network mynetwork myapp
+
+# 같은 네트워크의 컨테이너끼리 통신 가능
+# app 컨테이너에서 db 컨테이너 접근: http://db:5432
+```
+
+### 시스템 정리
+
+```bash
+# 모든 정지된 컨테이너 삭제
+docker container prune
+
+# 사용하지 않는 이미지 삭제
+docker image prune
+
+# 사용하지 않는 Volume 삭제
+docker volume prune
+
+# 전부 다 정리 (조심!)
+docker system prune -a
+```
+
+---
+
+## 6. Docker Compose
+
+여러 개의 컨테이너를 **한 번에 관리**하는 도구다.
+
+### 왜 필요할까?
+
+**실제 애플리케이션은 여러 컨테이너로 구성**된다:
+
+- Node.js 앱
+- PostgreSQL 데이터베이스
+- Redis 캐시
+- Nginx 프록시
+
+이걸 일일이 `docker run`으로 실행하면 너무 복잡하다.
+
+### docker-compose.yml
+
+```yaml
+version: '3.8'
+
+services:
+  # Node.js 앱
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL=postgres://db:5432/mydb
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./src:/app/src # 개발 시 코드 수정 반영
+
+  # PostgreSQL
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  # Redis
+  redis:
+    image: redis:alpine
+
+volumes:
+  postgres-data:
+```
+
+### Docker Compose 명령어
+
+```bash
+# 모든 서비스 시작
+docker-compose up
+
+# 백그라운드로 시작
+docker-compose up -d
+
+# 로그 보기
+docker-compose logs -f
+
+# 특정 서비스만 재시작
+docker-compose restart app
+
+# 모든 서비스 중지
+docker-compose down
+
+# 서비스 중지 + Volume까지 삭제
+docker-compose down -v
+
+# 이미지 새로 빌드하고 시작
+docker-compose up --build
+```
+
+### 실전 팁
+
+#### 1. 개발 환경 설정
+
+```yaml
+# docker-compose.dev.yml
+services:
+  app:
+    build: .
+    volumes:
+      - ./src:/app/src # 코드 수정 즉시 반영
+    environment:
+      - NODE_ENV=development
+    command: npm run dev # hot reload
+```
+
+```bash
+# 개발 환경으로 실행
+docker-compose -f docker-compose.dev.yml up
+```
+
+#### 2. 프로덕션 환경 설정
+
+```yaml
+# docker-compose.prod.yml
+services:
+  app:
+    image: myapp:1.0 # 미리 빌드된 이미지 사용
+    restart: always # 자동 재시작
+    environment:
+      - NODE_ENV=production
+```
+
+---
+
+## 7. 마무리
+
+Docker를 정리하며 가장 인상 깊었던 점은 실행 환경을 이미지로 고정해 환경 문제를 깔끔하게 해결할 수 있다는 점이었다.
+
+이를 통해 MSA 아키텍처에서 서비스 단위의 독립적인 배포와 운영을 위해 Docker가 사실상 필수적인 요소임을 이해하게 되었다.
+
+다음 글에서는 이러한 컨테이너를 효율적으로 관리하기 위해 등장한 Kubernetes에 대해 살펴본다.
+
+---
+
+### 간단 정리
+
+| 개념           | 설명                        | 비유          |
+| -------------- | --------------------------- | ------------- |
+| **Image**      | 설계도 (불변)               | 붕어빵 틀     |
+| **Container**  | 실행 중인 프로그램 (휘발성) | 붕어빵        |
+| **Volume**     | 영구 저장소                 | 재료 보관함   |
+| **Dockerfile** | Image 만드는 레시피         | 붕어빵 레시피 |
+| **Compose**    | 여러 Container 관리         | 붕어빵 가게   |
