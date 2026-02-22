@@ -74,6 +74,7 @@ export default function ListLayoutWithTags({
   pagination,
 }: ListLayoutProps) {
   const pathname = usePathname()
+  const totalPostCount = posts.length
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
@@ -115,13 +116,13 @@ export default function ListLayoutWithTags({
           <div className="hidden h-full max-h-screen max-w-[280px] min-w-[280px] flex-wrap overflow-auto rounded-sm bg-gray-50 pt-5 shadow-md sm:flex dark:bg-gray-900/70 dark:shadow-gray-800/40">
             <div className="px-6 py-4">
               {pathname.startsWith('/blog') ? (
-                <h3 className="font-bold text-blue-600 uppercase">All Posts</h3>
+                <h3 className="font-bold text-blue-600 uppercase">{`All Posts (${totalPostCount})`}</h3>
               ) : (
                 <Link
                   href={`/blog`}
                   className="font-bold text-gray-700 uppercase hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-600"
                 >
-                  All Posts
+                  {`All Posts (${totalPostCount})`}
                 </Link>
               )}
               <ul>
@@ -173,7 +174,9 @@ export default function ListLayoutWithTags({
                             </Link>
                           </h2>
                           <div className="my-1 flex flex-wrap sm:my-2">
-                            {tags?.map((tag) => <Tag key={tag} text={tag} />)}
+                            {tags?.map((tag) => (
+                              <Tag key={tag} text={tag} />
+                            ))}
                           </div>
                         </div>
                         <div className="prose max-w-none text-sm text-gray-500 sm:text-base dark:text-gray-400">
