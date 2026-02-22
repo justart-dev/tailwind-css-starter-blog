@@ -24,6 +24,7 @@ export default async function TagPage(props: { params: Promise<{ tag: string; pa
   const tag = decodeURI(params.tag)
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   const pageNumber = parseInt(params.page)
+  const totalPostCount = allCoreContent(sortPosts(allBlogs)).length
   const filteredPosts = allCoreContent(
     sortPosts(allBlogs.filter((post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)))
   )
@@ -45,6 +46,7 @@ export default async function TagPage(props: { params: Promise<{ tag: string; pa
   return (
     <ListLayout
       posts={filteredPosts}
+      totalPostCount={totalPostCount}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
       title={title}

@@ -17,6 +17,7 @@ interface PaginationProps {
 interface ListLayoutProps {
   posts: CoreContent<Blog>[]
   title: string
+  totalPostCount?: number
   initialDisplayPosts?: CoreContent<Blog>[]
   pagination?: PaginationProps
 }
@@ -70,11 +71,12 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
 export default function ListLayoutWithTags({
   posts,
   title,
+  totalPostCount,
   initialDisplayPosts = [],
   pagination,
 }: ListLayoutProps) {
   const pathname = usePathname()
-  const totalPostCount = posts.length
+  const allPostCount = totalPostCount ?? posts.length
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
@@ -116,13 +118,13 @@ export default function ListLayoutWithTags({
           <div className="hidden h-full max-h-screen max-w-[280px] min-w-[280px] flex-wrap overflow-auto rounded-sm bg-gray-50 pt-5 shadow-md sm:flex dark:bg-gray-900/70 dark:shadow-gray-800/40">
             <div className="px-6 py-4">
               {pathname.startsWith('/blog') ? (
-                <h3 className="font-bold text-blue-600 uppercase">{`All Posts (${totalPostCount})`}</h3>
+                <h3 className="font-bold text-blue-600 uppercase">{`All Posts (${allPostCount})`}</h3>
               ) : (
                 <Link
                   href={`/blog`}
                   className="font-bold text-gray-700 uppercase hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-600"
                 >
-                  {`All Posts (${totalPostCount})`}
+                  {`All Posts (${allPostCount})`}
                 </Link>
               )}
               <ul>
