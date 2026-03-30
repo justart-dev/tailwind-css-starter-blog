@@ -191,7 +191,8 @@ npx degit 'timlrx/tailwind-nextjs-starter-blog'
 ## Installation
 
 ```bash
-yarn
+corepack enable
+pnpm install
 ```
 
 Please note, that if you are using Windows, you may need to run:
@@ -205,7 +206,7 @@ $env:PWD = $(Get-Location).Path
 First, run the development server:
 
 ```bash
-yarn dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
