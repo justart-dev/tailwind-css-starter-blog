@@ -1,14 +1,16 @@
 import Link from '@/components/Link'
-import siteMetadata from '@/data/siteMetadata'
 import { genPageMetadata } from 'app/seo'
-import Orb from '@/components/Orb'
 import SplitText from '@/components/SplitText'
 import Spline from '@splinetool/react-spline/next'
 import { RocketLaunchIcon } from '@heroicons/react/24/outline'
 
 export const metadata = genPageMetadata({ title: 'Home', description: 'justart-dev blog' })
 
-export default function Home({ posts }) {
+type MainProps = {
+  posts: unknown[]
+}
+
+export default function Home({ posts: _posts }: MainProps) {
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
