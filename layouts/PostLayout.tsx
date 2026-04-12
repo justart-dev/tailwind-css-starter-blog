@@ -34,7 +34,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
       <ScrollTopAndComment />
       <article>
         <div className="space-y-8 pt-6 md:pt-10">
-          <header className="surface-panel-soft overflow-hidden px-6 py-10 sm:px-10">
+          <header className="surface-panel overflow-hidden px-6 py-10 sm:px-10">
             <div className="space-y-4 text-center">
               <div className="text-xs font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
                 {basePath}

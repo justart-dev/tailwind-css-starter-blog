@@ -19,12 +19,6 @@ export default function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
             <div>{siteMetadata.author}</div>
             <div>{`© ${new Date().getFullYear()}`}</div>
-            <Link
-              href="/"
-              className="rounded-full border border-gray-200/80 px-3 py-1 hover:border-gray-950 hover:text-gray-950 dark:border-white/10 dark:hover:border-white dark:hover:text-white"
-            >
-              {siteMetadata.title}
-            </Link>
           </div>
           <div className="text-sm text-gray-500 dark:text-gray-400">
             <Link href="https://github.com/timlrx/tailwind-nextjs-starter-blog">

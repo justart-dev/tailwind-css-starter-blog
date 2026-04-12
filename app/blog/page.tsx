@@ -27,7 +27,7 @@ export default async function BlogPage(props: { searchParams: Promise<{ page: st
       totalPostCount={totalPostCount}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
-      title="All Posts"
+      title="Blog"
     />
   )
 }

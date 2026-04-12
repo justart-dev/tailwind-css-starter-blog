@@ -23,7 +23,7 @@ export default function AuthorLayout({ children, content }: Props) {
                 About
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-7 text-gray-600 dark:text-gray-300">
-                Justart에 대해 소개합니다.
+                A short introduction about me.
               </p>
             </div>
           </div>

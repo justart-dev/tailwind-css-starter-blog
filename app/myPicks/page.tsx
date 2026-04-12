@@ -37,10 +37,11 @@ export default function LinkCollection() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h1 className="text-3xl font-semibold tracking-[-0.05em] text-gray-950 sm:text-4xl dark:text-white">
-                추천 링크 모음
+                My Picks
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-7 text-gray-600 dark:text-gray-300">
-                디자인 리소스부터 개발 도구, 기술 인사이트까지 자주 참고하는 링크를 모아뒀습니다.
+                A collection of links I often revisit, from design resources and dev tools to
+                technical insights.
               </p>
             </div>
           </div>

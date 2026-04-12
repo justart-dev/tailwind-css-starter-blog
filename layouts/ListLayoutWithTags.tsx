@@ -101,7 +101,7 @@ export default function ListLayoutWithTags({
                 {title}
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-7 text-gray-600 dark:text-gray-300">
-                Notes on frontend engineering, testing workflows, and infrastructure basics.
+                Notes on development, projects, tools, and the ideas that come with building things.
               </p>
             </div>
           </div>
