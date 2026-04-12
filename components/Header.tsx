@@ -18,7 +18,7 @@ const Header = () => {
 
   return (
     <header className={headerClass}>
-      <div className="rounded-[2rem] border border-white/60 bg-white/75 px-4 py-3 shadow-[0_18px_60px_-32px_rgba(15,23,42,0.35)] ring-1 ring-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/55 dark:ring-white/10">
+      <div className="px-1 py-2">
         <div className="flex min-h-[52px] items-center justify-between gap-4">
           <Link
             href="/"
@@ -44,7 +44,7 @@ const Header = () => {
             )}
           </Link>
           <div className="flex flex-shrink-0 items-center gap-2 sm:gap-3">
-            <div className="hidden items-center rounded-full border border-gray-200/80 bg-white/80 px-2 py-1 shadow-sm md:flex dark:border-white/10 dark:bg-white/5">
+            <div className="hidden min-h-[46px] items-center rounded-full border border-gray-200/80 bg-white/80 px-2 py-1.5 shadow-sm md:flex dark:border-white/10 dark:bg-white/5">
               {headerNavLinks.map((link) => (
                 <Link
                   key={link.title}
@@ -55,7 +55,7 @@ const Header = () => {
                 </Link>
               ))}
             </div>
-            <div className="flex items-center gap-1 rounded-full border border-gray-200/80 bg-white/70 px-3 py-1.5 shadow-sm dark:border-white/10 dark:bg-white/5">
+            <div className="flex min-h-[46px] items-center gap-1 rounded-full border border-gray-200/80 bg-white/70 px-3 py-1.5 shadow-sm dark:border-white/10 dark:bg-white/5">
               <SearchButton />
               <ThemeSwitch />
               <MobileNav />
