@@ -119,7 +119,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
             <SectionContainer>
               <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
-                <div className="relative isolate min-h-screen overflow-hidden">
+                <div className="site-shell relative isolate min-h-screen overflow-hidden">
                   <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-[radial-gradient(circle_at_top,_rgba(245,158,11,0.18),_transparent_58%)] blur-3xl dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.14),_transparent_62%)]" />
                   <Header />
                   <main className="mb-auto pb-12">{children}</main>

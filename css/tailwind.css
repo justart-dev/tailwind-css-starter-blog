@@ -175,6 +175,14 @@ input:-webkit-autofill:focus {
   vertical-align: middle;
 }
 
+.site-shell:has(.footer-near) {
+  min-height: auto;
+}
+
+.site-shell:has(.footer-near) + .site-footer > div {
+  margin-top: 1.5rem;
+}
+
 @layer components {
   .surface-panel {
     @apply rounded-[2rem] border border-gray-200/90 bg-white shadow-[0_18px_50px_-32px_rgba(15,23,42,0.18)] ring-1 ring-gray-200/70 dark:border-white/10 dark:bg-slate-950/55 dark:ring-white/10;
