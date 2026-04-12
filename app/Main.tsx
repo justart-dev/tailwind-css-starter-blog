@@ -4,16 +4,13 @@ import { genPageMetadata } from 'app/seo'
 import SplitText from '@/components/SplitText'
 import Spline from '@splinetool/react-spline/next'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
+import { CoreContent } from 'pliny/utils/contentlayer'
+import type { Blog } from 'contentlayer/generated'
 
 export const metadata = genPageMetadata({ title: 'Home', description: 'justart-dev blog' })
 
 type MainProps = {
-  posts: Array<{
-    path: string
-    date: string
-    title: string
-    summary: string
-  }>
+  posts: CoreContent<Blog>[]
 }
 
 export default function Home({ posts }: MainProps) {
@@ -31,10 +28,10 @@ export default function Home({ posts }: MainProps) {
               </div>
               <div className="space-y-4">
                 <h1 className="max-w-3xl text-3xl font-semibold tracking-[-0.06em] text-gray-950 sm:text-5xl lg:text-5xl dark:text-white">
-                  기록하고 만들면서, 더 나은 방향을 찾습니다.
+                  Building, writing, and slowly finding a better way forward.
                 </h1>
                 <SplitText
-                  text="React, 테스트, 인프라 등 개발하면서 마주친 고민과 해결 과정을 천천히 정리합니다."
+                  text="Notes on development, projects, tools, and the ideas that come with building things."
                   className="max-w-2xl text-lg leading-8 font-medium text-gray-600 dark:text-gray-300"
                   delay={35}
                   animationFrom={{ opacity: 0, transform: 'translate3d(0,24px,0)' }}
@@ -117,7 +114,7 @@ export default function Home({ posts }: MainProps) {
                       {post.title}
                     </h3>
                     <p className="text-sm leading-7 text-gray-600 dark:text-gray-300">
-                      {post.summary}
+                      {post.summary ?? ''}
                     </p>
                   </div>
                   <div className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200">
