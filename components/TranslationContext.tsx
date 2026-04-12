@@ -52,7 +52,12 @@ export function TranslationProvider({ children }: TranslationProviderProps) {
 
   // 페이지 변경 시 번역 적용
   useEffect(() => {
-    console.log('[Translation] Effect triggered:', { isInitialized, isSupported, currentLang, pathname })
+    console.log('[Translation] Effect triggered:', {
+      isInitialized,
+      isSupported,
+      currentLang,
+      pathname,
+    })
     if (!isInitialized || !isSupported || currentLang === 'ko') return
 
     const applyTranslation = async () => {

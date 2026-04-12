@@ -8,11 +8,9 @@ import Image from 'next/image'
 import { headerNavLinks } from 'app/headerNavLinks'
 
 const Header = () => {
-  let headerClass = 'flex items-center w-full justify-between py-2 sm:py-3'
+  let headerClass = 'w-full py-4 sm:py-5'
 
-  // 헤더 스타일 - 부드러운 디자인을 위한 스타일 조정
-  headerClass +=
-    ' bg-white/90 dark:bg-transparent backdrop-blur-sm transition-all duration-300 ease-in-out'
+  headerClass += ' transition-all duration-300 ease-in-out'
 
   if (siteMetadata.stickyNav) {
     headerClass += ' sticky top-0 z-50'
@@ -20,48 +18,48 @@ const Header = () => {
 
   return (
     <header className={headerClass}>
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex min-h-[48px] items-center justify-between sm:min-h-[52px]">
+      <div className="rounded-[2rem] border border-white/60 bg-white/75 px-4 py-3 shadow-[0_18px_60px_-32px_rgba(15,23,42,0.35)] ring-1 ring-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/55 dark:ring-white/10">
+        <div className="flex min-h-[52px] items-center justify-between gap-4">
           <Link
             href="/"
             aria-label={siteMetadata.headerTitle}
-            className="flex flex-shrink-0 items-center"
+            className="flex flex-shrink-0 items-center gap-3"
           >
-            <div className="mr-2 flex h-8 min-h-[2rem] w-8 min-w-[2rem] items-center justify-center overflow-hidden sm:mr-3 sm:h-10 sm:min-h-[2.5rem] sm:w-10 sm:min-w-[2.5rem]">
+            <div className="flex h-10 min-h-[2.5rem] w-10 min-w-[2.5rem] items-center justify-center overflow-hidden rounded-2xl bg-linear-to-br from-amber-100 to-orange-100 shadow-sm ring-1 ring-black/5 sm:h-11 sm:w-11 dark:from-sky-500/20 dark:to-cyan-400/10 dark:ring-white/10">
               <Image
                 src={siteMetadata.siteLogo}
                 alt="avatar"
-                width={40}
-                height={40}
-                className="aspect-square h-full w-full rounded-full border-2 border-gray-200 object-cover transition-all duration-300 dark:border-gray-700"
+                width={44}
+                height={44}
+                className="aspect-square h-full w-full rounded-2xl object-cover transition-all duration-300"
                 priority
               />
             </div>
             {typeof siteMetadata.headerTitle === 'string' ? (
-              <div className="hidden text-xl font-semibold whitespace-nowrap text-gray-900 transition-colors duration-300 sm:block sm:text-2xl dark:text-gray-100">
+              <div className="hidden text-lg font-semibold whitespace-nowrap text-gray-950 transition-colors duration-300 sm:block sm:text-xl dark:text-gray-50">
                 {siteMetadata.headerTitle}
               </div>
             ) : (
               siteMetadata.headerTitle
             )}
           </Link>
-          <div className="flex flex-shrink-0 items-center space-x-2 sm:space-x-4">
-            <div className="hidden items-center space-x-4 md:flex">
+          <div className="flex flex-shrink-0 items-center gap-2 sm:gap-3">
+            <div className="hidden items-center rounded-full border border-gray-200/80 bg-white/80 px-2 py-1 shadow-sm md:flex dark:border-white/10 dark:bg-white/5">
               {headerNavLinks.map((link) => (
                 <Link
                   key={link.title}
                   href={link.href}
-                  className="font-medium whitespace-nowrap text-gray-900 transition-colors duration-200 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-400"
+                  className="rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap text-gray-700 transition-all duration-200 hover:bg-gray-950 hover:text-white dark:text-gray-200 dark:hover:bg-white dark:hover:text-gray-950"
                 >
                   {link.title}
                 </Link>
               ))}
             </div>
-            <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="flex items-center gap-1 rounded-full border border-gray-200/80 bg-white/70 px-3 py-1.5 shadow-sm dark:border-white/10 dark:bg-white/5">
               <SearchButton />
-              <LanguageSelector />
               <ThemeSwitch />
               <MobileNav />
+              <LanguageSelector />
             </div>
           </div>
         </div>

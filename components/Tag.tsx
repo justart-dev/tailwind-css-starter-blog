@@ -12,7 +12,7 @@ const Tag = ({ text }: Props) => {
     <span className="inline-flex">
       <Link
         href={`/tags/${tagSlug}`}
-        className="mr-2 inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-100 hover:text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-800/50 dark:hover:text-blue-300"
+        className="inline-flex items-center rounded-full border border-gray-200/80 bg-white/80 px-3 py-1 text-xs font-semibold tracking-[0.12em] text-gray-600 uppercase transition-colors hover:border-gray-950 hover:text-gray-950 dark:border-white/10 dark:bg-white/5 dark:text-gray-300 dark:hover:border-white dark:hover:text-white"
       >
         <span>{displayText}</span>
       </Link>

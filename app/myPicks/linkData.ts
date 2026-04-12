@@ -28,7 +28,6 @@ export const categories = [
         url: 'https://www.dicebear.com/',
         description: '다양한 스타일의 사용자 아바타를 생성하는 라이브러리',
       },
-      
     ],
   },
   {

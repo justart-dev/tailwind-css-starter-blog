@@ -10,7 +10,9 @@ interface Translator {
 
 interface TranslatorConstructor {
   create(options: TranslatorCreateOptions): Promise<Translator>
-  availability(options: TranslatorCreateOptions): Promise<'unavailable' | 'downloadable' | 'downloading' | 'available'>
+  availability(
+    options: TranslatorCreateOptions
+  ): Promise<'unavailable' | 'downloadable' | 'downloading' | 'available'>
 }
 
 declare global {

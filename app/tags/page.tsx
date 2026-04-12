@@ -14,22 +14,25 @@ export default async function Page() {
   const tagKeys = Object.keys(tagCounts)
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
   return (
-    <>
-      <div className="flex flex-col items-start justify-start md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6">
-        <div className="space-x-2 pt-6 pb-8 md:space-y-5">
-          <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
+    <div className="surface-panel mt-6 p-6 sm:mt-10 sm:p-8 dark:bg-slate-950/55">
+      <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+        <div>
+          <div className="text-xs font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
+            Topics
+          </div>
+          <h1 className="mt-2 text-3xl font-semibold tracking-[-0.05em] text-gray-950 sm:text-4xl dark:text-white">
             Tags
           </h1>
         </div>
-        <div className="flex max-w-lg flex-wrap">
+        <div className="flex max-w-3xl flex-wrap gap-2">
           {tagKeys.length === 0 && 'No tags found.'}
           {sortedTags.map((t) => (
-            <div key={t} className="mt-2 mb-2">
+            <div key={t}>
               <Tag text={t} />
             </div>
           ))}
         </div>
       </div>
-    </>
+    </div>
   )
 }

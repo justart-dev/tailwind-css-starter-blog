@@ -113,14 +113,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6198824361218150"
         crossOrigin="anonymous"
       />
-      <body>
+      <body className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.96),_rgba(240,244,255,0.88)_35%,_rgba(247,247,245,1)_72%)] text-gray-950 antialiased dark:bg-[radial-gradient(circle_at_top,_rgba(28,37,65,0.9),_rgba(8,12,24,0.96)_44%,_rgba(2,6,23,1)_100%)] dark:text-gray-50">
         <ThemeProviders>
           <TranslationProvider>
             <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
             <SectionContainer>
               <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
-                <Header />
-                <main className="mb-auto">{children}</main>
+                <div className="relative isolate min-h-screen overflow-hidden">
+                  <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-[radial-gradient(circle_at_top,_rgba(245,158,11,0.18),_transparent_58%)] blur-3xl dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.14),_transparent_62%)]" />
+                  <Header />
+                  <main className="mb-auto pb-12">{children}</main>
+                </div>
               </SearchProvider>
               <Footer />
             </SectionContainer>
