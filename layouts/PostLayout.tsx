@@ -2,10 +2,7 @@ import { ReactNode } from 'react'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog, Authors } from 'contentlayer/generated'
 import Comments from '@/components/Comments'
-import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
-import SectionContainer from '@/components/SectionContainer'
-import Image from '@/components/Image'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
@@ -19,22 +16,22 @@ const postDateTemplate: Intl.DateTimeFormatOptions = {
 
 interface LayoutProps {
   content: CoreContent<Blog>
+  children: ReactNode
   authorDetails: CoreContent<Authors>[]
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
-  children: ReactNode
 }
 
-export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
+export default function PostLayout({ content, children }: LayoutProps) {
   const { path, slug, date, title, tags } = content
   const basePath = path.split('/')[0]
 
   return (
-    <SectionContainer>
+    <section className="mx-auto w-full max-w-7xl px-0 sm:px-6 lg:px-8">
       <ScrollTopAndComment />
       <article>
         <div className="space-y-8 pt-6 md:pt-10">
-          <header className="surface-panel overflow-hidden px-6 py-10 sm:px-10">
+          <header className="surface-panel overflow-hidden px-5 py-8 sm:px-10 sm:py-10">
             <div className="space-y-4 text-center">
               <div className="text-xs font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
                 {basePath}
@@ -62,97 +59,20 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             </div>
           </header>
           <div className="pb-8">
-            <div className="grid items-start gap-6 xl:grid-cols-[220px_minmax(0,1fr)]">
-              <dl className="surface-panel self-start p-6">
-                <dt className="sr-only">Authors</dt>
-                <dd>
-                  <div className="mb-5 text-xs font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
-                    Written by
-                  </div>
-                  <ul className="flex flex-wrap justify-center gap-4 xl:block xl:space-y-6">
-                    {authorDetails.map((author) => (
-                      <li className="flex items-center space-x-2" key={author.name}>
-                        {author.avatar && (
-                          <Image
-                            src={author.avatar}
-                            width={38}
-                            height={38}
-                            alt="avatar"
-                            className="h-10 w-10 rounded-full"
-                          />
-                        )}
-                        <dl className="text-sm leading-5 font-medium whitespace-nowrap">
-                          <dt className="sr-only">Name</dt>
-                          <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
-                          <dt className="sr-only">Twitter</dt>
-                          <dd>
-                            {author.twitter && (
-                              <Link
-                                href={author.twitter}
-                                className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                              >
-                                {author.twitter
-                                  .replace('https://twitter.com/', '@')
-                                  .replace('https://x.com/', '@')}
-                              </Link>
-                            )}
-                          </dd>
-                        </dl>
-                      </li>
-                    ))}
-                  </ul>
-                </dd>
-                <div className="mt-8 space-y-6 border-t border-gray-200/80 pt-6 dark:border-white/10">
-                  {(next || prev) && (
-                    <div className="space-y-5">
-                      {prev && prev.path && (
-                        <div>
-                          <h2 className="text-xs tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
-                            Previous
-                          </h2>
-                          <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 mt-2 text-sm font-medium">
-                            <Link href={`/${prev.path}`}>{prev.title}</Link>
-                          </div>
-                        </div>
-                      )}
-                      {next && next.path && (
-                        <div>
-                          <h2 className="text-xs tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
-                            Next
-                          </h2>
-                          <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 mt-2 text-sm font-medium">
-                            <Link href={`/${next.path}`}>{next.title}</Link>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  <div>
-                    <Link
-                      href={`/${basePath}`}
-                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 text-sm font-semibold"
-                      aria-label="Back to the blog"
-                    >
-                      &larr; Back to the blog
-                    </Link>
-                  </div>
+            <div className="surface-panel w-full min-w-0 px-4 py-6 sm:p-8">
+              <div className="prose dark:prose-invert max-w-none pt-2 pb-6">{children}</div>
+              {siteMetadata.comments && (
+                <div
+                  className="border-t border-gray-200/80 pt-6 pb-2 text-center text-gray-700 dark:border-white/10 dark:text-gray-300"
+                  id="comment"
+                >
+                  <Comments slug={slug} />
                 </div>
-              </dl>
-              <div className="surface-panel w-full min-w-0 p-6 sm:p-8">
-                <div className="prose dark:prose-invert max-w-none pt-2 pb-6">{children}</div>
-                {siteMetadata.comments && (
-                  <div
-                    className="border-t border-gray-200/80 pt-6 pb-2 text-center text-gray-700 dark:border-white/10 dark:text-gray-300"
-                    id="comment"
-                  >
-                    <Comments slug={slug} />
-                  </div>
-                )}
-              </div>
+              )}
             </div>
           </div>
         </div>
       </article>
-    </SectionContainer>
+    </section>
   )
 }

@@ -43,9 +43,8 @@ const LanguageSelector = () => {
 
   useEffect(() => setMounted(true), [])
 
-  // API 미지원 시 컴포넌트 숨김
-  if (!mounted || !isSupported) {
-    return null
+  if (!mounted) {
+    return <Blank />
   }
 
   const currentLanguage = languages.find((l) => l.code === currentLang)
@@ -53,11 +52,18 @@ const LanguageSelector = () => {
   return (
     <div className="flex items-center">
       <Menu as="div" className="relative inline-block text-left">
-        <div className="flex items-center justify-center hover:text-blue-600 dark:hover:text-blue-600">
+        <div
+          className={`flex items-center justify-center ${
+            isSupported
+              ? 'hover:text-blue-600 dark:hover:text-blue-600'
+              : 'cursor-not-allowed text-gray-400 dark:text-gray-500'
+          }`}
+        >
           <MenuButton
             aria-label="Language selector"
             className="flex items-center gap-1"
-            disabled={isTranslating}
+            disabled={isTranslating || !isSupported}
+            title={!isSupported ? '현재 브라우저에서는 언어 전환을 지원하지 않습니다.' : undefined}
           >
             {isTranslating ? (
               <div className="flex items-center gap-1">
@@ -87,53 +93,55 @@ const LanguageSelector = () => {
             )}
           </MenuButton>
         </div>
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <MenuItems className="ring-opacity-5 absolute right-0 z-50 mt-2 w-36 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black focus:outline-hidden dark:bg-gray-800">
-            <RadioGroup value={currentLang} onChange={setLanguage}>
-              <div className="p-1">
-                {languages.map((lang) => (
-                  <Radio key={lang.code} value={lang.code}>
-                    <MenuItem>
-                      {({ focus }) => (
-                        <button
-                          className={`${focus ? 'bg-blue-600 text-white' : ''} ${
-                            currentLang === lang.code ? 'font-semibold' : ''
-                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                        >
-                          <span className="mr-2">{lang.flag}</span>
-                          {lang.label}
-                          {currentLang === lang.code && (
-                            <svg
-                              className="ml-auto h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          )}
-                        </button>
-                      )}
-                    </MenuItem>
-                  </Radio>
-                ))}
-              </div>
-            </RadioGroup>
-          </MenuItems>
-        </Transition>
+        {isSupported && (
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-100"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            <MenuItems className="ring-opacity-5 absolute right-0 z-50 mt-2 w-36 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black focus:outline-hidden dark:bg-gray-800">
+              <RadioGroup value={currentLang} onChange={setLanguage}>
+                <div className="p-1">
+                  {languages.map((lang) => (
+                    <Radio key={lang.code} value={lang.code}>
+                      <MenuItem>
+                        {({ focus }) => (
+                          <button
+                            className={`${focus ? 'bg-blue-600 text-white' : ''} ${
+                              currentLang === lang.code ? 'font-semibold' : ''
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                          >
+                            <span className="mr-2">{lang.flag}</span>
+                            {lang.label}
+                            {currentLang === lang.code && (
+                              <svg
+                                className="ml-auto h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            )}
+                          </button>
+                        )}
+                      </MenuItem>
+                    </Radio>
+                  ))}
+                </div>
+              </RadioGroup>
+            </MenuItems>
+          </Transition>
+        )}
       </Menu>
     </div>
   )

@@ -58,8 +58,8 @@ const Header = () => {
             <div className="flex min-h-[46px] items-center gap-1 rounded-full border border-gray-200/80 bg-white/70 px-3 py-1.5 shadow-sm dark:border-white/10 dark:bg-white/5">
               <SearchButton />
               <ThemeSwitch />
-              <MobileNav />
               <LanguageSelector />
+              <MobileNav />
             </div>
           </div>
         </div>
