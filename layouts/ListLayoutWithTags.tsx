@@ -101,7 +101,7 @@ export default function ListLayoutWithTags({
                 {title}
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-7 text-gray-600 dark:text-gray-300">
-                Notes on development, projects, tools, and the ideas that come with building things.
+                개발 과정에서 마주친 고민과 작은 배움, 프로젝트의 흐름을 꾸준히 기록합니다.
               </p>
             </div>
           </div>

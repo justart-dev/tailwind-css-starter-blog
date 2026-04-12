@@ -40,8 +40,7 @@ export default function LinkCollection() {
                 My Picks
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-7 text-gray-600 dark:text-gray-300">
-                A collection of links I often revisit, from design resources and dev tools to
-                technical insights.
+                자주 참고하는 링크들을 주제별로 정리해둔 개인 컬렉션입니다.
               </p>
             </div>
           </div>

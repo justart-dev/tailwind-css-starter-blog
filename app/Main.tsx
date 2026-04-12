@@ -19,7 +19,7 @@ export default function Home({ posts }: MainProps) {
   return (
     <div className="space-y-12 pt-6 md:space-y-16 md:pt-10">
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
-        <div className="surface-panel relative overflow-hidden p-8 sm:p-10">
+        <div className="surface-panel relative overflow-hidden border-gray-200/50 p-8 ring-gray-200/35 sm:p-10 dark:border-white/6 dark:ring-white/6">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-r from-amber-100/80 via-transparent to-orange-100/80 dark:from-sky-500/15 dark:to-cyan-400/10" />
           <div className="relative flex h-full flex-col justify-between gap-10">
             <div className="space-y-6">
@@ -31,7 +31,7 @@ export default function Home({ posts }: MainProps) {
                   Building, writing, and slowly finding a better way forward.
                 </h1>
                 <SplitText
-                  text="Notes on development, projects, tools, and the ideas that come with building things."
+                  text="개발 과정에서 얻은 인사이트와 시행착오, 프로젝트 기록을 천천히 쌓아가는 개인 아카이브 공간입니다."
                   className="max-w-2xl text-lg leading-8 font-medium text-gray-600 dark:text-gray-300"
                   delay={35}
                   animationFrom={{ opacity: 0, transform: 'translate3d(0,24px,0)' }}
@@ -59,7 +59,7 @@ export default function Home({ posts }: MainProps) {
           </div>
         </div>
 
-        <div className="surface-panel overflow-hidden p-3">
+        <div className="surface-panel overflow-hidden border-gray-200/50 p-3 ring-gray-200/35 dark:border-white/6 dark:ring-white/6">
           <div className="flex h-full min-h-[420px] flex-col rounded-[2rem] bg-transparent">
             <div className="border-b border-gray-200/60 px-5 py-4 dark:border-white/10">
               <div className="text-xs font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
@@ -75,6 +75,8 @@ export default function Home({ posts }: MainProps) {
 
       <section className="surface-panel-soft relative overflow-hidden p-6 sm:p-8">
         <div className="surface-glow" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_right_bottom,rgba(250,204,21,0.16),transparent_30%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center_bottom,rgba(250,204,21,0.12),transparent_32%)]" />
         <div className="relative space-y-6">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
