@@ -1,10 +1,10 @@
+import { slug } from 'github-slugger'
 import Link from '@/components/Link'
 import siteMetadata from '@/data/siteMetadata'
+import tagData from 'app/tag-data.json'
 import { genPageMetadata } from 'app/seo'
-import SplitText from '@/components/SplitText'
-import Spline from '@splinetool/react-spline/next'
-import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { CoreContent } from 'pliny/utils/contentlayer'
+import { formatDate } from 'pliny/utils/formatDate'
 import type { Blog } from 'contentlayer/generated'
 
 export const metadata = genPageMetadata({ title: 'Home', description: 'justart-dev blog' })
@@ -14,120 +14,103 @@ type MainProps = {
 }
 
 export default function Home({ posts }: MainProps) {
-  const featuredPosts = posts.slice(0, 3)
+  const recentPosts = posts.slice(0, 3)
+  const tagCounts = tagData as Record<string, number>
+  const topTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a])
 
   return (
-    <div className="space-y-12 pt-6 md:space-y-16 md:pt-10">
-      <section className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
-        <div className="surface-panel relative overflow-hidden border-gray-200/50 p-8 ring-gray-200/35 sm:p-10 dark:border-white/6 dark:ring-white/6">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-r from-amber-100/80 via-transparent to-orange-100/80 dark:from-sky-500/15 dark:to-cyan-400/10" />
-          <div className="relative flex h-full flex-col justify-between gap-10">
-            <div className="space-y-6">
-              <div className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-semibold tracking-[0.24em] text-amber-900 uppercase dark:border-cyan-400/20 dark:bg-cyan-400/10 dark:text-cyan-100">
-                Justart-dev notes
-              </div>
-              <div className="space-y-4">
-                <h1 className="max-w-3xl text-3xl font-semibold tracking-[-0.06em] text-gray-950 sm:text-5xl lg:text-5xl dark:text-white">
-                  Building, writing, and slowly finding a better way forward.
-                </h1>
-                <SplitText
-                  text="개발 과정에서 얻은 인사이트와 시행착오, 프로젝트 기록을 천천히 쌓아가는 개인 아카이브 공간입니다."
-                  className="max-w-2xl text-lg leading-8 font-medium text-gray-600 dark:text-gray-300"
-                  delay={35}
-                  animationFrom={{ opacity: 0, transform: 'translate3d(0,24px,0)' }}
-                  animationTo={{ opacity: 1, transform: 'translate3d(0,0,0)' }}
-                  threshold={0.15}
-                  rootMargin="-40px"
-                />
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/blog"
-                className="inline-flex items-center gap-2 rounded-full bg-gray-950 px-6 py-3 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 dark:bg-white dark:text-gray-950"
-              >
-                Browse articles
-                <ArrowRightIcon className="h-4 w-4" />
-              </Link>
-              <Link
-                href={siteMetadata.github}
-                className="inline-flex items-center rounded-full border border-gray-200 bg-white/80 px-6 py-3 text-sm font-semibold text-gray-700 transition-colors duration-200 hover:border-gray-950 hover:text-gray-950 dark:border-white/10 dark:bg-white/5 dark:text-gray-200 dark:hover:border-white dark:hover:text-white"
-              >
-                View GitHub
-              </Link>
-            </div>
+    <div className="pt-6 pb-4 md:pt-8">
+      <section className="border-b border-black/8 pt-2 pb-10 md:pt-6 md:pb-10 dark:border-white/10">
+        <div className="max-w-4xl space-y-10">
+          <div className="text-[11px] font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
+            Justart-dev archive
           </div>
-        </div>
-
-        <div className="surface-panel overflow-hidden border-gray-200/50 p-3 ring-gray-200/35 dark:border-white/6 dark:ring-white/6">
-          <div className="flex h-full min-h-[420px] flex-col rounded-[2rem] bg-transparent">
-            <div className="border-b border-gray-200/60 px-5 py-4 dark:border-white/10">
-              <div className="text-xs font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
-                Interactive scene
-              </div>
-            </div>
-            <div className="h-[420px] w-full">
-              <Spline scene="https://prod.spline.design/u-rSfD5D6NGWRUxK/scene.splinecode" />
-            </div>
-          </div>
+          <h1 className="max-w-4xl text-4xl font-semibold tracking-[-0.07em] text-gray-950 sm:text-6xl lg:text-7xl dark:text-white">
+            오래 남길 만한 개발 기록을 천천히 쌓아두는 블로그 .
+          </h1>
+          <p className="max-w-2xl py-5 text-base leading-8 text-gray-600 sm:text-lg dark:text-gray-300">
+            지금의 고민과 과정이 언젠가 다시 꺼내볼 기록이 되길 바라며 남기는 개인 아카이브입니다.
+          </p>
         </div>
       </section>
 
-      <section className="surface-panel-soft relative overflow-hidden p-6 sm:p-8">
-        <div className="surface-glow" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_right_bottom,rgba(250,204,21,0.16),transparent_30%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center_bottom,rgba(250,204,21,0.12),transparent_32%)]" />
-        <div className="relative space-y-6">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <section className="grid gap-12 border-t border-black/8 py-14 lg:grid-cols-[minmax(0,1fr)_320px] dark:border-white/10">
+        <div>
+          <div className="mb-8 flex items-end justify-between gap-6 border-b border-black/8 pb-4 dark:border-white/10">
             <div>
-              <div className="text-xs font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
-                Latest posts
+              <div className="text-[11px] font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
+                Recent writing
               </div>
-              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em] text-gray-950 dark:text-white">
-                Recently published
-              </h2>
+              <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-gray-950 dark:text-white">
+                최근 글
+              </h3>
             </div>
             <Link
               href="/blog"
-              className="inline-flex w-fit items-center gap-2 rounded-full border border-transparent px-1 py-1 text-sm font-semibold text-gray-700 transition-colors hover:text-gray-950 dark:text-gray-300 dark:hover:text-white"
+              className="text-sm text-gray-500 underline-offset-4 transition-colors hover:text-gray-950 hover:underline dark:text-gray-400 dark:hover:text-white"
             >
-              View all posts
-              <ArrowRightIcon className="h-4 w-4" />
+              전체보기
             </Link>
           </div>
-
-          <div className="grid gap-4 lg:grid-cols-3">
-            {featuredPosts.map((post) => (
-              <Link
-                key={post.path}
-                href={`/${post.path}`}
-                className="surface-panel group p-6 transition-transform duration-200 hover:-translate-y-1 dark:bg-slate-950/60"
-              >
-                <div className="flex h-full flex-col gap-5">
-                  <div className="text-xs font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
-                    {new Date(post.date).toLocaleDateString(siteMetadata.locale, {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
-                  </div>
+          <ul className="divide-y divide-black/8 dark:divide-white/10">
+            {recentPosts.map((post) => (
+              <li key={post.path} className="py-6">
+                <article className="grid gap-3 md:grid-cols-[120px_minmax(0,1fr)] md:gap-6">
+                  <time
+                    className="pt-1 text-sm text-gray-500 dark:text-gray-400"
+                    dateTime={post.date}
+                    suppressHydrationWarning
+                  >
+                    {formatDate(post.date, siteMetadata.locale)}
+                  </time>
                   <div className="space-y-3">
-                    <h3 className="group-hover:text-primary-600 dark:group-hover:text-primary-400 text-2xl font-semibold tracking-[-0.04em] text-gray-950 transition-colors dark:text-white">
-                      {post.title}
-                    </h3>
-                    <p className="text-sm leading-7 text-gray-600 dark:text-gray-300">
-                      {post.summary ?? ''}
+                    <h4 className="text-2xl font-semibold tracking-[-0.04em] text-gray-950 dark:text-white">
+                      <Link
+                        href={`/${post.path}`}
+                        className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      >
+                        {post.title}
+                      </Link>
+                    </h4>
+                    <p className="max-w-2xl text-sm leading-7 text-gray-600 dark:text-gray-300">
+                      {post.summary}
                     </p>
                   </div>
-                  <div className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200">
-                    Read article
-                    <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-                  </div>
-                </div>
-              </Link>
+                </article>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
+
+        <aside className="space-y-8 lg:pl-6">
+          <div>
+            <div className="text-[11px] font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
+              Short note
+            </div>
+            <div className="mt-4 space-y-4 text-sm leading-7 text-gray-600 dark:text-gray-300">
+              <p>안녕하세요. 함께 하면 즐거운 개발자가 되고 싶은 Justart입니다.</p>
+              <p>클로드는 사랑이지만, 요즘은 코덱스가 더 끌리네요.</p>
+            </div>
+          </div>
+
+          <div className="border-t border-black/8 pt-6 dark:border-white/10">
+            <div className="text-[11px] font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
+              Tags
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {topTags.map((tag) => (
+                <Link
+                  key={tag}
+                  href={`/tags/${slug(tag)}`}
+                  className="rounded-full border border-black/10 px-3 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:border-gray-950 hover:text-gray-950 dark:border-white/10 dark:text-gray-300 dark:hover:border-white dark:hover:text-white"
+                >
+                  #{tag}
+                  <span className="ml-1 text-gray-400 dark:text-gray-500">{tagCounts[tag]}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </aside>
       </section>
     </div>
   )
