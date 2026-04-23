@@ -34,6 +34,7 @@ const MobileNav = () => {
           viewBox="0 0 20 20"
           fill="currentColor"
           className="hover:text-primary-500 dark:hover:text-primary-400 h-8 w-8 text-gray-900 dark:text-gray-100"
+          style={{ width: '2rem', height: '2rem', flexShrink: 0 }}
         >
           <path
             fillRule="evenodd"
@@ -89,7 +90,12 @@ const MobileNav = () => {
                 aria-label="Toggle Menu"
                 onClick={onToggleNav}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  style={{ width: '2rem', height: '2rem', flexShrink: 0 }}
+                >
                   <path
                     fillRule="evenodd"
                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
