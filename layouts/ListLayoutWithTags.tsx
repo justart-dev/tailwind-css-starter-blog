@@ -117,7 +117,7 @@ export default function ListLayoutWithTags({
 
   return (
     <div className="pt-6 pb-4 md:pt-8">
-      <section className="border-b border-black/8 pt-2 pb-10 md:pt-6 md:pb-10 dark:border-white/10">
+      <section className="pt-2 pb-10 md:pt-6 md:pb-10 lg:border-b lg:border-black/8 dark:lg:border-white/10">
         <div className="max-w-4xl space-y-8">
           <div className="text-[11px] font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
             {eyebrow}
@@ -153,7 +153,7 @@ export default function ListLayoutWithTags({
         </div>
       </div>
 
-      <section className="grid items-start gap-12 border-t border-black/8 py-14 lg:grid-cols-[280px_minmax(0,1fr)] dark:border-white/10">
+      <section className="grid items-start gap-12 py-14 lg:grid-cols-[280px_minmax(0,1fr)] lg:border-t lg:border-black/8 dark:lg:border-white/10">
         <aside className="hidden lg:block">
           <div className="sticky top-28 overflow-hidden lg:pr-6">
             <div>
