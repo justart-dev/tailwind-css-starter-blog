@@ -50,6 +50,8 @@ export default async function TagPage(props: { params: Promise<{ tag: string; pa
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
       title={title}
+      eyebrow="Tag archive"
+      description={`${title}와 관련된 글과 기록을 한곳에 모아둔 태그 아카이브입니다.`}
     />
   )
 }
