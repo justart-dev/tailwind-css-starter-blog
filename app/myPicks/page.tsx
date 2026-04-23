@@ -1,82 +1,83 @@
 import { genPageMetadata } from 'app/seo'
 import { categories } from './linkData'
-import {
-  SparklesIcon,
-  RocketLaunchIcon,
-  WrenchScrewdriverIcon,
-  StarIcon,
-  ChartBarIcon,
-  DevicePhoneMobileIcon,
-  LightBulbIcon,
-} from '@heroicons/react/24/solid'
-import { JSX } from 'react'
 
 export const metadata = genPageMetadata({
   title: '추천 링크 모음',
   description: '디자인 리소스, 개발 도구, 모바일 앱 출시 등 유용한 링크 모음',
 })
 
-const categoryIcons: Record<string, JSX.Element> = {
-  '디자인 에셋': <SparklesIcon className="h-6 w-6 text-black dark:text-white" />,
-  레퍼런스: <LightBulbIcon className="h-6 w-6 text-black dark:text-white" />,
-  '프론트엔드 라이브러리': <RocketLaunchIcon className="h-6 w-6 text-black dark:text-white" />,
-  마케팅: <DevicePhoneMobileIcon className="h-6 w-6 text-black dark:text-white" />,
-  '개발 유틸리티': <WrenchScrewdriverIcon className="h-6 w-6 text-black dark:text-white" />,
-  '기술 인사이트': <ChartBarIcon className="h-6 w-6 text-black dark:text-white" />,
-  '사이드 프로젝트': <StarIcon className="h-6 w-6 text-black dark:text-white" />,
+function getHostname(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '')
+  } catch {
+    return url
+  }
 }
 
 export default function LinkCollection() {
   return (
-    <div className="space-y-6 pt-6 md:space-y-8 md:pt-10">
-      <div className="surface-panel p-6 sm:p-8">
-        <div className="flex flex-col gap-3">
-          <div className="text-xs font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
-            Curated links
+    <div className="pt-6 pb-4 md:pt-8">
+      <section className="border-b border-black/8 pt-2 pb-10 md:pt-6 md:pb-10 dark:border-white/10">
+        <div className="max-w-4xl space-y-8">
+          <div className="text-[11px] font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
+            Collected references
           </div>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h1 className="text-3xl font-semibold tracking-[-0.05em] text-gray-950 sm:text-4xl dark:text-white">
-                My Picks
-              </h1>
-              <p className="mt-2 max-w-2xl text-sm leading-7 text-gray-600 dark:text-gray-300">
-                자주 참고하는 링크들을 주제별로 정리해둔 개인 컬렉션입니다.
-              </p>
-            </div>
-          </div>
+          <h1 className="max-w-4xl text-4xl font-semibold tracking-[-0.07em] text-gray-950 sm:text-6xl dark:text-white">
+            My Picks
+          </h1>
+          <p className="max-w-2xl text-base leading-8 text-gray-600 sm:text-lg dark:text-gray-300">
+            작업하다가 자주 다시 찾게 되는 링크들만 조용히 모아둔 개인 컬렉션입니다.
+          </p>
         </div>
-      </div>
+      </section>
 
-      <div className="space-y-6">
-        {categories.map((category) => (
+      <div className="space-y-0 border-t border-black/8 py-14 dark:border-white/10">
+        {categories.map((category, index) => (
           <section
             key={category.title}
             id={encodeURIComponent(category.title)}
-            className="surface-panel p-6 sm:p-8"
+            className={`${index !== 0 ? 'border-t border-black/8 pt-10 dark:border-white/10' : ''} pb-10`}
           >
-            <div className="mb-2 flex items-center gap-2">
-              {categoryIcons[category.title]}
-              <h2 className="text-xl font-semibold text-black md:text-2xl dark:text-white">
-                {category.title}
-              </h2>
-            </div>
-            <p className="mb-5 text-sm text-gray-700 md:text-base dark:text-gray-300">
-              {category.description}
-            </p>
+            <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12">
+              <div className="space-y-3 lg:pr-4">
+                <div className="text-[11px] font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
+                  Collection
+                </div>
+                <h2 className="text-2xl font-semibold tracking-[-0.04em] text-gray-950 sm:text-3xl dark:text-white">
+                  {category.title}
+                </h2>
+                <p className="text-sm leading-7 text-gray-600 dark:text-gray-300">
+                  {category.description}
+                </p>
+              </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              {category.links.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-[1.75rem] bg-white p-4 ring-1 ring-gray-200/80 transition-colors hover:bg-gray-50 dark:bg-slate-950/60 dark:ring-white/10 dark:hover:bg-gray-900"
-                >
-                  <div className="mb-1 font-medium text-black dark:text-white">{link.name}</div>
-                  <div className="text-sm text-gray-700 dark:text-gray-300">{link.description}</div>
-                </a>
-              ))}
+              <div className="min-w-0">
+                <div className="divide-y divide-black/8 dark:divide-white/10">
+                  {category.links.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group block py-5 no-underline"
+                    >
+                      <div className="grid gap-2 md:grid-cols-[minmax(0,1fr)_160px] md:items-start md:gap-6">
+                        <div className="space-y-2">
+                          <div className="group-hover:text-primary-600 dark:group-hover:text-primary-400 text-xl font-semibold tracking-[-0.03em] text-gray-950 transition-colors dark:text-white">
+                            {link.name}
+                          </div>
+                          <p className="max-w-2xl text-sm leading-7 text-gray-600 dark:text-gray-300">
+                            {link.description}
+                          </p>
+                        </div>
+                        <div className="pt-1 text-sm text-gray-500 md:text-right dark:text-gray-400">
+                          {getHostname(link.url)}
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
         ))}
