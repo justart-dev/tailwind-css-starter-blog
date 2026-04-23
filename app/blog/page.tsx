@@ -28,6 +28,8 @@ export default async function BlogPage(props: { searchParams: Promise<{ page: st
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
       title="Blog"
+      eyebrow="Writing archive"
+      description="개발 과정에서 마주친 고민과 작은 배움, 프로젝트의 흐름을 차분히 기록해 둔 글 목록입니다."
     />
   )
 }
