@@ -9,7 +9,7 @@ const siteMetadata = {
   siteUrl: 'https://justart-dev.vercel.app',
   siteRepo: 'https://github.com/justart-dev/tailwind-css-starter-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/avatar.png`,
-  socialBanner: `${process.env.BASE_PATH || ''}/static/images/avatar.png`,
+  socialBanner: `${process.env.BASE_PATH || ''}/static/images/og-dev-blog.png`,
   email: 'hbd9425@gmail.com',
   github: 'https://github.com/justart-dev',
   x: '',
