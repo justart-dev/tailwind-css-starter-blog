@@ -2,12 +2,9 @@ import { slug } from 'github-slugger'
 import Link from '@/components/Link'
 import siteMetadata from '@/data/siteMetadata'
 import tagData from 'app/tag-data.json'
-import { genPageMetadata } from 'app/seo'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import { formatDate } from 'pliny/utils/formatDate'
 import type { Blog } from 'contentlayer/generated'
-
-export const metadata = genPageMetadata({ title: 'Home', description: 'justart-dev blog' })
 
 type MainProps = {
   posts: CoreContent<Blog>[]

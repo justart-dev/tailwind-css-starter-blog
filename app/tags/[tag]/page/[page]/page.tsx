@@ -4,6 +4,8 @@ import ListLayout from '@/layouts/ListLayoutWithTags'
 import { allBlogs } from 'contentlayer/generated'
 import tagData from 'app/tag-data.json'
 import { notFound } from 'next/navigation'
+import { genPageMetadata } from 'app/seo'
+import { Metadata } from 'next'
 
 const POSTS_PER_PAGE = 5
 
@@ -16,6 +18,23 @@ export const generateStaticParams = async () => {
       tag: encodeURI(tag),
       page: (i + 1).toString(),
     }))
+  })
+}
+
+export async function generateMetadata(props: {
+  params: Promise<{ tag: string; page: string }>
+}): Promise<Metadata> {
+  const params = await props.params
+  const tag = decodeURI(params.tag)
+  const pageNumber = parseInt(params.page, 10)
+
+  return genPageMetadata({
+    title: pageNumber <= 1 ? tag : `${tag} - Page ${pageNumber}`,
+    description: `${tag}와 관련된 글 목록 ${pageNumber}페이지`,
+    path:
+      pageNumber <= 1
+        ? `/tags/${encodeURIComponent(tag)}`
+        : `/tags/${encodeURIComponent(tag)}/page/${pageNumber}`,
   })
 }
 

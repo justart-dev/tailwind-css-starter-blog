@@ -4,7 +4,7 @@ import siteMetadata from '@/data/siteMetadata'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 import { allBlogs } from 'contentlayer/generated'
 import tagData from 'app/tag-data.json'
-import { genPageMetadata } from 'app/seo'
+import { genPageMetadata, buildCanonicalUrl } from 'app/seo'
 import { Metadata } from 'next'
 
 const POSTS_PER_PAGE = 5
@@ -16,11 +16,12 @@ export async function generateMetadata(props: {
   const tag = decodeURI(params.tag)
   return genPageMetadata({
     title: tag,
-    description: `${siteMetadata.title} ${tag} tagged content`,
+    description: `${tag}와 관련된 글과 기록을 모아둔 Justart-dev 태그 아카이브.`,
+    path: `/tags/${encodeURIComponent(tag)}`,
     alternates: {
-      canonical: './',
+      canonical: buildCanonicalUrl(`/tags/${encodeURIComponent(tag)}`),
       types: {
-        'application/rss+xml': `${siteMetadata.siteUrl}/tags/${tag}/feed.xml`,
+        'application/rss+xml': `${siteMetadata.siteUrl}/tags/${encodeURIComponent(tag)}/feed.xml`,
       },
     },
   })
@@ -48,16 +49,46 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
     currentPage: 1,
     totalPages: totalPages,
   }
+  const collectionDescription = `${title}와 관련된 글과 기록을 한곳에 모아둔 태그 아카이브입니다.`
 
   return (
-    <ListLayout
-      posts={filteredPosts}
-      totalPostCount={totalPostCount}
-      initialDisplayPosts={initialDisplayPosts}
-      pagination={pagination}
-      title={title}
-      eyebrow="Tag archive"
-      description={`${title}와 관련된 글과 기록을 한곳에 모아둔 태그 아카이브입니다.`}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: `${title} tag archive`,
+            url: `${siteMetadata.siteUrl}/tags/${encodeURIComponent(tag)}`,
+            description: collectionDescription,
+            isPartOf: {
+              '@type': 'WebSite',
+              name: siteMetadata.title,
+              url: siteMetadata.siteUrl,
+            },
+            mainEntity: {
+              '@type': 'ItemList',
+              itemListElement: initialDisplayPosts.slice(0, 10).map((post, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                url: `${siteMetadata.siteUrl}/${post.path}`,
+                name: post.title,
+                description: post.summary,
+              })),
+            },
+          }),
+        }}
+      />
+      <ListLayout
+        posts={filteredPosts}
+        totalPostCount={totalPostCount}
+        initialDisplayPosts={initialDisplayPosts}
+        pagination={pagination}
+        title={title}
+        eyebrow="Tag archive"
+        description={collectionDescription}
+      />
+    </>
   )
 }

@@ -69,6 +69,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const basePath = process.env.BASE_PATH || ''
+  const sameAs = [siteMetadata.github, siteMetadata.notion, siteMetadata.threads].filter(Boolean)
 
   return (
     <html
@@ -114,6 +115,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         crossOrigin="anonymous"
       />
       <body className="min-h-screen bg-[#fcfbf8] text-gray-950 antialiased dark:bg-[#0b1020] dark:text-gray-50">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: siteMetadata.title,
+              url: siteMetadata.siteUrl,
+              description: siteMetadata.description,
+              inLanguage: siteMetadata.language,
+              publisher: {
+                '@type': 'Person',
+                name: siteMetadata.author,
+                url: siteMetadata.siteUrl,
+                sameAs,
+              },
+              sameAs,
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Person',
+              name: siteMetadata.author,
+              url: siteMetadata.siteUrl,
+              sameAs,
+            }),
+          }}
+        />
         <ThemeProviders>
           <TranslationProvider>
             <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />

@@ -4,6 +4,7 @@ import { categories } from './linkData'
 export const metadata = genPageMetadata({
   title: '추천 링크 모음',
   description: '디자인 리소스, 개발 도구, 모바일 앱 출시 등 유용한 링크 모음',
+  path: '/myPicks',
 })
 
 function getHostname(url: string) {
