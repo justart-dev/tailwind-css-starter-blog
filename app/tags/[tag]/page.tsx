@@ -15,7 +15,7 @@ export async function generateMetadata(props: {
   const params = await props.params
   const tag = decodeURI(params.tag)
   return genPageMetadata({
-    title: tag,
+    title: `${tag} 관련 글`,
     description: `${tag}와 관련된 글과 기록을 모아둔 Justart-dev 태그 아카이브.`,
     path: `/tags/${encodeURIComponent(tag)}`,
     alternates: {
@@ -49,7 +49,7 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
     currentPage: 1,
     totalPages: totalPages,
   }
-  const collectionDescription = `${title}와 관련된 글과 기록을 한곳에 모아둔 태그 아카이브입니다.`
+  const collectionDescription = `${title} 관련 글과 기록을 한곳에 모아둔 태그 아카이브입니다.`
 
   return (
     <>
@@ -59,7 +59,7 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
-            name: `${title} tag archive`,
+            name: `${title} 관련 글`,
             url: `${siteMetadata.siteUrl}/tags/${encodeURIComponent(tag)}`,
             description: collectionDescription,
             isPartOf: {
@@ -85,7 +85,7 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
         totalPostCount={totalPostCount}
         initialDisplayPosts={initialDisplayPosts}
         pagination={pagination}
-        title={title}
+        title={`${title} 관련 글`}
         eyebrow="Tag archive"
         description={collectionDescription}
       />

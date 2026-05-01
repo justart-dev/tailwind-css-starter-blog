@@ -23,7 +23,7 @@ export default function Home({ posts }: MainProps) {
             Justart-dev archive
           </div>
           <h1 className="max-w-4xl text-4xl font-semibold tracking-[-0.07em] text-gray-950 sm:text-6xl lg:text-7xl dark:text-white">
-            오래 남길 만한 개발 기록을 천천히 쌓아두는 블로그 .
+            오래 남길 만한 개발 기록을 천천히 쌓아두는 블로그.
           </h1>
           <p className="max-w-2xl py-5 text-base leading-8 text-gray-600 sm:text-lg dark:text-gray-300">
             지금의 고민과 과정이 언젠가 다시 꺼내볼 기록이 되길 바라며 남기는 개인 아카이브입니다.

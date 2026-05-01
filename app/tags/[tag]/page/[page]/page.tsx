@@ -29,7 +29,7 @@ export async function generateMetadata(props: {
   const pageNumber = parseInt(params.page, 10)
 
   return genPageMetadata({
-    title: pageNumber <= 1 ? tag : `${tag} - Page ${pageNumber}`,
+    title: pageNumber <= 1 ? `${tag} 관련 글` : `${tag} 관련 글 - Page ${pageNumber}`,
     description: `${tag}와 관련된 글 목록 ${pageNumber}페이지`,
     path:
       pageNumber <= 1
@@ -68,9 +68,9 @@ export default async function TagPage(props: { params: Promise<{ tag: string; pa
       totalPostCount={totalPostCount}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
-      title={title}
+      title={`${title} 관련 글`}
       eyebrow="Tag archive"
-      description={`${title}와 관련된 글과 기록을 한곳에 모아둔 태그 아카이브입니다.`}
+      description={`${title} 관련 글과 기록을 한곳에 모아둔 태그 아카이브입니다.`}
     />
   )
 }

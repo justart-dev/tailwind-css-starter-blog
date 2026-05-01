@@ -4,9 +4,9 @@ import Main from './Main'
 import { genPageMetadata } from './seo'
 
 export const metadata = genPageMetadata({
-  title: 'Home',
+  title: 'Justart-dev 개발 아카이브',
   description:
-    '개발 과정에서 마주친 고민과 프로젝트 기록을 차분히 쌓아두는 Justart-dev 개인 아카이브 블로그.',
+    'React, Next.js, TypeScript, 인프라, 아키텍처, 프로젝트 회고를 기록하는 개인 개발 블로그입니다.',
   path: '/',
 })
 
