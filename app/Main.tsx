@@ -79,7 +79,7 @@ export default function Home({ posts }: MainProps) {
           </ul>
         </div>
 
-        <aside className="space-y-8 lg:pl-6">
+        <aside className="space-y-8 border-t border-black/8 pt-8 lg:border-t-0 lg:pt-0 lg:pl-6 dark:border-white/10">
           <div>
             <div className="text-[11px] font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
               Short note
