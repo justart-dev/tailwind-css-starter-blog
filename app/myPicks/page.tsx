@@ -62,7 +62,7 @@ export default function LinkCollection() {
                       rel="noopener noreferrer"
                       className="group block py-5 no-underline"
                     >
-                      <div className="grid gap-2 md:grid-cols-[minmax(0,1fr)_160px] md:items-start md:gap-6">
+                      <div className="grid gap-2 md:grid-cols-[minmax(0,1fr)_240px] md:items-start md:gap-6">
                         <div className="space-y-2">
                           <div className="group-hover:text-primary-600 dark:group-hover:text-primary-400 text-xl font-semibold tracking-[-0.03em] text-gray-950 transition-colors dark:text-white">
                             {link.name}
@@ -71,7 +71,7 @@ export default function LinkCollection() {
                             {link.description}
                           </p>
                         </div>
-                        <div className="pt-1 text-sm text-gray-500 md:text-right dark:text-gray-400">
+                        <div className="min-w-0 pt-1 text-sm break-words text-gray-500 md:text-right dark:text-gray-400">
                           {getHostname(link.url)}
                         </div>
                       </div>
