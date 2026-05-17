@@ -2,7 +2,6 @@ import 'css/tailwind.css'
 import 'pliny/search/algolia.css'
 import 'remark-github-blockquote-alert/alert.css'
 
-import { Space_Grotesk, Noto_Sans_JP } from 'next/font/google'
 import { Analytics, AnalyticsConfig } from 'pliny/analytics'
 import { SearchProvider, SearchConfig } from 'pliny/search'
 import Header from '@/components/Header'
@@ -13,18 +12,6 @@ import { ThemeProviders } from './theme-providers'
 import { TranslationProvider } from '@/components/TranslationContext'
 import { Metadata } from 'next'
 import Script from 'next/script'
-
-const space_grotesk = Space_Grotesk({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-space-grotesk',
-})
-
-const noto_sans_jp = Noto_Sans_JP({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-noto-sans-jp',
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
@@ -72,11 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const sameAs = [siteMetadata.github, siteMetadata.notion, siteMetadata.threads].filter(Boolean)
 
   return (
-    <html
-      lang={siteMetadata.language}
-      className={`${space_grotesk.variable} ${noto_sans_jp.variable} scroll-smooth`}
-      suppressHydrationWarning
-    >
+    <html lang={siteMetadata.language} className="scroll-smooth" suppressHydrationWarning>
       <link
         rel="apple-touch-icon"
         sizes="76x76"

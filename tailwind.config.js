@@ -8,13 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: [
-          'var(--font-space-grotesk)',
-          'var(--font-noto-sans-jp)',
-          'system-ui',
-          '-apple-system',
-          'sans-serif',
-        ],
+        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       },
       colors: {
         primary: {
