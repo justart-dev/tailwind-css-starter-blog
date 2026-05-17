@@ -1,0 +1,129 @@
+---
+title: '도커와 쿠버네티스 간단 정리'
+date: '2026-05-17'
+tags: ['Infra']
+draft: false
+summary: '"그림으로 이해하는 도커와 쿠버네티스"를 읽고 복습하면서 정리하기'
+---
+
+## 목차
+
+1. 들어가며
+2. 컨테이너
+3. 도커
+   1. Build / Run
+   2. Ship
+4. 쿠버네티스
+5. 컨테이너 런타임과 컨테이너 표준 규격
+
+---
+
+## 1. 들어가며
+
+도커와 쿠버네티스의 개념적인 부분은 이전에 공부했지만, 실제로 구축해보고 사용해본 경험은 거의 없었다. Minikube 등을 이용해 실습까지 해보고자 했지만, 여러 사정으로 한동안 공부에 손을 놓게 되면서 결국 해보지 못했다. (반성합니다...)
+
+그러다 `EKS`(Amazon Elastic Kubernetes Service)와 `Helm`을 사용하게 되면서, 잊고 있던 이 부분을 다시 익혀야겠다는 생각이 들었다. 그래서 **그림으로 이해하는 도커와 쿠버네티스**라는 귀여운 표지의 책을 읽으며 복습하고, 정리해보기로 했다.
+
+이번에는 꼭 실습과 함께 작성하겠다.
+
+실습 환경은 [Docker Desktop for Mac](https://docs.docker.com/desktop/setup/install/mac-install/)을 기준으로 준비했고, Rosetta가 필요한 경우 아래 명령어로 설치하면 된다.
+
+```bash
+softwareupdate --install-rosetta
+```
+
+## 2. 컨테이너
+
+컨테이너의 기본적인 작업 흐름은
+
+**이미지 작성(Build) -> 이미지 배포(Ship) -> 컨테이너 실행(Run)**
+
+이미지 설계를 기록한 파일을 입력하면 빌드 결과로 이미지를 얻을 수 있다. 이미지를 저장하고 배포하는 레지스트리라는 서버를 사용한다.
+
+이미지를 레지스트리에 업로드하고 서비스 환경과 테스트환경에서는 레지스트리 서비스에서 이미지를 가져와서 컨테이너를 실행한다.
+
+- 도커는 **하나의 머신**에서 컨테이너 관리, 이미지 작성, 이미지 공유 등 컨테이너에 관련된 기본적인 작업 흐름을 지원하는 도구.
+
+- 쿠버네티스는 **여러 대의 머신**으로 구성된 환경에서 컨테이너를 관리하는데 사용하는 오케스트레이션 엔진.
+
+## 3. 도커
+
+### Build / Run
+
+도커를 사용해보기 위해 가장 단순한 예제로 "Hello, Docker!" 를 출력하는 셸 스크립트를 컨테이너에서 실행해보자.
+
+hello.sh 에는 아래 내용을 작성한다.
+
+```bash
+#!/bin/sh
+
+echo "Hello, Docker!"
+exec sleep infinity # 서버 계속 떠있게 하기 위한 임시
+```
+
+Dockerfile 에는 아래 내용을 작성한다.
+
+```bash
+FROM alpine:3.23 # 베이스 이미지 지정
+
+WORKDIR /app # 컨테이너 내부 작업 디렉터리 설정 (이후 명령어들은 기본적으로 /app 디렉토리에서 실행됨)
+
+COPY hello.sh /app/hello.sh # 로컬 파일을 컨테이너 내부로 복사
+
+RUN chmod +x hello.sh # 빌드 시점에 실행 권한 부여
+
+CMD ["./hello.sh"] # 컨테이너 실행 시 기본으로 실행할 명령
+```
+
+이제 이미지를 빌드하고 컨테이너를 실행한다.
+
+```bash
+docker build -t hello-docker:v1 ./myimage # ./myimage를 빌드 컨텍스트로 사용해 hello-docker:v1 이미지 생성
+docker image ls hello-docker:v1 # 생성된 이미지가 로컬에 있는지 확인
+docker run --name hello-container hello-docker:v1 # hello-docker:v1 이미지로 컨테이너 실행
+```
+
+실행 결과는 아래와 같다. (Docker Desktop Terminal)
+
+<Image
+  src="/static/images/docker-desktop.png"
+  alt="Docker Desktop에서 실행 결과 확인"
+  className="mx-auto"
+  width="900"
+  height="600"
+/>
+
+컨테이너 정지 및 삭제는 아래의 명령어를 사용한다.
+
+```bash
+docker stop hello-container # 실행 중인 컨테이너 정지
+docker rm hello-container # 정지된 컨테이너 삭제
+```
+
+### Ship
+
+도커는 작성한 이미지를 다른 호스트에 배포할 수 있다. 이미지는 **레지스트리** 라고 부르는 이미지 배포용 서버를 통해서 다른 호스트와 공유한다.
+
+레지스트리가 도커 허브가 아니라면 이미지 이름에 레지스트리명도 포함되어야한다. 서비스마다 조금 다르니 꼭 확인하자. 우리는 도커 허브를 이용한다.
+
+도커 허브에 이미지를 올리려면 이미지 이름이 `계정명/이미지명:태그` 형태여야 한다. 예를 들어 도커 허브 계정명이 `justart`라면 아래와 같은 형태가 된다. (Docker ID는 변경 불가해서 새로 파야한다고 한다.)
+
+```bash
+justart/hello-docker:v1
+```
+
+이미 `hello-docker:v1`이라는 이름으로 이미지를 만들어두었다면, `docker tag`로 도커 허브에 올릴 이름을 하나 더 붙일 수 있다.
+
+```bash
+docker tag hello-docker:v1 justart/hello-docker:v1 # 기존 이미지에 새 이름 부여
+docker push justart/hello-docker:v1 # 도커 허브에 이미지 업로드
+```
+
+반대로 처음부터 도커 허브에 올릴 이름으로 빌드할 수도 있다.
+
+```bash
+docker build -t justart/hello-docker:v1 ./myimage # 빌드하면서 이미지 이름 지정
+docker push justart/hello-docker:v1 # 도커 허브에 이미지 업로드
+```
+
+이미 만든 이미지의 이름을 추가할 때는 `docker tag`를 사용하고, 이미지를 만들면서 이름을 붙일 때는 `docker build -t`를 사용한다.
