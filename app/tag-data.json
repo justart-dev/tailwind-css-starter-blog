@@ -3,9 +3,9 @@
   "infra": 4,
   "project": 3,
   "react": 2,
-  "ai-agent": 1,
   "tdd": 2,
-  "think": 2,
   "tailwind-css": 2,
+  "ai-agent": 1,
+  "think": 2,
   "typescript": 1
 }
