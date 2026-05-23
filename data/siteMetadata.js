@@ -6,7 +6,7 @@ const siteMetadata = {
   description: '프론트엔드와 웹 개발, 프로젝트 회고, 기술 인사이트를 정리하는 개인 개발 아카이브',
   language: 'ko-KR',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://justart-dev.vercel.app',
+  siteUrl: 'https://justart-dev.pages.dev',
   siteRepo: 'https://github.com/justart-dev/tailwind-css-starter-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/avatar.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/og-justart-dev-cover.png`,

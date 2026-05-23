@@ -4,7 +4,7 @@ export const headerNavLinks = [
   { href: '/tags', title: 'Tags' },
   { href: '/myPicks', title: 'MyPicks' },
   {
-    href: 'https://cloud.umami.is/share/KVyi2VjCIHSmdTE7/justart-dev.vercel.app',
+    href: 'https://cloud.umami.is/share/KVyi2VjCIHSmdTE7',
     title: 'Insights',
   },
 ]

@@ -10,7 +10,10 @@
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "next lint --fix --dir pages --dir app --dir components --dir lib --dir layouts --dir scripts",
     "prepare": "husky",
-    "test": "pnpm playwright test"
+    "test": "pnpm playwright test",
+    "cf:build": "EXPORT=true UNOPTIMIZED=true pnpm build",
+    "cf:deploy": "wrangler pages deploy out --project-name=justart-dev",
+    "cf": "pnpm cf:build && pnpm cf:deploy"
   },
   "dependencies": {
     "@headlessui/react": "2.2.0",
