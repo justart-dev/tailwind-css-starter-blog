@@ -1,8 +1,9 @@
 {
+  "trailingSlash": false,
   "redirects": [
     {
-      "source": "/(.*)",
-      "destination": "https://justart-dev.pages.dev/$1",
+      "source": "/:path*",
+      "destination": "https://justart-dev.pages.dev/:path*",
       "permanent": true
     }
   ]
