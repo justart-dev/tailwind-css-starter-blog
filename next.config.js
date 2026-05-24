@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { withContentlayer } = require('next-contentlayer2')
-
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
+/* eslint-enable @typescript-eslint/no-require-imports */
 
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `
@@ -79,6 +80,15 @@ module.exports = () => {
         },
       ],
       unoptimized,
+    },
+    async redirects() {
+      return [
+        {
+          source: '/:path*',
+          destination: 'https://justart-dev.pages.dev/:path*',
+          permanent: true,
+        },
+      ]
     },
     async headers() {
       return [
