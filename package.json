@@ -76,7 +76,8 @@
     "lint-staged": "^13.0.0",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "wrangler": "^4.94.0"
   },
   "lint-staged": {
     "*.+(js|jsx|ts|tsx)": [

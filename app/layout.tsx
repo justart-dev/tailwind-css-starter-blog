@@ -86,7 +86,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <meta name="msapplication-TileColor" content="#000000" />
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
-      <meta name="google-site-verification" content="vhwJw57Gjn2GqP4ls2gFNnU2QPZLp9OwT6g7aOxP3yM" />
+      <meta name="naver-site-verification" content="0ada425db4e4b9a7c861e8c88c1d48ce70cbfebd" />
+      <meta name="google-site-verification" content="ZJthunR7XCOFljAbLghEzFHVvWMx9lS92762coqDCuw" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
       <Script
         src="https://cloud.umami.is/script.js"
