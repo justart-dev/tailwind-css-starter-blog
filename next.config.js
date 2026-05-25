@@ -82,6 +82,9 @@ module.exports = () => {
       unoptimized,
     },
     async redirects() {
+      if (process.env.NODE_ENV === 'development') {
+        return []
+      }
       return [
         {
           source: '/:path*',
