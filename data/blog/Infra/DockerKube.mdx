@@ -139,14 +139,6 @@ docker run --name hello-container parklego/hello-docker:v1 # 내려받은 이미
 
 ## 4. 쿠버네티스: 핵심 개념 정리
 
-<Image
-  src="/static/images/kube.png"
-  alt="쿠버네티스 구조 및 흐름"
-  className="mx-auto"
-  width="900"
-  height="600"
-/>
-
 쿠버네티스의 주요 특징 중 하나가 **선언적**으로 어플리케이션을 관리할 수 있다는 점이다.
 
 어플리케이션과 어플리케이션을 구성하는 컨테이너는 어떤 상태가 이상적인 상태인지 YAML 또는 JSON 형식의 매니페스트 설정 파일로 선언한다. 그러면 지정한 상태를 실현하고 유지하는 구체적인 작업을 쿠버네티스가 알아서 처리해준다.
@@ -184,7 +176,7 @@ docker run --name hello-container parklego/hello-docker:v1 # 내려받은 이미
 <div className="my-8 border-l-4 border-primary-500 pl-6">
   <h3 className="mt-0 text-xl font-bold">Context 관리</h3>
 
-`kubectl` 명령어는 클러스터 내부가 아니라 내 로컬 PC에서 실행하는 명령어이다. 실무에서는 로컬, 개발, 운영 등 여러 개의 클러스터를 다루게 되는데, 이때 조종기가 어떤 클러스터를 가리키고 있는지 결정하는 것이 `컨텍스트(Context)`다.
+`kubectl` 명령어는 클러스터 내부가 아니라 내 로컬 PC에서 실행하는 명령어이다. 실무에서는 로컬, 개발, 운영 등 여러 개의 클러스터를 다루게 되는데, 이때 어떤 클러스터를 가리키고 있는지 결정하는 것이 `컨텍스트(Context)`다.
 
     ```bash
     # 현재 연결된 클러스터 확인
