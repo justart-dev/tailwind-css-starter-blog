@@ -82,16 +82,7 @@ module.exports = () => {
       unoptimized,
     },
     async redirects() {
-      if (process.env.NODE_ENV === 'development') {
-        return []
-      }
-      return [
-        {
-          source: '/:path*',
-          destination: 'https://justart-dev.pages.dev/:path*',
-          permanent: true,
-        },
-      ]
+      return []
     },
     async headers() {
       return [

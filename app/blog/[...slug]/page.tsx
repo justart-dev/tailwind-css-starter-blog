@@ -13,6 +13,7 @@ import PostBanner from '@/layouts/PostBanner'
 import { Metadata } from 'next'
 import siteMetadata from '@/data/siteMetadata'
 import { notFound } from 'next/navigation'
+import { buildCanonicalUrl } from 'app/seo'
 
 const defaultLayout = 'PostLayout'
 const layouts = {
@@ -53,7 +54,7 @@ export async function generateMetadata(props: {
     title: post.title,
     description: post.summary,
     alternates: {
-      canonical: `/blog/${slug}`,
+      canonical: buildCanonicalUrl(`/blog/${slug}`),
     },
     openGraph: {
       title: post.title,
