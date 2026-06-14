@@ -79,7 +79,7 @@ export default function LinkCollection() {
               id={encodeURIComponent(category.title)}
               className={`${index !== 0 ? 'border-t border-black/8 pt-10 dark:border-white/10' : ''} pb-10`}
             >
-              <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12">
+              <div className="grid gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12">
                 <div className="space-y-3 lg:pr-4">
                   <div className="text-[11px] font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
                     Collection
