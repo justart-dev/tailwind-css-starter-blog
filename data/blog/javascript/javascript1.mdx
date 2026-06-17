@@ -1,0 +1,163 @@
+---
+title: '최신 자바스크립트 기능 살펴보기'
+date: '2026-06-17'
+tags: ['javascript']
+draft: false
+summary: 'ES2024~ES2026에 걸쳐 단계적으로 표준화되었거나 도입된 것들 정리'
+---
+
+## New Set Methods (ES2025)
+
+ES2025에서는 Set 인스턴스에서 직접 집합 연산을 할 수 있는 메서드들이 추가됐습니다. 합집합, 교집합, 차집합뿐만 아니라 부분집합·상위집합 여부, 서로소 여부까지 메서드 한 번으로 확인할 수 있죠.
+
+기존에는 두 컬렉션의 중복 없는 합집합/교집합을 만들려면 배열을 Set으로 변환하거나 `filter`와 `includes`를 조합해야 했습니다.
+
+```js
+const a = [1, 2, 3, 3]
+const b = [3, 4, 5, 5]
+
+// 합집합
+const union = [...new Set([...a, ...b])]
+
+// 교집합
+const intersection = a.filter((value) => b.includes(value))
+```
+
+이제 배열을 Set으로 감싸면 메서드 호출만으로 같은 결과를 얻습니다. 인자로는 Set뿐 아니라 모든 iterable을 넘길 수 있습니다.
+
+```js
+const setA = new Set([1, 2, 3])
+const setB = new Set([3, 4, 5])
+
+setA.union(setB) // Set {1, 2, 3, 4, 5}
+setA.intersection(setB) // Set {3}
+setA.difference(setB) // Set {1, 2}
+setA.symmetricDifference(setB) // Set {1, 2, 4, 5}
+```
+
+또한 집합 간 관계를 확인하는 메서드도 추가됐습니다.
+
+```js
+const small = new Set([1, 2])
+const large = new Set([1, 2, 3, 4])
+
+small.isSubsetOf(large) // true
+large.isSupersetOf(small) // true
+small.isDisjointFrom(large) // false
+```
+
+모든 메서드는 기존 Set을 변경하지 않고 새로운 Set을 반환합니다. `union`과 `intersection` 요 두마리는 정말 꿀 메소드군요.
+
+## Promise.try (ES2025)
+
+어떤 함수가 동기 에러를 던질지, 비동기 에러를 던질지 알 수 없을 때 에러 처리가 복잡했습니다.
+동기 에러는 `try...catch`로, 비동기 에러는 `catch`로 따로 잡아야 했으니까요.
+
+```js
+function loadUser(userId) {
+  if (!userId) {
+    throw new Error('userId가 필요합니다')
+  }
+  return fetch(`/api/users/${userId}`).then((res) => res.json())
+}
+
+// 기존 방식: 동기/비동기 에러를 모두 대응하려면...
+try {
+  loadUser(userId)
+    .then((user) => console.log(user))
+    .catch((err) => console.error('비동기 에러:', err))
+} catch (err) {
+  console.error('동기 에러:', err)
+}
+```
+
+`Promise.try`는 전달받은 함수를 실행한 뒤, 그 결과를 자동으로 Promise로 감싸 줍니다. 함수 실행 중에 나온 동기 에러도 reject로 바꿔주므로 `.then()`/`.catch()`/`.finally()`로 체이닝해서 일관되게 처리할 수 있습니다.
+
+```js
+// user는 Promise 입니다
+const user = Promise.try(() => loadUser(userId))
+  .then((user) => {
+    console.log('불러오기 성공:', user)
+    return user
+  })
+  .catch((err) => {
+    console.error('에러:', err)
+    return null
+  })
+  .finally(() => {
+    console.log('로딩 종료')
+  })
+```
+
+`Promise.try`는 함수 실행 직후 발생하는 동기 예외도 reject로 만들어 주기 때문에, 함수의 에러 처리 방식이 동기인지 비동기인지와 상관없이 일관되게 다뤄질 수 있습니다.
+
+## Import Attribute (ES2025)
+
+ES 모듈에서 JSON 파일을 직접 가져오는 표준 방법이 생겼습니다. 기존에는 JSON을 `fetch`로 받아서 `JSON.parse`를 해야 했거나, 번들러가 알아서 처리해 주는 방식에 의존해야 했죠.
+
+```js
+// 기존 방식
+const res = await fetch('/config.json')
+const config = await res.json()
+```
+
+ES2025에서는 `with` 키워드로 가져오는 모듈의 속성을 명시할 수 있습니다. JSON 파일을 가져올 때는 `type: 'json'`을 지정해 주면 됩니다.
+
+```js
+import config from './config.json' with { type: 'json' }
+
+console.log(config.apiUrl)
+```
+
+동적 가져오기에서는 `import()`의 두 번째 인자로 전달합니다.
+
+```js
+const config = await import('./config.json', {
+  with: { type: 'json' },
+})
+
+console.log(config.default.apiUrl)
+```
+
+`with`를 사용하면 브라우저와 런타임이 해당 모듈을 어떻게 해석해야 할지 명확히 알 수 있어, 보안과 예측 가능성이 높아집니다.
+
+## Error.isError (ES2026)
+
+`instanceof Error`는 같은 렐름(realm)에 있는 Error 인스턴스만 정확히 판별합니다. iframe이나 Worker, Node.js의 vm처럼 다른 컨텍스트에서 생성된 Error는 `instanceof Error`가 `false`를 반환해 오판할 수 있죠.
+
+```js
+// iframe에서 넘어온 에러
+const err = new iframe.contentWindow.Error('boom')
+
+console.log(err instanceof Error) // false
+console.log(Error.isError(err)) // true
+```
+
+또한 `{ message: '...' }`처럼 에러처럼 보이는 일반 객체도 걸러냅니다.
+
+```js
+console.log(Error.isError(new TypeError('fail'))) // true
+console.log(Error.isError({ message: 'fail' })) // false
+console.log(Error.isError('fail')) // false
+```
+
+`Error.isError`는 어떤 컨텍스트에서 만들어졌든 실제 Error 객체만 true로 반환하기 때문에, 글로벌 에러 핸들러나 로깅 함수에서 안전하게 에러 여부를 확인할 때 유용합니다.
+
+## Temporal (ES2026)
+
+사실 이 블로그 작성의 이유이기도 한 날짜 관련 API다. 2026년 3월 11일, 드디어 표준 확정이 떴었다. 이를 사용하면 더 이상 날짜 관련 라이브러리를 설치하지 않아도 될 것이다.
+
+자바스크립트로 날짜 객체를 건드려본 개발자들은 알 것이다. 날짜 원본 객체를 건드리거나 브라우저마다 다르게 해석하는 등 얼마나 엉망진창인지를...
+
+이렇게 된 이유는 한 개발자가 자바스크립트를 배포할 시간이 10일 밖에 남지 않아서 자바의 결함 있는 Date 클래스를 베꼈얈고, 우리는 계속 그렇게 쓰왔던 것이다. 그래서 날짜 관련해서는 라이브러리를 사용하는 게 그냥 정신건강에 좋았다.
+
+아래는 가장 유명한 엉망진창 코드 중 하나다. 0부터 시작하는 월(Month).
+
+```js
+const date = new Date('2026-01-01')
+
+console.log(date.getMonth()) // 0
+```
+
+> [!NOTE]  
+> 참고 : [Date is finally dead. Temporal is here. - YouTube](https://www.youtube.com/watch?v=Q0BOHt6iHAY)
