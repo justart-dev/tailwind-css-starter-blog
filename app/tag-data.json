@@ -1,8 +1,8 @@
 {
   "architecture": 1,
   "infra": 4,
-  "ai-agent": 1,
   "javascript": 1,
+  "ai-agent": 1,
   "react": 2,
   "tailwind-css": 2,
   "tdd": 2,

@@ -123,14 +123,20 @@ console.log(config.default.apiUrl)
 
 ## Error.isError (ES2026)
 
-`instanceof Error`는 같은 렐름(realm)에 있는 Error 인스턴스만 정확히 판별합니다. iframe이나 Worker, Node.js의 vm처럼 다른 컨텍스트에서 생성된 Error는 `instanceof Error`가 `false`를 반환해 오판할 수 있죠. 실무에서 `Error.isError`는 **"시스템/런타임 에러인지, 비즈니스 로직에서 의도적으로 던진 값인지"**를 구분할 때 씁니다.
+`Error.isError`는 값이 진짜 Error 객체인지 확인합니다. `instanceof Error`와 비슷해 보이지만, 훨씬 안전합니다.
 
-| 구분               | 예시                                                                                   | `Error.isError` 결과 |
-| ------------------ | -------------------------------------------------------------------------------------- | -------------------- |
-| 시스템/런타임 에러 | `fetch` 실패, `JSON.parse` 오류, Axios/Zod/Prisma 에러, 커스텀 `Error` 클래스          | `true`               |
-| 비즈니스 로직 에러 | 백엔드가 내려준 `{ code, message }`, 폼 필드 에러 배열, 동료가 `throw`한 문자열/`null` | `false`              |
+`instanceof Error`는 같은 페이지의 Error 클래스로 만든 인스턴스만 인정합니다. iframe, Web Worker, 서버에서 넘어온 Error는 같은 클래스가 아니라서 `false`가 될 수 있습니다.
 
-시스템 에러는 Sentry에 보내거나 스택을 로깅해야 하고, 비즈니스 에러는 사용자에게 메시지를 보여주거나 폼에 표시하면 됩니다. `Error.isError`로 먼저 구분하면 두 처리를 섭이지 않게 할 수 있습니다.
+`Error.isError`는 Error 객체 본질을 확인합니다.
+
+```js
+Error.isError(new Error('fail')) // true
+Error.isError(new TypeError('fail')) // true
+Error.isError({ message: 'fail' }) // false
+Error.isError('fail') // false
+```
+
+실무에서는 `catch`로 잡은 값이 **시스템 에러**인지, **비즈니스 로직에서 의도적으로 던진 값**인지 구분할 때 씁니다. 시스템 에러는 로깅이나 Sentry로, 비즈니스 에러는 사용자 메시지로 처리합니다.
 
 ### 1. TypeScript에서 `catch (e: unknown)` 좁힐 때
 
@@ -225,7 +231,7 @@ if (errors.length > 0) {
 }
 ```
 
-`AggregateError` 안에도 Error 객첼만 깔끔하게 담고 싶을 때 씁니다.
+`AggregateError` 안에도 Error 객체만 깔끔하게 담고 싶을 때 씁니다.
 
 ### 5. 커스텀 에러 클래스
 
@@ -267,7 +273,7 @@ ws.onerror = (event) => {
 }
 ```
 
-`Error.isError`는 어떤 컨텍스트에서 만들어졌든 실제 Error 객첼만 true로 반환합니다. 글로벌 에러 핸들러나 로깅 함수에서 **시스템 에러는 추적 도구로 보내고, 비즈니스 에러는 사용자 피드백으로 전환**하는 기준점으로 쓰면 됩니다.
+`Error.isError`는 어떤 컨텍스트에서 만들어졌든 실제 Error 객체만 true로 반환합니다. 시스템 에러는 추적 도구로 보내고, 비즈니스 에러는 사용자 메시지로 처리하는 기준점으로 쓰면 됩니다.
 
 ## Temporal (ES2026)
 
