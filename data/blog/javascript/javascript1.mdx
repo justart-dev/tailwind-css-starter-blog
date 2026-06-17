@@ -123,25 +123,151 @@ console.log(config.default.apiUrl)
 
 ## Error.isError (ES2026)
 
-`instanceof Error`는 같은 렐름(realm)에 있는 Error 인스턴스만 정확히 판별합니다. iframe이나 Worker, Node.js의 vm처럼 다른 컨텍스트에서 생성된 Error는 `instanceof Error`가 `false`를 반환해 오판할 수 있죠.
+`instanceof Error`는 같은 렐름(realm)에 있는 Error 인스턴스만 정확히 판별합니다. iframe이나 Worker, Node.js의 vm처럼 다른 컨텍스트에서 생성된 Error는 `instanceof Error`가 `false`를 반환해 오판할 수 있죠. 실무에서 `Error.isError`는 **"시스템/런타임 에러인지, 비즈니스 로직에서 의도적으로 던진 값인지"**를 구분할 때 씁니다.
 
-```js
-// iframe에서 넘어온 에러
-const err = new iframe.contentWindow.Error('boom')
+| 구분               | 예시                                                                                   | `Error.isError` 결과 |
+| ------------------ | -------------------------------------------------------------------------------------- | -------------------- |
+| 시스템/런타임 에러 | `fetch` 실패, `JSON.parse` 오류, Axios/Zod/Prisma 에러, 커스텀 `Error` 클래스          | `true`               |
+| 비즈니스 로직 에러 | 백엔드가 내려준 `{ code, message }`, 폼 필드 에러 배열, 동료가 `throw`한 문자열/`null` | `false`              |
 
-console.log(err instanceof Error) // false
-console.log(Error.isError(err)) // true
+시스템 에러는 Sentry에 보내거나 스택을 로깅해야 하고, 비즈니스 에러는 사용자에게 메시지를 보여주거나 폼에 표시하면 됩니다. `Error.isError`로 먼저 구분하면 두 처리를 섭이지 않게 할 수 있습니다.
+
+### 1. TypeScript에서 `catch (e: unknown)` 좁힐 때
+
+TS 4.4부터 `catch` 변수가 `unknown` 타입이라 직접 `.message`를 쓸 수 없습니다.
+
+```ts
+try {
+  await fetchUser()
+} catch (e) {
+  console.error(e.message) // ❌ TS 에러
+}
 ```
 
-또한 `{ message: '...' }`처럼 에러처럼 보이는 일반 객체도 걸러냅니다.
+`Error.isError`로 타입을 좁히면 안전하게 사용할 수 있습니다.
 
-```js
-console.log(Error.isError(new TypeError('fail'))) // true
-console.log(Error.isError({ message: 'fail' })) // false
-console.log(Error.isError('fail')) // false
+```ts
+try {
+  await fetchUser()
+} catch (e) {
+  if (Error.isError(e)) {
+    console.error(e.message) // ✅
+  } else {
+    console.error('알 수 없는 에러:', e)
+  }
+}
 ```
 
-`Error.isError`는 어떤 컨텍스트에서 만들어졌든 실제 Error 객체만 true로 반환하기 때문에, 글로벌 에러 핸들러나 로깅 함수에서 안전하게 에러 여부를 확인할 때 유용합니다.
+### 2. Zod 검증 에러
+
+Zod는 `ZodError`라는 커스텀 Error를 던집니다.
+
+```ts
+import { z } from 'zod'
+
+const schema = z.object({ email: z.string().email() })
+
+try {
+  schema.parse({ email: 'invalid' })
+} catch (e) {
+  if (Error.isError(e)) {
+    console.log('Error 객체임') // true
+  }
+
+  // ZodError 전용 처리
+  if (e instanceof z.ZodError) {
+    console.log(e.errors[0].message)
+  }
+}
+```
+
+`Error.isError(e)`는 true지만, 세부적인 종류까지 알고 싶으면 `instanceof z.ZodError`를 추가로 씁니다.
+
+### 3. Axios 인터셉터
+
+Axios는 `AxiosError`를 던지지만, 코드 흐름상 다른 값이 들어올 수도 있습니다.
+
+```ts
+api.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    if (!Error.isError(error)) {
+      // Error가 아닌 값은 감싸서 통일
+      return Promise.reject(new Error(String(error)))
+    }
+
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logout()
+      }
+      return Promise.reject(error)
+    }
+
+    return Promise.reject(error)
+  }
+)
+```
+
+### 4. `Promise.allSettled` + `AggregateError`
+
+여러 API를 동시에 부르고 실패한 것만 모을 때 유용합니다.
+
+```ts
+const results = await Promise.allSettled([fetch('/api/a'), fetch('/api/b'), fetch('/api/c')])
+
+const errors = results
+  .filter((r): r is PromiseRejectedResult => r.status === 'rejected')
+  .map((r) => r.reason)
+  .filter(Error.isError) // 진짜 Error만 필터링
+
+if (errors.length > 0) {
+  throw new AggregateError(errors, '일부 요청 실패')
+}
+```
+
+`AggregateError` 안에도 Error 객첼만 깔끔하게 담고 싶을 때 씁니다.
+
+### 5. 커스텀 에러 클래스
+
+서비스별로 에러를 구분하고 싶을 때 커스텀 Error 클래스를 만듭니다.
+
+```ts
+class PaymentError extends Error {
+  constructor(
+    message: string,
+    public code: string
+  ) {
+    super(message)
+    this.name = 'PaymentError'
+  }
+}
+
+try {
+  throw new PaymentError('카드 거절', 'CARD_DECLINED')
+} catch (e) {
+  console.log(Error.isError(e)) // true
+  console.log(e instanceof PaymentError) // true
+  console.log(e instanceof Error) // true
+}
+```
+
+`Error.isError`는 커스텀 Error 클래스도 true로 잡습니다.
+
+### 6. WebSocket 연결 실패
+
+```ts
+const ws = new WebSocket('wss://api.example.com')
+
+ws.onerror = (event) => {
+  if (Error.isError(event.error)) {
+    console.error('WS 에러:', event.error.message)
+  } else {
+    console.error('WS 연결 실패')
+  }
+}
+```
+
+`Error.isError`는 어떤 컨텍스트에서 만들어졌든 실제 Error 객첼만 true로 반환합니다. 글로벌 에러 핸들러나 로깅 함수에서 **시스템 에러는 추적 도구로 보내고, 비즈니스 에러는 사용자 피드백으로 전환**하는 기준점으로 쓰면 됩니다.
 
 ## Temporal (ES2026)
 
