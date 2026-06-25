@@ -1,0 +1,370 @@
+---
+title: 'JavaScript Temporal API 완벽 가이드'
+date: '2026-06-25'
+tags: ['javascript']
+draft: false
+summary: '날짜, 시간, 시간대(Time Zone)를 안전하게 다루는 새로운 JavaScript 표준 살펴보기'
+---
+
+# JavaScript Temporal API 완벽 가이드
+
+2026년 3월 11일, 드디어 **Temporal API**가 **ECMAScript** 표준으로 확정되었습니다. 이제는 날짜와 시간을 다루기 위해 별도의 라이브러리에 의존해야 하는 경우가 크게 줄어들 것으로 보입니다.
+
+자바스크립트로 날짜 관련 기능을 구현해 본 개발자라면 `Date` 객체가 가진 여러 문제를 한 번쯤 경험해 보셨을 것입니다. 원본 객체가 변경되거나, 브라우저 및 실행 환경에 따라 날짜 문자열이 다르게 해석되는 등 예상치 못한 동작이 자주 발생했습니다.
+
+이러한 문제는 JavaScript가 탄생하던 초기의 역사적 배경과도 관련이 있습니다. JavaScript는 매우 짧은 기간 안에 개발되었고, 당시 Java의 `Date` API 설계를 상당 부분 참고했습니다. 
+
+결과적으로 여러 한계와 설계적 문제를 그대로 물려받게 되었고, 오랜 기간 동안 개발자들은 이를 보완하기 위해 Moment.js, date-fns, Day.js와 같은 라이브러리를 사용해 왔습니다.
+
+이러한 문제를 해결하기 위해 등장한 것이 바로 **Temporal API**입니다.
+
+Temporal은 날짜, 시간, 시간대(Time Zone), 기간(Duration)을 명확하게 구분하여 다룰 수 있도록 설계되었으며, 대부분의 객체가 **불변(Immutable)** 이기 때문에 더욱 예측 가능하고 안전한 코드를 작성할 수 있습니다.
+
+
+---
+
+## PlainDate
+
+`Temporal.PlainDate`는 **날짜만 표현**합니다.
+
+* 시간 없음
+* 시간대(Time Zone) 없음
+* 생일, 공휴일, 예약일 등 날짜만 필요한 경우 사용
+
+```ts
+const christmas = Temporal.PlainDate.from("2026-12-25");
+
+console.log(christmas.year); // 2026
+console.log(christmas.month); // 12
+console.log(christmas.day); // 25
+console.log(christmas.dayOfWeek); // 5 (금요일)
+```
+
+기존 `Date` 객체와 달리 월(month)이 0부터 시작하지 않습니다.
+
+```ts
+new Date().getMonth(); // 0 ~ 11
+```
+
+
+---
+
+## PlainTime
+
+`Temporal.PlainTime`은 **시간만 표현**합니다.
+
+* 날짜 없음
+* 시간대 없음
+* 알람, 영업시간, 반복 스케줄 등에 적합
+
+```ts
+const alarm = Temporal.PlainTime.from("07:30:00");
+
+console.log(alarm.hour); // 7
+console.log(alarm.minute); // 30
+```
+
+---
+
+## PlainDateTime
+
+`Temporal.PlainDateTime`은 **날짜와 시간**을 함께 표현합니다.
+
+* 날짜 포함
+* 시간 포함
+* 시간대 없음
+
+특정 지역과 무관한 "2026년 3월 15일 오후 2시" 같은 값을 표현할 때 사용합니다.
+
+```ts
+const meeting = Temporal.PlainDateTime.from(
+  "2026-03-15T14:00:00",
+);
+
+console.log(meeting.toString());
+// 2026-03-15T14:00:00
+```
+
+---
+
+## ZonedDateTime
+
+`Temporal.ZonedDateTime`은 **날짜 + 시간 + 시간대(Time Zone)** 를 모두 포함합니다.
+
+국제 서비스나 일정 관리에서 가장 많이 사용되는 타입입니다.
+
+```ts
+const seoulTime = Temporal.ZonedDateTime.from(
+  "2026-03-15T14:00:00+09:00[Asia/Seoul]",
+);
+
+console.log(seoulTime.toString());
+// 2026-03-15T14:00:00+09:00[Asia/Seoul]
+```
+
+사용 사례
+
+* 캘린더 일정
+* 미팅 예약
+* 국제 서비스 스케줄링
+* 서머타임(DST) 고려가 필요한 기능
+
+---
+
+## Instant
+
+`Temporal.Instant`는 **UTC 기준 절대 시점(Absolute Time)** 을 표현합니다.
+
+* 시간대 없음
+* 캘린더 정보 없음
+* 전 세계 어디서나 동일한 시점
+
+주로 로그 기록이나 데이터베이스 저장용으로 사용합니다.
+
+```ts
+const now = Temporal.Now.instant();
+
+console.log(now.toString());
+// 2026-02-27T02:30:00.123456789Z
+```
+
+사용 사례
+
+* 로그 타임스탬프
+* DB `created_at`
+* 이벤트 발생 시각 저장
+* 서버 간 시간 동기화
+
+---
+
+## Duration
+
+`Temporal.Duration`은 특정 시점이 아닌 **기간(Length of Time)** 을 나타냅니다.
+
+```ts
+const threeDays = Temporal.Duration.from({
+  days: 3,
+  hours: 5,
+});
+
+console.log(threeDays.toString());
+// P3DT5H
+```
+
+### 특정 단위로 변환
+
+```ts
+const meeting = Temporal.Duration.from({
+  hours: 2,
+  minutes: 20,
+});
+
+console.log(
+  meeting.total({ unit: "minute" }),
+);
+// 140
+
+console.log(
+  meeting.total({ unit: "second" }),
+);
+// 8400
+```
+
+### 사용 사례
+
+* 남은 시간 표시
+* 타이머
+* 근무 시간 계산
+* 영상 재생 길이
+
+---
+
+# 날짜 연산
+
+Temporal의 가장 큰 장점 중 하나는 직관적인 날짜 연산입니다.
+
+기존 `Date` 객체처럼 밀리초를 직접 계산할 필요 없이 `add()`, `subtract()`, `until()`, `since()` 등을 사용할 수 있습니다.
+
+## add()
+
+특정 기간을 더합니다.
+
+```ts
+const today = Temporal.PlainDate.from(
+  "2026-02-27",
+);
+
+const after30Days = today.add({
+  days: 30,
+});
+
+console.log(after30Days.toString());
+// 2026-03-29
+```
+
+```ts
+const future = today.add({
+  years: 1,
+  months: 6,
+});
+
+console.log(future.toString());
+// 2027-08-27
+```
+
+---
+
+## subtract()
+
+특정 기간을 뺍니다.
+
+```ts
+const today = Temporal.PlainDate.from(
+  "2026-02-27",
+);
+
+const twoMonthsAgo = today.subtract({
+  months: 2,
+});
+
+console.log(twoMonthsAgo.toString());
+// 2025-12-27
+```
+
+---
+
+## until()
+
+현재 날짜에서 미래 날짜까지의 차이를 구합니다.
+
+```ts
+const start = Temporal.PlainDate.from(
+  "2026-01-01",
+);
+
+const end = Temporal.PlainDate.from(
+  "2026-03-15",
+);
+
+const diff = start.until(end);
+
+console.log(diff.toString());
+// P73D
+```
+
+단위를 지정할 수도 있습니다.
+
+```ts
+const diff = start.until(end, {
+  largestUnit: "month",
+});
+
+console.log(diff.toString());
+// P2M14D
+```
+
+---
+
+## since()
+
+`until()`과 반대 방향으로 계산합니다.
+
+```ts
+const start = Temporal.PlainDate.from(
+  "2026-01-01",
+);
+
+const end = Temporal.PlainDate.from(
+  "2026-03-15",
+);
+
+const diff = end.since(start);
+
+console.log(diff.toString());
+// P73D
+```
+
+---
+
+# 시간대(Time Zone) 다루기
+
+Temporal이 특히 빛을 발하는 부분은 시간대 처리입니다.
+
+예를 들어 서울 기준 오후 2시에 예정된 회의를 뉴욕 시간으로 변환할 수 있습니다.
+
+```ts
+const seoulMeeting =
+  Temporal.ZonedDateTime.from(
+    "2026-03-15T14:00:00+09:00[Asia/Seoul]",
+  );
+
+const newYorkMeeting =
+  seoulMeeting.withTimeZone(
+    "America/New_York",
+  );
+
+console.log(newYorkMeeting.toString());
+```
+
+Temporal은 IANA Time Zone Database를 사용하므로 **서머타임(DST)** 도 자동으로 처리합니다.
+
+---
+
+# 불변 객체(Immutable)
+
+Temporal의 모든 객체는 불변입니다.
+
+즉, 메서드를 호출해도 원본 객체가 변경되지 않고 항상 새로운 객체가 반환됩니다.
+
+```ts
+const today = Temporal.PlainDate.from(
+  "2026-02-27",
+);
+
+const tomorrow = today.add({
+  days: 1,
+});
+
+console.log(today.toString());
+// 2026-02-27
+
+console.log(tomorrow.toString());
+// 2026-02-28
+```
+
+원본 데이터가 의도치 않게 변경되는 문제를 방지할 수 있어 대규모 애플리케이션에서도 안전하게 사용할 수 있습니다.
+
+---
+
+# 사용 목적에 따른 Temporal 타입 정리
+
+| 상황        | Temporal 타입     |
+| --------- | --------------- |
+| 생일, 공휴일   | `PlainDate`     |
+| 알람, 영업시간  | `PlainTime`     |
+| 날짜 + 시간   | `PlainDateTime` |
+| 국제 일정, 예약 | `ZonedDateTime` |
+| 로그, DB 저장 | `Instant`       |
+| 기간 계산     | `Duration`      |
+
+---
+
+# 마무리
+
+**Temporal API**는 오랫동안 JavaScript 개발자들을 괴롭혀 왔던 `Date` 객체의 여러 한계를 해결하기 위해 설계된 차세대 날짜·시간 API입니다.
+
+특히 다음과 같은 장점이 있습니다.
+
+* 날짜와 시간을 명확하게 분리
+* 직관적인 날짜 연산
+* 시간대(Time Zone) 지원
+* 서머타임 자동 처리
+* 불변 객체 제공
+
+국제 서비스, 예약 시스템, 캘린더, 로그 처리 등 날짜와 시간을 다루는 모든 프로젝트에서 Temporal은 기존 `Date`보다 훨씬 안전하고 직관적인 선택이 될 수 있습니다.
+
+---
+#### Reference
+- https://www.youtube.com/watch?v=Q0BOHt6iHAY
+- https://daleseo.com/js-temporal/
+- https://www.w3schools.com/Js/js_temporal.asp
