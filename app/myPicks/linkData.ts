@@ -24,6 +24,11 @@ export const categories = [
         description: '수천 개의 유명 브랜드 로고를 SVG 포맷으로 제공',
       },
       {
+        name: 'Logo.dev',
+        url: 'https://logo.dev/',
+        description: '도메인 기반으로 기업 및 서비스 로고 이미지를 간편하게 가져오는 API',
+      },
+      {
         name: 'Dicebear',
         url: 'https://www.dicebear.com/',
         description: '다양한 스타일의 사용자 아바타를 생성하는 라이브러리',
