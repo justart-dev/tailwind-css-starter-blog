@@ -105,6 +105,11 @@ export const categories = [
         url: 'https://react.email/',
         description: 'React 환경에서 현대적인 이메일 템플릿을 개발하는 표준 도구',
       },
+      {
+        name: 'React Suite',
+        url: 'https://www.rsuitejs.com/',
+        description: 'React 기반의 기업용 UI 컴포넌트 라이브러리',
+      },
     ],
   },
   {
@@ -196,8 +201,20 @@ export const categories = [
     ],
   },
   {
-    title: '사이드 프로젝트',
-    description: '배움을 기록하고 가치를 나누기 위해 직접 개발한 프로젝트',
+    title: 'AI 에이전트 도구',
+    description:
+      'Cursor, Claude Code, Codex 등 AI 코딩 도구의 출력 퀄리티를 끌어올리는 에이전트 프레임워크',
+    links: [
+      {
+        name: 'Taste Skill',
+        url: 'https://www.tasteskill.dev/',
+        description: 'AI 코딩 에이전트에게 디자인 감각을 주는 SKILL.md 프레임워크',
+      },
+    ],
+  },
+  {
+    title: '내가 만든 장난감들',
+    description: '가볍게 시작해서 꾸준히 다듬어온 개인 프로젝트 모음',
     links: [
       {
         name: 'Clip Memo',
