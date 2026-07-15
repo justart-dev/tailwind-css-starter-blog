@@ -1,12 +1,12 @@
 {
   "architecture": 1,
-  "infra": 4,
-  "javascript": 2,
-  "react": 2,
-  "tailwind-css": 2,
   "ai-agent": 1,
+  "infra": 4,
   "project": 3,
+  "javascript": 2,
+  "tailwind-css": 2,
   "tdd": 2,
+  "react": 2,
   "think": 3,
   "typescript": 1
 }

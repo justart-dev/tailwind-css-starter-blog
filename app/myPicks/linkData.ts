@@ -81,6 +81,11 @@ export const categories = [
         description: 'React 컴포넌트의 큐레이션 리소스',
       },
       {
+        name: 'Originkit',
+        url: 'https://www.originkit.dev/',
+        description: '현대적인 웹사이트를 위한 무료 애니메이션 컴포넌트 라이브러리',
+      },
+      {
         name: 'ReactBits',
         url: 'https://www.reactbits.dev/',
         description: '특별한 인터랙션을 위한 독창적인 React 애니메이션 컴포넌트',
