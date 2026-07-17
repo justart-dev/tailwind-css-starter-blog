@@ -42,7 +42,12 @@ export const categories = [
       {
         name: 'Mobbin',
         url: 'https://mobbin.com/',
-        description: '실제 서비스들의 온보딩부터 결제까지의 UX 흐름 분석',
+        description: '실제 서비스들의 온볼딩부터 결제까지의 UX 흐름 분석',
+      },
+      {
+        name: 'UI Bowl',
+        url: 'https://uibowl.io/',
+        description: '국내 UI/UX 패턴을 모아놓은 서비스',
       },
       {
         name: 'Designus',
