@@ -163,11 +163,6 @@ export const categories = [
         description: '소스 코드를 공유하기 좋은 깔끔한 이미지로 변환',
       },
       {
-        name: 'Screely',
-        url: 'https://screely.com/',
-        description: '평범한 스크린샷을 세련된 브라우저 목업 이미지로 완성',
-      },
-      {
         name: 'Microsoft Clarity',
         url: 'https://clarity.microsoft.com/',
         description: '사용자의 행동을 히트맵과 녹화로 확인하는 UX 분석 도구',
