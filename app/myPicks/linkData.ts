@@ -201,10 +201,14 @@ export const categories = [
     ],
   },
   {
-    title: 'AI 에이전트 도구',
-    description:
-      'Cursor, Claude Code, Codex 등 AI 코딩 도구의 출력 퀄리티를 끌어올리는 에이전트 프레임워크',
+    title: 'AI 관련 서비스',
+    description: 'AI 에이전트, 코딩 도구, 벤치마크 플랫폼까지 — 실무 적용부터 트렌드 파악까지',
     links: [
+      {
+        name: 'Arena',
+        url: 'https://arena.ai/leaderboard',
+        description: '실사용자 선호도 기반으로 AI 에이전트 성능을 비교하고 순위를 확인하는 플랫폼',
+      },
       {
         name: 'Taste Skill',
         url: 'https://www.tasteskill.dev/',
