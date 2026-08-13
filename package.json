@@ -12,7 +12,7 @@
     "prepare": "husky",
     "test": "pnpm playwright test",
     "cf:build": "EXPORT=true UNOPTIMIZED=true pnpm build",
-    "cf:deploy": "wrangler pages deploy out --project-name=justart-dev",
+    "cf:deploy": "wrangler pages deploy out --project-name=justart-dev --branch main",
     "cf": "pnpm cf:build && pnpm cf:deploy"
   },
   "dependencies": {
