@@ -50,9 +50,9 @@ export const categories = [
         description: '국내 UI/UX 패턴을 모아놓은 서비스',
       },
       {
-        name: 'Designus',
-        url: 'https://ko.designus.design/store-reference',
-        description: '국내외 다양한 웹/앱 서비스의 디자인 레퍼런스 모음',
+        name: 'One Page Love',
+        url: 'https://onepagelove.com/',
+        description: '인기 있는 원페이지 웹사이트를 선별해 제공하는 디자인 레퍼런스',
       },
       {
         name: 'WIT',
@@ -63,16 +63,6 @@ export const categories = [
         name: '60FPS',
         url: 'https://60fps.design/',
         description: '부드러운 인터랙션과 애니메이션 중심의 디자인 레퍼런스',
-      },
-      {
-        name: 'Good UI',
-        url: 'https://goodui.org/',
-        description: '실제 A/B 테스트 결과를 바탕으로 한 승률 높은 UI 패턴 가이드',
-      },
-      {
-        name: 'LaunchKit',
-        url: 'https://launchkit.evilmartians.io/',
-        description: '모던한 랜딩페이지 레이아웃 구성을 위한 시각적 가이드',
       },
     ],
   },
