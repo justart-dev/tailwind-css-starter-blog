@@ -96,11 +96,6 @@ export const categories = [
         description: 'Tailwind CSS 기반의 트렌디하고 화려한 UI 컴포넌트 모음',
       },
       {
-        name: 'ReUI',
-        url: 'https://reui.io/',
-        description: 'shadcn/ui와 Framer Motion을 결합한 실무 중심 UI 킷',
-      },
-      {
         name: 'Anime.js',
         url: 'https://animejs.com/',
         description: '자바스크립트 기반의 강력하고 가벼운 애니메이션 동력원',
@@ -109,11 +104,6 @@ export const categories = [
         name: 'React Email',
         url: 'https://react.email/',
         description: 'React 환경에서 현대적인 이메일 템플릿을 개발하는 표준 도구',
-      },
-      {
-        name: 'React Suite',
-        url: 'https://www.rsuitejs.com/',
-        description: 'React 기반의 기업용 UI 컴포넌트 라이브러리',
       },
     ],
   },
