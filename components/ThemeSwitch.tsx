@@ -2,7 +2,15 @@
 
 import { Fragment, useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Radio,
+  RadioGroup,
+  Transition,
+} from '@headlessui/react'
 
 const Sun = () => (
   <svg
@@ -77,53 +85,58 @@ const ThemeSwitch = () => {
           leaveTo="transform opacity-0 scale-95"
         >
           <MenuItems className="bg-paper dark:bg-ink absolute right-0 z-50 mt-2 w-36 origin-top-right divide-y divide-black/8 rounded-2xl border border-black/8 p-1 shadow-lg ring-0 shadow-black/5 focus:outline-hidden dark:divide-white/10 dark:border-white/10">
-            <div className="p-1">
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={() => setTheme('light')}
-                    className={`${focus ? 'text-ink dark:text-paper' : 'text-muted'} ${
-                      theme === 'light' ? 'font-semibold' : ''
-                    } group flex w-full items-center rounded-xl px-3 py-2 text-sm transition-colors`}
-                  >
-                    <div className="mr-2">
-                      <Sun />
-                    </div>
-                    Light
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={() => setTheme('dark')}
-                    className={`${focus ? 'text-ink dark:text-paper' : 'text-muted'} ${
-                      theme === 'dark' ? 'font-semibold' : ''
-                    } group flex w-full items-center rounded-xl px-3 py-2 text-sm transition-colors`}
-                  >
-                    <div className="mr-2">
-                      <Moon />
-                    </div>
-                    Dark
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={() => setTheme('system')}
-                    className={`${focus ? 'text-ink dark:text-paper' : 'text-muted'} ${
-                      theme === 'system' ? 'font-semibold' : ''
-                    } group flex w-full items-center rounded-xl px-3 py-2 text-sm transition-colors`}
-                  >
-                    <div className="mr-2">
-                      <Monitor />
-                    </div>
-                    System
-                  </button>
-                )}
-              </MenuItem>
-            </div>
+            <RadioGroup value={theme} onChange={setTheme}>
+              <div className="p-1">
+                <Radio value="light">
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        className={`${focus ? 'text-ink dark:text-paper' : 'text-muted'} ${
+                          theme === 'light' ? 'font-semibold' : ''
+                        } group flex w-full items-center rounded-xl px-3 py-2 text-sm transition-colors`}
+                      >
+                        <div className="mr-2">
+                          <Sun />
+                        </div>
+                        Light
+                      </button>
+                    )}
+                  </MenuItem>
+                </Radio>
+                <Radio value="dark">
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        className={`${focus ? 'text-ink dark:text-paper' : 'text-muted'} ${
+                          theme === 'dark' ? 'font-semibold' : ''
+                        } group flex w-full items-center rounded-xl px-3 py-2 text-sm transition-colors`}
+                      >
+                        <div className="mr-2">
+                          <Moon />
+                        </div>
+                        Dark
+                      </button>
+                    )}
+                  </MenuItem>
+                </Radio>
+                <Radio value="system">
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        className={`${focus ? 'text-ink dark:text-paper' : 'text-muted'} ${
+                          theme === 'system' ? 'font-semibold' : ''
+                        } group flex w-full items-center rounded-xl px-3 py-2 text-sm transition-colors`}
+                      >
+                        <div className="mr-2">
+                          <Monitor />
+                        </div>
+                        System
+                      </button>
+                    )}
+                  </MenuItem>
+                </Radio>
+              </div>
+            </RadioGroup>
           </MenuItems>
         </Transition>
       </Menu>

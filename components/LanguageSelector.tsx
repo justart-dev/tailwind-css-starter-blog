@@ -1,7 +1,15 @@
 'use client'
 
 import { Fragment, useEffect, useState } from 'react'
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Radio,
+  RadioGroup,
+  Transition,
+} from '@headlessui/react'
 import { useTranslation, SupportedLanguage } from './TranslationContext'
 
 const languages: { code: SupportedLanguage; label: string; flag: string }[] = [
@@ -80,39 +88,42 @@ const LanguageSelector = () => {
             leaveTo="transform opacity-0 scale-95"
           >
             <MenuItems className="bg-paper dark:bg-ink absolute right-0 z-50 mt-2 w-36 origin-top-right divide-y divide-black/8 rounded-2xl border border-black/8 p-1 shadow-lg ring-0 shadow-black/5 focus:outline-hidden dark:divide-white/10 dark:border-white/10">
-              <div className="p-1">
-                {languages.map((lang) => (
-                  <MenuItem key={lang.code}>
-                    {({ focus }) => (
-                      <button
-                        onClick={() => setLanguage(lang.code)}
-                        className={`${focus ? 'text-ink dark:text-paper' : 'text-muted'} ${
-                          currentLang === lang.code ? 'font-semibold' : ''
-                        } group flex w-full items-center rounded-xl px-3 py-2 text-sm transition-colors`}
-                      >
-                        <span className="mr-2">{lang.flag}</span>
-                        {lang.label}
-                        {currentLang === lang.code && (
-                          <svg
-                            className="ml-auto h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            style={{ width: '1rem', height: '1rem', flexShrink: 0 }}
+              <RadioGroup value={currentLang} onChange={setLanguage}>
+                <div className="p-1">
+                  {languages.map((lang) => (
+                    <Radio key={lang.code} value={lang.code}>
+                      <MenuItem>
+                        {({ focus }) => (
+                          <button
+                            className={`${focus ? 'text-ink dark:text-paper' : 'text-muted'} ${
+                              currentLang === lang.code ? 'font-semibold' : ''
+                            } group flex w-full items-center rounded-xl px-3 py-2 text-sm transition-colors`}
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
+                            <span className="mr-2">{lang.flag}</span>
+                            {lang.label}
+                            {currentLang === lang.code && (
+                              <svg
+                                className="ml-auto h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                style={{ width: '1rem', height: '1rem', flexShrink: 0 }}
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            )}
+                          </button>
                         )}
-                      </button>
-                    )}
-                  </MenuItem>
-                ))}
-              </div>
+                      </MenuItem>
+                    </Radio>
+                  ))}
+                </div>
+              </RadioGroup>
             </MenuItems>
           </Transition>
         )}

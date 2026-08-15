@@ -31,8 +31,8 @@ export default function Home({ posts }: MainProps) {
               text="#Justart-dev #DevLog #LearnInPublic #CodeNotes #QuestionEverything #Life"
               animateOn="view"
               sequential={true}
-              revealDirection="start"
-              speed={25}
+              revealDirection="center"
+              speed={40}
               maxIterations={10}
               className="text-ink dark:text-paper"
               encryptedClassName="text-muted/50"
@@ -40,8 +40,8 @@ export default function Home({ posts }: MainProps) {
             />
           </div>
         </div>
-        <div className="absolute bottom-60 left-1/2 -translate-x-1/2">
-          <ChevronDownIcon className="text-muted h-6 w-6 animate-bounce" />
+        <div className="absolute bottom-48 left-1/2 -translate-x-1/2">
+          <ChevronDownIcon className="text-muted/60 h-5 w-5 animate-bounce" />
         </div>
       </section>
 
