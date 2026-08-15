@@ -63,12 +63,13 @@ export default function Home({ posts }: MainProps) {
       {/* Recent writing + Tags */}
       <section className="dark:border-line-dark/8 grid gap-12 border-t border-black/8 py-14 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div>
-          <div className="mb-8 flex items-end gap-6 pb-4">
-            <div>
-              <Eyebrow>Recent writing</Eyebrow>
-            </div>
+          <div className="flex items-end justify-between">
+            <Eyebrow>Recent writing</Eyebrow>
+            <Link href="/blog" className="text-muted text-xs font-medium tracking-wider uppercase">
+              View all ({posts.length})
+            </Link>
           </div>
-          <ul className="divide-y divide-black/8 dark:divide-white/10">
+          <ul className="mt-4 divide-y divide-black/8 dark:divide-white/10">
             {recentPosts.map((post) => (
               <li key={post.path} className="py-6">
                 <article className="grid gap-3 md:grid-cols-[120px_minmax(0,1fr)] md:gap-6">
