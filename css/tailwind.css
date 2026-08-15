@@ -322,30 +322,42 @@ input:-webkit-autofill:focus {
 }
 
 /* Compact body text spacing — reduce vertical rhythm for tighter reading */
+.prose p,
+.prose li,
+.prose td,
+.prose th {
+  line-height: 1.4;
+}
 .prose p {
   margin-top: 0;
-  margin-bottom: 0.85em;
+  margin-bottom: 0.5em;
+}
+.prose p:first-child {
+  margin-top: 0;
+}
+.prose p:last-child {
+  margin-bottom: 0;
 }
 .prose h2 {
-  margin-top: 1.2em;
-  margin-bottom: 0.6em;
+  margin-top: 0.8em;
+  margin-bottom: 0.3em;
 }
 .prose h3 {
-  margin-top: 1em;
-  margin-bottom: 0.45em;
+  margin-top: 0.6em;
+  margin-bottom: 0.25em;
 }
 .prose ul,
 .prose ol {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
 }
 .prose blockquote {
-  margin-top: 0.6em;
-  margin-bottom: 0.6em;
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
 }
 .prose pre {
-  margin-top: 0.75em;
-  margin-bottom: 0.75em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 /* Compact Table of Contents — reduce vertical spacing and indentation */
