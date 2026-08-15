@@ -22,11 +22,11 @@ export default function Home({ posts }: MainProps) {
     <div className="pt-6 pb-4 md:pt-8">
       {/* Hero */}
       <section className="hero-section dark:border-line-dark/8 relative flex items-center justify-center border-b border-black/8">
-        <div className="mt-[-20rem] max-w-4xl text-center">
+        <div className="mt-[-10rem] max-w-4xl text-center">
           <div className="text-muted text-[11px] font-semibold tracking-[0.24em] uppercase">
             Justart-dev archive
           </div>
-          <div className="mt-24">
+          <div className="mt-6">
             <DecryptedText
               text="#Justart-dev #DevLog #LearnInPublic #CodeNotes #QuestionEverything #Life"
               animateOn="view"

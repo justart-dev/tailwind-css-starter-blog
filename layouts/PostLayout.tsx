@@ -35,21 +35,9 @@ export default function PostLayout({ content, children, next, prev }: LayoutProp
             <div className="text-[11px] font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
               {categoryLabel}
             </div>
-            <div className="space-y-3">
-              <dl>
-                <div>
-                  <dt className="sr-only">Published on</dt>
-                  <dd className="text-sm leading-6 font-medium text-gray-500 dark:text-gray-400">
-                    <time dateTime={date}>
-                      {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
-                    </time>
-                  </dd>
-                </div>
-              </dl>
-              <h1 className="w-full text-4xl font-semibold tracking-[-0.07em] text-gray-950 sm:text-6xl dark:text-white">
-                {title}
-              </h1>
-            </div>
+            <h1 className="w-full text-4xl font-semibold tracking-[-0.07em] text-gray-950 sm:text-6xl dark:text-white">
+              {title}
+            </h1>
           </div>
         </header>
 

@@ -33,7 +33,7 @@ const Header = () => {
           </div>
 
           {/* Right: actions */}
-          <div className="flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-3">
             <div className="hidden items-center gap-3 md:flex">
               <SearchButton />
               <ThemeSwitch />
