@@ -321,9 +321,36 @@ input:-webkit-autofill:focus {
   min-height: 100vh;
 }
 
+/* Compact body text spacing — reduce vertical rhythm for tighter reading */
+.prose p {
+  margin-top: 0;
+  margin-bottom: 0.85em;
+}
+.prose h2 {
+  margin-top: 1.2em;
+  margin-bottom: 0.6em;
+}
+.prose h3 {
+  margin-top: 1em;
+  margin-bottom: 0.45em;
+}
+.prose ul,
+.prose ol {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.prose blockquote {
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+}
+.prose pre {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
 /* Compact Table of Contents — reduce vertical spacing and indentation */
 .prose #목차 {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 .prose #목차 + ol {
   margin-top: 0;
@@ -331,7 +358,7 @@ input:-webkit-autofill:focus {
 }
 .prose #목차 + ol > li,
 .prose #목차 + ol li {
-  margin: 0.15rem 0;
+  margin: 0.05rem 0;
 }
 .prose #목차 + ol > li > p,
 .prose #목차 + ol li > p {
@@ -341,13 +368,13 @@ input:-webkit-autofill:focus {
 .prose #목차 + ol ol,
 .prose #목차 + ol ul ul,
 .prose #목차 + ol ol ol {
-  margin-top: 0.15rem;
+  margin-top: 0.05rem;
   margin-bottom: 0;
   margin-left: 0.75rem;
 }
 .prose #목차 + ol ul > li,
 .prose #목차 + ol ol > li {
-  margin: 0.1rem 0;
+  margin: 0.03rem 0;
 }
 .prose #목차 + ol ul > li > p,
 .prose #목차 + ol ol > li > p {
