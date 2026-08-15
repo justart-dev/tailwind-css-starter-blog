@@ -9,6 +9,7 @@ import SectionContainer from '@/components/SectionContainer'
 import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
+import { onest, geistMono } from './fonts'
 import { TranslationProvider } from '@/components/TranslationContext'
 import { Metadata } from 'next'
 import Script from 'next/script'
@@ -59,7 +60,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const sameAs = [siteMetadata.github, siteMetadata.notion, siteMetadata.threads].filter(Boolean)
 
   return (
-    <html lang={siteMetadata.language} className="scroll-smooth" suppressHydrationWarning>
+    <html
+      lang={siteMetadata.language}
+      className={`${onest.variable} ${geistMono.variable} scroll-smooth`}
+      suppressHydrationWarning
+    >
       <link
         rel="apple-touch-icon"
         sizes="76x76"
@@ -98,7 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6198824361218150"
         crossOrigin="anonymous"
       />
-      <body className="min-h-screen bg-[#fcfbf8] text-gray-950 antialiased dark:bg-[#0b1020] dark:text-gray-50">
+      <body className="bg-paper text-ink dark:bg-ink dark:text-paper min-h-screen antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

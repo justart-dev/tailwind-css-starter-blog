@@ -244,3 +244,161 @@ input:-webkit-autofill:focus {
     }
   }
 }
+
+/* ===== Craft.wild.as inspired additions ===== */
+
+/* Masthead header */
+.masthead {
+  position: relative;
+  z-index: 40;
+}
+
+/* Max-width container (matching craft.wild.as) */
+.container-maxw {
+  max-width: 1176px;
+  margin: 0 auto;
+  padding-left: 28px;
+  padding-right: 28px;
+}
+@media (min-width: 768px) {
+  .container-maxw {
+    padding-left: 56px;
+    padding-right: 56px;
+  }
+}
+
+/* Monospace uppercase label utility */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Eyebrow label */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #8b8b8b;
+}
+.dark .eyebrow {
+  color: #8b8b8b;
+}
+
+/* Text reveal animation (for AnimatedLineText) */
+.text-reveal-block {
+  overflow: hidden;
+}
+.text-reveal-line {
+  display: block;
+  opacity: 0;
+  animation: revealLine 0.6s ease forwards;
+}
+.text-reveal-line > span {
+  display: block;
+}
+@keyframes revealLine {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Hide scrollbar for carousel/scroll containers */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hero section — full height, centered content */
+.hero-section {
+  min-height: 100vh;
+}
+
+/* Compact Table of Contents — reduce vertical spacing and indentation */
+.prose #목차 {
+  margin-bottom: 1rem;
+}
+.prose #목차 + ol {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.prose #목차 + ol > li,
+.prose #목차 + ol li {
+  margin: 0.15rem 0;
+}
+.prose #목차 + ol > li > p,
+.prose #목차 + ol li > p {
+  margin: 0;
+}
+.prose #목차 + ol ul,
+.prose #목차 + ol ol,
+.prose #목차 + ol ul ul,
+.prose #목차 + ol ol ol {
+  margin-top: 0.15rem;
+  margin-bottom: 0;
+  margin-left: 0.75rem;
+}
+.prose #목차 + ol ul > li,
+.prose #목차 + ol ol > li {
+  margin: 0.1rem 0;
+}
+.prose #목차 + ol ul > li > p,
+.prose #목차 + ol ol > li > p {
+  margin: 0;
+}
+
+/* Particle text animation */
+.particle-text {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  overflow: hidden;
+  touch-action: none;
+  isolation: isolate;
+  --particle-color: #111827;
+  --particle-highlight: #2563eb;
+}
+.dark .particle-text {
+  --particle-color: #f9fafb;
+  --particle-highlight: #60a5fa;
+}
+.particle-text__canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.particle-text__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* DecryptedText block layout override */
+.decrypted-text__block {
+  display: block !important;
+  width: 100%;
+  text-align: center;
+  line-height: 1.35;
+  font-size: clamp(1.75rem, 5vw, 4rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  height: 5.6em;
+  overflow: hidden;
+}

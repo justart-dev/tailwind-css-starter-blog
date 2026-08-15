@@ -84,14 +84,14 @@ const ThemeSwitch = () => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <MenuItems className="absolute right-0 z-50 mt-2 w-36 origin-top-right divide-y divide-black/8 rounded-2xl border border-black/8 bg-[#fcfbf8] p-1 shadow-lg ring-0 shadow-black/5 focus:outline-hidden dark:divide-white/10 dark:border-white/10 dark:bg-[#0f172a]">
+          <MenuItems className="bg-paper dark:bg-ink absolute right-0 z-50 mt-2 w-36 origin-top-right divide-y divide-black/8 rounded-2xl border border-black/8 p-1 shadow-lg ring-0 shadow-black/5 focus:outline-hidden dark:divide-white/10 dark:border-white/10">
             <RadioGroup value={theme} onChange={setTheme}>
               <div className="p-1">
                 <Radio value="light">
                   <MenuItem>
                     {({ focus }) => (
                       <button
-                        className={`${focus ? 'bg-gray-950 text-white dark:bg-white dark:text-gray-950' : 'text-gray-700 dark:text-gray-200'} group flex w-full items-center rounded-xl px-3 py-2 text-sm transition-colors`}
+                        className={`${focus ? 'text-paper dark:bg-paper dark:text-ink bg-gray-900' : 'text-muted'} group flex w-full items-center rounded-xl px-3 py-2 text-sm transition-colors`}
                       >
                         <div className="mr-2">
                           <Sun />

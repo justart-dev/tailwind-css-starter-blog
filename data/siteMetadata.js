@@ -3,7 +3,7 @@ const siteMetadata = {
   title: 'Justart-dev Blog',
   author: 'Justart',
   headerTitle: 'Justart-dev',
-  description: '프론트엔드와 웹 개발, 프로젝트 회고, 기술 인사이트를 정리하는 개인 개발 아카이브',
+  description: '웹 개발, 프로젝트 회고, 기술 인사이트를 정리하는 개인 개발 아카이브',
   language: 'ko-KR',
   theme: 'system', // system, dark or light
   siteUrl: 'https://justart-dev.pages.dev',
