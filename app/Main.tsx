@@ -23,9 +23,13 @@ export default function Home({ posts }: MainProps) {
       {/* Hero */}
       <section className="hero-section dark:border-line-dark/8 relative flex items-center justify-center border-b border-black/8">
         <div className="mt-[-10rem] max-w-4xl text-center">
-          <div className="text-muted text-[11px] font-semibold tracking-[0.24em] uppercase">
+          <h1 className="text-muted text-[11px] font-semibold tracking-[0.24em] uppercase">
             Justart-dev archive
-          </div>
+          </h1>
+          <p className="sr-only">
+            React, Next.js, TypeScript, 인프라, 아키텍처, 프로젝트 회고를 기록하는 개인 개발
+            블로그입니다. 최근 글과 태그, 추천 링크를 확인할 수 있습니다.
+          </p>
           <div className="mt-6">
             <DecryptedText
               text="#Justart-dev #DevLog #LearnInPublic #CodeNotes #QuestionEverything #Life"

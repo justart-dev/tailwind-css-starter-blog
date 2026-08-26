@@ -1,5 +1,14 @@
 import Link from '@/components/Link'
 
+const recoveryLinks = [
+  { href: '/blog', label: 'Blog' },
+  { href: '/tags', label: 'Tags' },
+  { href: '/myPicks', label: 'MyPicks' },
+  { href: '/llms.txt', label: 'llms.txt' },
+  { href: '/sitemap.xml', label: 'Sitemap' },
+  { href: '/feed.xml', label: 'RSS' },
+]
+
 export default function NotFound() {
   return (
     <div className="flex flex-col items-start justify-start md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6">
@@ -19,6 +28,22 @@ export default function NotFound() {
         >
           Back to homepage
         </Link>
+        <div className="mt-8 space-y-3">
+          <div className="text-[11px] font-semibold tracking-[0.24em] text-gray-500 uppercase dark:text-gray-400">
+            Where to look next
+          </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
+            {recoveryLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-muted hover:text-ink dark:text-muted dark:hover:text-paper text-sm transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
