@@ -76,25 +76,23 @@ export default function Home({ posts }: MainProps) {
           <ul className="mt-4 divide-y divide-black/8 dark:divide-white/10">
             {recentPosts.map((post) => (
               <li key={post.path} className="py-6">
-                <article className="grid gap-3 md:grid-cols-[120px_minmax(0,1fr)] md:gap-6">
-                  <time
-                    className="text-muted pt-1 text-sm"
-                    dateTime={post.date}
-                    suppressHydrationWarning
-                  >
-                    {formatDate(post.date, siteMetadata.locale)}
-                  </time>
-                  <div className="space-y-3">
-                    <h4 className="text-ink dark:text-paper text-2xl font-semibold tracking-[-0.04em]">
-                      <Link
-                        href={`/${post.path}`}
-                        className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                      >
-                        {post.title}
-                      </Link>
-                    </h4>
-                    <p className="text-muted max-w-2xl text-sm leading-7">{post.summary}</p>
+                <article className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs tracking-wide text-gray-400 dark:text-gray-500">
+                    <time dateTime={post.date} suppressHydrationWarning>
+                      {formatDate(post.date, siteMetadata.locale)}
+                    </time>
+                    <span>·</span>
+                    <span>{(post.tags?.[0] || 'blog').toLowerCase()}</span>
                   </div>
+                  <h4 className="text-ink dark:text-paper text-2xl font-semibold tracking-[-0.04em]">
+                    <Link
+                      href={`/${post.path}`}
+                      className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                    >
+                      {post.title}
+                    </Link>
+                  </h4>
+                  <p className="text-muted max-w-2xl text-sm leading-7">{post.summary}</p>
                 </article>
               </li>
             ))}

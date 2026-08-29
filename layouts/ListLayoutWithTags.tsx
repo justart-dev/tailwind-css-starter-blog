@@ -203,32 +203,30 @@ export default function ListLayoutWithTags({
               const { path, date, title, summary, tags } = post
               return (
                 <li key={path} className="py-6 first:pt-0 last:pb-0">
-                  <article className="grid gap-4 md:grid-cols-[140px_minmax(0,1fr)] md:gap-8">
-                    <dl>
-                      <dt className="sr-only">Published on</dt>
-                      <dd className="pt-1 text-sm text-gray-500 dark:text-gray-400">
-                        <time dateTime={date} suppressHydrationWarning>
-                          {formatDate(date, siteMetadata.locale)}
-                        </time>
-                      </dd>
-                    </dl>
-                    <div className="space-y-3">
-                      <div className="flex flex-wrap gap-2">
-                        {tags?.map((tag) => (
-                          <Tag key={tag} text={tag} interactive={false} />
-                        ))}
-                      </div>
-                      <h2 className="text-2xl font-semibold tracking-[-0.04em] text-gray-950 sm:text-3xl dark:text-white">
-                        <Link
-                          href={`/${path}`}
-                          className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                        >
-                          {title}
-                        </Link>
-                      </h2>
-                      <div className="max-w-2xl text-sm leading-7 text-gray-600 sm:text-base dark:text-gray-300">
-                        {summary}
-                      </div>
+                  <article className="space-y-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {tags?.map((tag) => (
+                        <Tag key={tag} text={tag} interactive={false} />
+                      ))}
+                      <span className="text-xs text-gray-400 dark:text-gray-500">·</span>
+                      <time
+                        dateTime={date}
+                        className="text-xs tracking-wide text-gray-400 dark:text-gray-500"
+                        suppressHydrationWarning
+                      >
+                        {formatDate(date, siteMetadata.locale)}
+                      </time>
+                    </div>
+                    <h2 className="text-2xl font-semibold tracking-[-0.04em] text-gray-950 sm:text-3xl dark:text-white">
+                      <Link
+                        href={`/${path}`}
+                        className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                      >
+                        {title}
+                      </Link>
+                    </h2>
+                    <div className="max-w-2xl text-sm leading-7 text-gray-600 sm:text-base dark:text-gray-300">
+                      {summary}
                     </div>
                   </article>
                 </li>
