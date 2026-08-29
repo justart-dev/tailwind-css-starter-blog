@@ -27,7 +27,14 @@ export const metadata: Metadata = {
     description: siteMetadata.description,
     url: siteMetadata.siteUrl,
     siteName: siteMetadata.title,
-    images: [siteMetadata.socialBanner],
+    images: [
+      {
+        url: siteMetadata.socialBanner,
+        width: 1200,
+        height: 630,
+        alt: siteMetadata.title,
+      },
+    ],
     locale: siteMetadata.locale.replace('-', '_'),
     type: 'website',
   },
@@ -52,12 +59,14 @@ export const metadata: Metadata = {
     title: siteMetadata.title,
     card: 'summary_large_image',
     images: [siteMetadata.socialBanner],
+    creator: '@justart_dev',
   },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const basePath = process.env.BASE_PATH || ''
   const sameAs = [siteMetadata.github, siteMetadata.notion, siteMetadata.threads].filter(Boolean)
+  const siteUrl = siteMetadata.siteUrl
 
   return (
     <html
@@ -110,15 +119,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
+              '@id': `${siteUrl}#website`,
               name: siteMetadata.title,
-              url: siteMetadata.siteUrl,
+              url: siteUrl,
               description: siteMetadata.description,
               inLanguage: siteMetadata.language,
               publisher: {
-                '@type': 'Person',
-                name: siteMetadata.author,
-                url: siteMetadata.siteUrl,
-                sameAs,
+                '@id': `${siteUrl}#publisher`,
               },
               sameAs,
             }),
@@ -130,8 +137,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'Person',
+              '@id': `${siteUrl}#publisher`,
               name: siteMetadata.author,
-              url: siteMetadata.siteUrl,
+              url: siteUrl,
               sameAs,
             }),
           }}

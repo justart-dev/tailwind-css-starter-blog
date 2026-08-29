@@ -16,6 +16,12 @@ export function buildCanonicalUrl(path: string = '/') {
   return new URL(normalizedPath, siteMetadata.siteUrl).toString()
 }
 
+function ogImageEntry(image?: string) {
+  const url = image || siteMetadata.socialBanner
+  const absolute = url.startsWith('http') ? url : `${siteMetadata.siteUrl}${url}`
+  return { url: absolute, width: 1200, height: 630, alt: siteMetadata.title }
+}
+
 export function genPageMetadata({
   title,
   description,
@@ -25,6 +31,7 @@ export function genPageMetadata({
   ...rest
 }: PageSEOProps): Metadata {
   const canonical = buildCanonicalUrl(path)
+  const ogImage = ogImageEntry(image)
 
   return {
     title,
@@ -38,7 +45,7 @@ export function genPageMetadata({
       description: description || siteMetadata.description,
       url: canonical,
       siteName: siteMetadata.title,
-      images: image ? [image] : [siteMetadata.socialBanner],
+      images: [ogImage],
       locale: siteMetadata.locale.replace('-', '_'),
       type,
     },
@@ -46,7 +53,7 @@ export function genPageMetadata({
       title: `${title} | ${siteMetadata.title}`,
       description: description || siteMetadata.description,
       card: 'summary_large_image',
-      images: image ? [image] : [siteMetadata.socialBanner],
+      images: [ogImage.url],
     },
     ...rest,
   }

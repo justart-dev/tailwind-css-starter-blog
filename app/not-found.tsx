@@ -1,4 +1,9 @@
 import Link from '@/components/Link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+}
 
 const recoveryLinks = [
   { href: '/blog', label: 'Blog' },
