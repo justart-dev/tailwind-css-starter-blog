@@ -4,7 +4,6 @@ const recoveryLinks = [
   { href: '/blog', label: 'Blog' },
   { href: '/tags', label: 'Tags' },
   { href: '/myPicks', label: 'MyPicks' },
-  { href: '/llms.txt', label: 'llms.txt' },
   { href: '/sitemap.xml', label: 'Sitemap' },
   { href: '/feed.xml', label: 'RSS' },
 ]

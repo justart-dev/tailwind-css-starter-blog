@@ -35,14 +35,14 @@ test('제거된 신뢰 페이지(/about 등)는 404로 응답해야 한다.', as
   expect(response?.status()).toBe(404)
 })
 
-test('존재하지 않는 경로는 404로 응답하고 안내 링크(llms.txt, Blog)를 제공해야 한다.', async ({
+test('존재하지 않는 경로는 404로 응답하고 안내 링크(Blog 등)를 제공해야 한다.', async ({
   page,
 }) => {
   const response = await page.goto(`${startUrl}/agentic-test-no-page`)
 
   expect(response?.status()).toBe(404)
   const main = page.locator('main')
-  await expect(main.getByRole('link', { name: 'llms.txt' })).toBeVisible()
+  await expect(main.getByRole('link', { name: 'llms.txt' })).toBeHidden()
   await expect(main.getByRole('link', { name: 'Blog' })).toBeVisible()
 })
 

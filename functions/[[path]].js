@@ -19,7 +19,6 @@ This page does not exist on Justart-dev Blog, a Korean-language personal develop
 
 ## Where to look next
 
-- [llms.txt](/llms.txt) - curated index of this site for agents
 - [Blog index](/blog.md) - all posts as markdown
 - [Home](/index.md) - site overview as markdown
 - [Sitemap](/sitemap.xml) - all pages
