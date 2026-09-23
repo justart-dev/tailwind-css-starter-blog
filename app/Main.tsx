@@ -104,7 +104,7 @@ export default function Home({ posts }: MainProps) {
             <Eyebrow>Short note</Eyebrow>
             <div className="text-muted mt-4 space-y-4 text-sm leading-7">
               <p>안녕하세요. 함께 하면 즐거운 개발자가 되고 싶은 Justart입니다.</p>
-              <p>클로드는 사랑이지만, 요즘은 코덱스가 더 끌리네요.</p>
+              <p>요즘은 새 오픈웨이트 모델 나오면 커맨드코드에 물려보는 게 낙이에요.</p>
             </div>
           </div>
 

@@ -105,6 +105,11 @@ export const categories = [
         url: 'https://www.rsuitejs.com/',
         description: 'React 기반의 기업용 UI 컴포넌트 라이브러리',
       },
+      {
+        name: 'Driver.js',
+        url: 'https://driverjs.com/',
+        description: '복잡한 UI를 단계별로 안내하는 인터랙티브 투어 라이브러리',
+      },
     ],
   },
   {
@@ -200,14 +205,14 @@ export const categories = [
         description: '실사용자 선호도 기반으로 AI 에이전트 성능을 비교하고 순위를 확인하는 플랫폼',
       },
       {
+        name: 'Artificial Analysis',
+        url: 'https://artificialanalysis.ai/',
+        description: 'AI 벤더 및 모델 성능을 비교하는 데이터 플랫폼',
+      },
+      {
         name: 'Taste Skill',
         url: 'https://www.tasteskill.dev/',
         description: 'AI 코딩 에이전트에게 디자인 감각을 주는 SKILL.md 프레임워크',
-      },
-      {
-        name: 'Originkit',
-        url: 'https://www.originkit.dev/',
-        description: '현대적인 웹사이트를 위한 무료 애니메이션 컴포넌트 라이브러리',
       },
     ],
   },
