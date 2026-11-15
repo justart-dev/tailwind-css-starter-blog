@@ -114,7 +114,7 @@ export const categories = [
   },
   {
     title: '마케팅',
-    description: '앱 스토어 최적화 및 출시까지 필요한 도구들',
+    description: '앱·웹 서비스 출시와 홍보, 사용자 유입까지 챙기는 도구들',
     links: [
       {
         name: 'ASO Report',
