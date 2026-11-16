@@ -102,10 +102,23 @@ ${publishPosts.map(postLink).join('\n')}
 
 ## Optional
 
+- [Full text](${siteUrl}/llms-full.txt): every post in one file, no navigation needed
 - [Tags](${siteUrl}/tags): browse posts by topic (${tags.join(', ')})
 - [RSS feed](${siteUrl}/feed.xml): full-text feed of all posts
 - [Sitemap](${siteUrl}/sitemap.xml): machine-readable list of all pages
 `
+}
+
+function generateLlmsFullTxt() {
+  return `# ${siteMetadata.title} — full text
+
+> ${siteMetadata.description} (${siteUrl})
+
+이 파일은 사이트의 모든 글을 한 파일에 담은 것입니다. 글 목록과 안내는 [llms.txt](${siteUrl}/llms.txt)를 참고하세요.
+
+---
+
+${publishPosts.map(generatePostMarkdown).join('\n---\n\n')}`
 }
 
 const generateMarkdown = () => {
@@ -115,8 +128,9 @@ const generateMarkdown = () => {
   write('index.md', generateIndexMarkdown())
   write('blog.md', generateBlogMarkdown())
   write('llms.txt', generateLlmsTxt())
+  write('llms-full.txt', generateLlmsFullTxt())
   console.log(
-    `Agent files generated: ${publishPosts.length} post .md files, index.md, blog.md, llms.txt`
+    `Agent files generated: ${publishPosts.length} post .md files, index.md, blog.md, llms.txt, llms-full.txt`
   )
 }
 export default generateMarkdown
