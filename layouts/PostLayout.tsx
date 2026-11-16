@@ -1,7 +1,8 @@
 import { ReactNode } from 'react'
 import Link from '@/components/Link'
-import { CoreContent } from 'pliny/utils/contentlayer'
+import { CoreContent, allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import type { Blog, Authors } from 'contentlayer/generated'
+import { allBlogs } from 'contentlayer/generated'
 import Comments from '@/components/Comments'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
@@ -22,9 +23,28 @@ interface LayoutProps {
   prev?: { path: string; title: string }
 }
 
+const RELATED_POST_COUNT = 3
+
+function findRelatedPosts(slug: string, tags: string[] = []) {
+  const tagSet = new Set(tags)
+  return allCoreContent(sortPosts(allBlogs))
+    .filter((post) => post.slug !== slug && post.draft !== true)
+    .map((post) => ({
+      post,
+      shared: (post.tags || []).filter((tag) => tagSet.has(tag)).length,
+    }))
+    .sort(
+      (a, b) =>
+        b.shared - a.shared || new Date(b.post.date).getTime() - new Date(a.post.date).getTime()
+    )
+    .slice(0, RELATED_POST_COUNT)
+    .map((entry) => entry.post)
+}
+
 export default function PostLayout({ content, children, next, prev }: LayoutProps) {
   const { path, slug, date, title, summary, tags } = content
   const categoryLabel = decodeURI(path.split('/')[1] || tags?.[0] || 'blog')
+  const related = findRelatedPosts(slug, tags as string[] | undefined)
 
   return (
     <section className="mx-auto w-full max-w-6xl px-0 sm:px-6 lg:px-8">
@@ -74,6 +94,32 @@ export default function PostLayout({ content, children, next, prev }: LayoutProp
             </div>
 
             <footer className="mt-14 space-y-10 border-t border-black/8 pt-6 dark:border-white/10">
+              {related.length > 0 && (
+                <div className="border-b border-black/8 pb-8 dark:border-white/10">
+                  <div className="text-[11px] font-semibold tracking-[0.18em] text-gray-500 uppercase dark:text-gray-400">
+                    Recommended reading
+                  </div>
+                  <div className="mt-4 divide-y divide-black/8 dark:divide-white/10">
+                    {related.map((post) => (
+                      <Link
+                        key={post.slug}
+                        href={`/${post.path}`}
+                        className="group block py-4 no-underline"
+                      >
+                        <div className="text-sm font-medium text-gray-800 transition-colors group-hover:text-gray-950 dark:text-gray-200 dark:group-hover:text-white">
+                          {post.title}
+                        </div>
+                        {post.summary && (
+                          <p className="mt-1 max-w-2xl text-sm leading-7 text-gray-500 dark:text-gray-400">
+                            {post.summary}
+                          </p>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {siteMetadata.comments && (
                 <div
                   className="border-b border-black/8 pb-8 text-gray-700 dark:border-white/10 dark:text-gray-300"
