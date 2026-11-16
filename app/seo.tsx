@@ -32,6 +32,7 @@ export function genPageMetadata({
 }: PageSEOProps): Metadata {
   const canonical = buildCanonicalUrl(path)
   const ogImage = ogImageEntry(image)
+  const shareTitle = title === siteMetadata.title ? title : `${title} | ${siteMetadata.headerTitle}`
 
   return {
     title,
@@ -41,7 +42,7 @@ export function genPageMetadata({
       canonical,
     },
     openGraph: {
-      title: `${title} | ${siteMetadata.title}`,
+      title: shareTitle,
       description: description || siteMetadata.description,
       url: canonical,
       siteName: siteMetadata.title,
@@ -50,7 +51,7 @@ export function genPageMetadata({
       type,
     },
     twitter: {
-      title: `${title} | ${siteMetadata.title}`,
+      title: shareTitle,
       description: description || siteMetadata.description,
       card: 'summary_large_image',
       images: [ogImage.url],

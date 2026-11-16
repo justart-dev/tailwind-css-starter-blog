@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
   title: {
     default: siteMetadata.title,
-    template: `%s | ${siteMetadata.title}`,
+    template: `%s | ${siteMetadata.headerTitle}`,
   },
   description: siteMetadata.description,
   keywords: siteMetadata.keywords,
@@ -121,6 +121,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               '@type': 'WebSite',
               '@id': `${siteUrl}#website`,
               name: siteMetadata.title,
+              alternateName: ['Justart-dev Blog', 'Justart-dev 개발 아카이브', 'justart-dev'],
               url: siteUrl,
               description: siteMetadata.description,
               inLanguage: siteMetadata.language,
@@ -139,7 +140,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               '@type': 'Person',
               '@id': `${siteUrl}#publisher`,
               name: siteMetadata.author,
+              alternateName: ['justart-dev', 'Justart-dev'],
               url: siteUrl,
+              jobTitle: 'Web Developer',
               sameAs,
             }),
           }}
