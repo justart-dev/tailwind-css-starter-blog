@@ -94,32 +94,6 @@ export default function PostLayout({ content, children, next, prev }: LayoutProp
             </div>
 
             <footer className="mt-14 space-y-10 border-t border-black/8 pt-6 dark:border-white/10">
-              {related.length > 0 && (
-                <div className="border-b border-black/8 pb-8 dark:border-white/10">
-                  <div className="text-[11px] font-semibold tracking-[0.18em] text-gray-500 uppercase dark:text-gray-400">
-                    Recommended reading
-                  </div>
-                  <div className="mt-4 divide-y divide-black/8 dark:divide-white/10">
-                    {related.map((post) => (
-                      <Link
-                        key={post.slug}
-                        href={`/${post.path}`}
-                        className="group block py-4 no-underline"
-                      >
-                        <div className="text-sm font-medium text-gray-800 transition-colors group-hover:text-gray-950 dark:text-gray-200 dark:group-hover:text-white">
-                          {post.title}
-                        </div>
-                        {post.summary && (
-                          <p className="mt-1 max-w-2xl text-sm leading-7 text-gray-500 dark:text-gray-400">
-                            {post.summary}
-                          </p>
-                        )}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {siteMetadata.comments && (
                 <div
                   className="border-b border-black/8 pb-8 text-gray-700 dark:border-white/10 dark:text-gray-300"
@@ -182,6 +156,32 @@ export default function PostLayout({ content, children, next, prev }: LayoutProp
                   )}
                 </div>
               </div>
+
+              {related.length > 0 && (
+                <div className="border-t border-black/8 pt-8 dark:border-white/10">
+                  <div className="text-[11px] font-semibold tracking-[0.18em] text-gray-500 uppercase dark:text-gray-400">
+                    Recommended reading
+                  </div>
+                  <div className="mt-4 divide-y divide-black/8 dark:divide-white/10">
+                    {related.map((post) => (
+                      <Link
+                        key={post.slug}
+                        href={`/${post.path}`}
+                        className="group block py-4 no-underline"
+                      >
+                        <div className="text-sm font-medium text-gray-800 transition-colors group-hover:text-gray-950 dark:text-gray-200 dark:group-hover:text-white">
+                          {post.title}
+                        </div>
+                        {post.summary && (
+                          <p className="mt-1 max-w-2xl text-sm leading-7 text-gray-500 dark:text-gray-400">
+                            {post.summary}
+                          </p>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </footer>
           </div>
         </div>
