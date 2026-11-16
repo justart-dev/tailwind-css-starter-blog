@@ -11,7 +11,9 @@
     "lint": "next lint --fix --dir pages --dir app --dir components --dir lib --dir layouts --dir scripts",
     "prepare": "husky",
     "test": "pnpm playwright test",
+    "gate": "node ./scripts/check-publish-gate.mjs",
     "indexnow": "node ./scripts/indexnow.mjs",
+    "snapshot": "node ./scripts/seo-snapshot.mjs",
     "cf:build": "EXPORT=true UNOPTIMIZED=true pnpm build",
     "cf:deploy": "wrangler pages deploy out --project-name=justart-dev",
     "cf": "pnpm cf:build && pnpm cf:deploy"
