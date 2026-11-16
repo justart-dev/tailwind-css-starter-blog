@@ -38,6 +38,11 @@ export default function PostLayout({ content, children, next, prev }: LayoutProp
             <h1 className="w-full text-4xl font-semibold tracking-[-0.07em] text-gray-950 sm:text-6xl dark:text-white">
               {title}
             </h1>
+            {summary && (
+              <p className="max-w-2xl text-base leading-8 text-gray-600 sm:text-lg dark:text-gray-300">
+                {summary}
+              </p>
+            )}
           </div>
         </header>
 
