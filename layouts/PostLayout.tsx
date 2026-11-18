@@ -25,26 +25,63 @@ interface LayoutProps {
 
 const RELATED_POST_COUNT = 3
 
-function findRelatedPosts(slug: string, tags: string[] = []) {
+const MAX_ADJACENT_PICKS = 1
+
+function categoryOf(path: string) {
+  return path.split('/')[1] ?? ''
+}
+
+function stableHash(value: string) {
+  let hash = 0
+  for (let index = 0; index < value.length; index++) {
+    hash = (hash * 31 + value.charCodeAt(index)) | 0
+  }
+  return Math.abs(hash)
+}
+
+function findRelatedPosts(slug: string, tags: string[], adjacentPaths: Set<string>) {
   const tagSet = new Set(tags)
-  return allCoreContent(sortPosts(allBlogs))
+  const scored = allCoreContent(sortPosts(allBlogs))
     .filter((post) => post.slug !== slug && post.draft !== true)
     .map((post) => ({
       post,
       shared: (post.tags || []).filter((tag) => tagSet.has(tag)).length,
+      adjacent: adjacentPaths.has(post.path),
+      sameCategory: categoryOf(post.path) === categoryOf(slug),
+      spread: stableHash(`${slug}:${post.path}`),
     }))
+
+  const byDate = (a: { post: { date: string } }, b: { post: { date: string } }) =>
+    new Date(b.post.date).getTime() - new Date(a.post.date).getTime()
+
+  const tagMatches = scored
+    .filter((entry) => entry.shared > 0)
     .sort(
       (a, b) =>
-        b.shared - a.shared || new Date(b.post.date).getTime() - new Date(a.post.date).getTime()
+        b.shared - a.shared ||
+        Number(a.adjacent) - Number(b.adjacent) ||
+        Number(b.sameCategory) - Number(a.sameCategory) ||
+        byDate(a, b)
     )
-    .slice(0, RELATED_POST_COUNT)
-    .map((entry) => entry.post)
+
+  const filler = scored
+    .filter((entry) => entry.shared === 0 && !entry.adjacent)
+    .sort((a, b) => Number(b.sameCategory) - Number(a.sameCategory) || a.spread - b.spread)
+
+  const picks = [
+    ...tagMatches.filter((entry) => !entry.adjacent),
+    ...tagMatches.filter((entry) => entry.adjacent).slice(0, MAX_ADJACENT_PICKS),
+    ...filler,
+  ]
+
+  return picks.slice(0, RELATED_POST_COUNT).map((entry) => entry.post)
 }
 
 export default function PostLayout({ content, children, next, prev }: LayoutProps) {
   const { path, slug, date, title, summary, tags } = content
   const categoryLabel = decodeURI(path.split('/')[1] || tags?.[0] || 'blog')
-  const related = findRelatedPosts(slug, tags as string[] | undefined)
+  const adjacentPaths = new Set([prev?.path, next?.path].filter(Boolean) as string[])
+  const related = findRelatedPosts(slug, (tags as string[] | undefined) ?? [], adjacentPaths)
 
   return (
     <section className="mx-auto w-full max-w-6xl px-0 sm:px-6 lg:px-8">
