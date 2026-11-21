@@ -120,7 +120,7 @@ function notAcceptable(request) {
 - text/html
 - text/markdown
 
-You requested: ${request.headers.get('accept') || '(none)'}
+You requested: ${(request.headers.get('accept') || '(none)').slice(0, 120)}
 `
   return new Response(body, {
     status: 406,
