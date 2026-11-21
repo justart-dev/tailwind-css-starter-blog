@@ -14,6 +14,7 @@ import { Metadata } from 'next'
 import siteMetadata from '@/data/siteMetadata'
 import { notFound } from 'next/navigation'
 import { buildCanonicalUrl } from 'app/seo'
+import { jsonLdScript } from 'lib/jsonLd'
 
 const defaultLayout = 'PostLayout'
 const layouts = {
@@ -114,7 +115,7 @@ export default async function Page(props: { params: Promise<{ slug: string[] }> 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdScript({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
@@ -142,7 +143,7 @@ export default async function Page(props: { params: Promise<{ slug: string[] }> 
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
       />
       <Layout content={mainContent} authorDetails={authorDetails} next={next} prev={prev}>
         <MDXLayoutRenderer code={post.body.code} components={components} toc={post.toc} />

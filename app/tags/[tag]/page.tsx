@@ -6,6 +6,7 @@ import { allBlogs } from 'contentlayer/generated'
 import tagData from 'app/tag-data.json'
 import { genPageMetadata, buildCanonicalUrl } from 'app/seo'
 import { Metadata } from 'next'
+import { jsonLdScript } from 'lib/jsonLd'
 
 const POSTS_PER_PAGE = 5
 
@@ -56,7 +57,7 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdScript({
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
             name: `${title} 관련 글`,

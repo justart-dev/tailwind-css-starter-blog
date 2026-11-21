@@ -3,6 +3,7 @@ import { allBlogs } from 'contentlayer/generated'
 import { genPageMetadata } from 'app/seo'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 import siteMetadata from '@/data/siteMetadata'
+import { jsonLdScript } from 'lib/jsonLd'
 
 const POSTS_PER_PAGE = 5
 
@@ -31,7 +32,7 @@ export default async function BlogPage(props: { searchParams: Promise<{ page: st
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdScript({
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
             name: 'Blog',

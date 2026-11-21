@@ -3,6 +3,7 @@ import Link from '@/components/Link'
 import tagData from 'app/tag-data.json'
 import { genPageMetadata } from 'app/seo'
 import siteMetadata from '@/data/siteMetadata'
+import { jsonLdScript } from 'lib/jsonLd'
 
 export const metadata = genPageMetadata({
   title: 'Tags',
@@ -23,7 +24,7 @@ export default async function Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdScript({
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
             name: 'Tags',

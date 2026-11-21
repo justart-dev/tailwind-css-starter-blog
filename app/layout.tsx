@@ -13,6 +13,7 @@ import { onest, geistMono } from './fonts'
 import { TranslationProvider } from '@/components/TranslationContext'
 import { Metadata } from 'next'
 import Script from 'next/script'
+import { jsonLdScript } from 'lib/jsonLd'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
@@ -111,7 +112,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: jsonLdScript({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
               '@id': `${siteUrl}#website`,
@@ -130,7 +131,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: jsonLdScript({
               '@context': 'https://schema.org',
               '@type': 'Person',
               '@id': `${siteUrl}#publisher`,

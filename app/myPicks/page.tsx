@@ -1,6 +1,7 @@
 import { genPageMetadata } from 'app/seo'
 import { categories } from './linkData'
 import siteMetadata from '@/data/siteMetadata'
+import { jsonLdScript } from 'lib/jsonLd'
 
 export const metadata = genPageMetadata({
   title: '추천 링크 모음',
@@ -26,7 +27,7 @@ export default function LinkCollection() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdScript({
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
             name: 'My Picks',

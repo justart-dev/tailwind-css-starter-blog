@@ -5,6 +5,7 @@ import { notFound, redirect } from 'next/navigation'
 import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
 import siteMetadata from '@/data/siteMetadata'
+import { jsonLdScript } from 'lib/jsonLd'
 
 const POSTS_PER_PAGE = 5
 
@@ -60,7 +61,7 @@ export default async function Page(props: { params: Promise<{ page: string }> })
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdScript({
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
             name: `Blog - Page ${pageNumber}`,
